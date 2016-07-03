@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableChapter extends Migration
+class CreateTableAuthor extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateTableChapter extends Migration
     public function up()
     {
         //
-        Schema::create('chapter', function(Blueprint $table){
+        Schema::create('author', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('n_id');
             $table->string('name');
-            $table->longText('content');
-            $table->bigInteger('views')->default(0);
-            $table->timestamps();
         });
     }
 
@@ -31,6 +27,6 @@ class CreateTableChapter extends Migration
     public function down()
     {
         //
-        Schema::drop('chapter');
+        Schema::drop('author');
     }
 }

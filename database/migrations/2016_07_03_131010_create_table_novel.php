@@ -13,7 +13,7 @@ class CreateTableNovel extends Migration
     public function up()
     {
         //
-        Schema::create('novels', function(Blueprint $table) {
+        Schema::create('novel', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
@@ -35,6 +35,6 @@ class CreateTableNovel extends Migration
     public function down()
     {
         //
-        Schema::drop('novels');
+        Schema::drop('novel');
     }
 }
