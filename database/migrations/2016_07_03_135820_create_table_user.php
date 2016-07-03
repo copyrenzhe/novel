@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableChapter extends Migration
+class CreateTableUser extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateTableChapter extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('chapter', function(Blueprint $table){
+        Schema::create('user', function (Blueprint $table) {
+            //
             $table->increments('id');
-            $table->integer('n_id');
-            $table->string('name');
-            $table->longText('content');
-            $table->bigInteger('views')->default(0);
+            $table->string('open_id')->index(); //订阅者微信open_id
+            $table->string('nickname');
+            $table->boolean('is_subscribe');
+            $table->timestamp('push_time');
             $table->timestamps();
         });
     }
@@ -30,7 +30,6 @@ class CreateTableChapter extends Migration
      */
     public function down()
     {
-        //
-        Schema::drop('chapter');
+        Schema::drop('user');
     }
 }
