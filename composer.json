@@ -6,7 +6,8 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*"
+        "laravel/framework": "5.2.*",
+        "barryvdh/laravel-ide-helper": "2.2-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
