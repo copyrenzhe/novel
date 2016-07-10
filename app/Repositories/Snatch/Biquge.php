@@ -10,6 +10,7 @@
 namespace App\Repositories\Snatch;
 
 use App\Models\Author;
+use App\Models\Chapter;
 use App\Models\Novel;
 use PhpQuery\PhpQuery as phpQuery;
 
@@ -32,16 +33,34 @@ Class Biquge implements SnatchInterface
     public function newNovelList()
     {
         $list_url = self::DOMAIN . '/xiaoshuodaquan/';
-//        $result_html = $this->send($list_url);
-        $result_html = file_get_contents($list_url);
-        var_dump($result_html);
+        $result_html = $this->send($list_url);
+//        $result_html = file_get_contents($list_url);
         $novelList = $this->getDivList($result_html);
         foreach($novelList as $novel){
             $type_name = $this->getDivType($novel);
             $type = $this->returnType($type_name);
-            var_dump($type);
-//            $info_arr = $this->getLiNovel($novel);
-//            foreach($info_arr[1] as $)
+            $info_arr = $this->getLiNovel($novel);
+            foreach($info_arr[1] as $key => $info){
+                $novel_link = $info;
+                $novel_name = $info_arr[2][$key];
+                $novel_is_over = $info_arr[3][$key] == '载' ? 0 : 1;
+                $novel_author = $info_arr[4][$key];
+                $author = Author::firstOrCreate(['name'=>$novel_author]);
+                $novel = Novel::firstOrCreate(['name'=>$novel_name, 'author_id'=>$author->id, 'type'=>$type, 'is_over'=>$novel_is_over]);
+                $novel_html = $this->send(self::DOMAIN . $novel_link);
+                $novel->description = $this->getNovelInfo($novel_html);
+                $novel->cover = $this->getNovelCover($novel_html);
+                $novel->save();
+                $chapter_list = $this->getChapterList($novel_html);
+                foreach($chapter_list[1] as $k => $chapter_data){
+                    $chapter_link = $chapter_data;
+                    $chapter_name = $chapter_list[2][$k];
+                    $chapter = Chapter::firstOrCreate(['name'=>$chapter_name, 'novel_id'=>$novel->id]);
+                    $chapter_html = $this->send(self::DOMAIN . $chapter_link);
+                    $chapter->content = $this->getChapterContent($chapter_html);
+                    $chapter->save();
+                }
+            }
         }
     }
 
@@ -88,6 +107,33 @@ Class Biquge implements SnatchInterface
         $preg = '/<li><a href="(.*?)"> target="_balnk">(.*?)<\/a>\((.*?)\) \/(.*?)<\/li>/';
         preg_match_all($preg, $html, $matches);
         return $matches;
+    }
+
+    private function getNovelInfo($html)
+    {
+        preg_match('/<div id="intro">(.*?)<\/div>/', $html, $match);
+        return $match[1];
+    }
+
+    private function getNovelCover($html)
+    {
+        $preg = '/<div id="fmimg"><img alt=".*?" src="(.*?)" width="120" height="150" \/><span class="b"><\/span><\/div>/';
+        preg_match($preg, $html, $match);
+        return $match[1];
+    }
+
+    private function getChapterList($html)
+    {
+        $preg = '/<dd><a href="(.*?)">(.*?)<\/a><\/dd>/';
+        preg_match_all($preg, $html, $matches);
+        return $matches;
+    }
+
+    private function getChapterContent($html)
+    {
+        $preg = '/<div id="content"><script><readx\(\)><\/script>(.*?)<\/div>/';
+        preg_match($preg, $html, $content);
+        return $content[1];
     }
 
     public function getNovelList()
