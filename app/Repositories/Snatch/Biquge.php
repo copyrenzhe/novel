@@ -21,12 +21,9 @@ Class Biquge implements SnatchInterface
     const REFERER = 'http://www.biquge.la';
     const DOMAIN = 'http://www.biquge.la';
 
-    private $type;
-
     public static function init()
     {
         $Biquge = new Biquge();
-        $Biquge->type = '';
         return $Biquge->newNovelList();
     }
 
