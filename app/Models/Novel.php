@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Novel extends Model
 {
+    protected $table = 'novel';
+    protected $fillable = ['name', 'description', 'author_id', 'type', 'cover', 'hot', 'sort', 'is_over'];
+
     //
     public function tags()
     {
