@@ -21,6 +21,10 @@ Class Biquge implements SnatchInterface
     const REFERER = 'http://www.biquge.la';
     const DOMAIN = 'http://www.biquge.la';
 
+    /**
+     * 初始化小说列表，获取当前笔趣阁所有小说
+     * @return [type] [description]
+     */
     public static function init()
     {
         $Biquge = new Biquge();
@@ -28,9 +32,15 @@ Class Biquge implements SnatchInterface
     }
 
     /**
-     * 初始化小说列表，获取当前笔趣阁所有小说与章节
+     * 更新小说章节
      * @return [type] [description]
      */
+    public static function update($novel_id = [], )
+    {
+        $Biquge = new Biquge();
+        return $Biquge->getNovelChapter();
+    }
+
     public function newNovelList()
     {
         $list_url = self::DOMAIN . '/xiaoshuodaquan/';
@@ -55,16 +65,31 @@ Class Biquge implements SnatchInterface
                 $novel_author = $info_arr[4][$key];
                 $author = Author::firstOrCreate(['name'=>$novel_author]);
                 $novel = Novel::firstOrCreate(['name'=>$novel_name, 'author_id'=>$author->id, 'type'=>$type, 'is_over'=>$novel_is_over]);
+                $novel->biquge_url = self::DOMAIN . $novel_link;
                 $novel_html = $this->send(self::DOMAIN . $novel_link);
                 $novel->description = $this->getNovelInfo($novel_html);
                 $novel->cover = $this->getNovelCover($novel_html);
                 $novel->save();
-                $chapter_list = $this->getChapterList($novel_html);
-                foreach($chapter_list[1] as $k => $chapter_data){
-                    $chapter_link = $chapter_data;
-                    $chapter_name = $chapter_list[2][$k];
-                    $chapter = Chapter::firstOrCreate(['name'=>$chapter_name, 'novel_id'=>$novel->id]);
-                    $chapter_html = $this->send(self::DOMAIN . $novel_link. $chapter_link);
+            }
+        }
+    }
+
+    public function getNovelChapter() {
+        $novels = Novel::all();
+        foreach ($novels as $key => $novel) {
+            $novel_html = $this->send(self::DOMAIN . $novel_link);
+            $chapter_list = $this->getChapterList($novel_html);
+            if(!$chapter_list[1]){
+                echo "getChapterList failed:\n";
+                var_dump($novel_html);
+                die;
+            }
+            foreach($chapter_list[1] as $k => $chapter_data){
+                $chapter_link = $chapter_data;
+                $chapter_name = $chapter_list[2][$k];
+                $chapter = Chapter::firstOrCreate(['name'=>$chapter_name, 'novel_id'=>$novel->id]);
+                if(!$chapter->content) {
+                    $chapter_html = $this->send($novel->biquge_url. $chapter_link);
                     $chapter->content = $this->getChapterContent($chapter_html);
                     $chapter->save();
                 }

@@ -19,3 +19,44 @@ Route::get('/', function () {
 Route::get('/test', function() {
     return App\Repositories\Snatch\Biquge::init();
 });
+
+
+Route::get('/authors', function() {
+});
+
+Route::get('/top-novel', function() {
+
+});
+
+Route::get('/over-novel', function() {
+
+});
+
+Route::get('/search', function() {
+
+});
+
+//novel categories
+Route::get('/xuanhuan', function() {
+
+});
+
+Route::get('/xiuzhen', function() {
+
+});
+
+Route::get('/dushi', function() {
+
+});
+
+Route::get('/lishi', function() {
+
+});
+
+Route::get('/wangyou', function() {
+
+});
+
+Route::get('/kehuan', function() {
+
+});
