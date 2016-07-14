@@ -23,6 +23,7 @@ class CreateTableNovel extends Migration
             $table->bigInteger('hot')->default(0);
             $table->integer('sort')->default(0);
             $table->boolean('is_over');
+            $table->string('biquge_url')->nullable();
             $table->timestamps();
         });
     }
