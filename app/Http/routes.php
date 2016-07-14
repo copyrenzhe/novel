@@ -60,3 +60,6 @@ Route::get('/wangyou', function() {
 Route::get('/kehuan', function() {
 
 });
+
+//wechat route
+Route::any('/wechat', 'WechatController@serve');
