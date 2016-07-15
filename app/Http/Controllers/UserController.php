@@ -9,12 +9,8 @@ use App\Http\Requests;
 
 class UserController extends Controller
 {
-    public wechat;
+    public $wechat;
 
-    /**
-     * UserController constructor.
-     * @param $user
-     */
     public function __construct(Application $wechat)
     {
         $this->wechat = $wechat;
