@@ -63,3 +63,7 @@ Route::get('/kehuan', function() {
 
 //wechat route
 Route::any('/wechat', 'WechatController@serve');
+
+//wechat user
+Route::get('/users', 'UserController@users');
+Route::get('/user/{openId}', 'UserController@user');
