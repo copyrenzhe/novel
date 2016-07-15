@@ -30,4 +30,14 @@ class Novel extends Model
     {
     	return $this->belongsToMany('App\Model\User', 'user_novel');
     }
+
+    public function scopeContinued($query)
+    {
+        return $query->where('is_over', '=', 0);
+    }
+
+    public function scopeOver($query)
+    {
+        return $query->where('is_over', '=', 1);
+    }
 }

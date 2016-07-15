@@ -12,8 +12,11 @@ namespace App\Repositories\Snatch;
 use App\Models\Author;
 use App\Models\Chapter;
 use App\Models\Novel;
-use PhpQuery\PhpQuery as phpQuery;
 
+/**
+ * Class Biquge
+ * @package App\Repositories\Snatch
+ */
 Class Biquge implements SnatchInterface
 {
     const COOKIE = './biquge.cookie';
@@ -28,20 +31,20 @@ Class Biquge implements SnatchInterface
     public static function init()
     {
         $Biquge = new Biquge();
-        return $Biquge->newNovelList();
+        return $Biquge->getNovelList();
     }
 
     /**
      * 更新小说章节
      * @return [type] [description]
      */
-    public static function update($novel_id = [], )
+    public static function update($novel_id)
     {
         $Biquge = new Biquge();
-        return $Biquge->getNovelChapter();
+        return $Biquge->getNovelChapter($novel_id);
     }
 
-    public function newNovelList()
+    public function getNovelList()
     {
         $list_url = self::DOMAIN . '/xiaoshuodaquan/';
         $result_html = $this->send($list_url);
@@ -68,23 +71,41 @@ Class Biquge implements SnatchInterface
                 $novel->biquge_url = self::DOMAIN . $novel_link;
                 $novel_html = $this->send(self::DOMAIN . $novel_link);
                 $novel->description = $this->getNovelInfo($novel_html);
-                $novel->cover = $this->getNovelCover($novel_html);
+                $cover_link = $this->getNovelCover($novel_html);
+                if(!empty($cover_link)){
+                    $cover_ext = substr($cover_link, strrpos($cover_link, '.')+1);
+                    $cover = file_get_contents($cover_link);
+                    file_put_contents(public_path('cover/'.$novel->id.'_cover.'.$cover_ext), $cover);
+                    $novel->cover = '/cover/'.$novel->id.'_cover.'.$cover_ext;
+                }
                 $novel->save();
             }
         }
     }
 
-    public function getNovelChapter() {
-        $novels = Novel::all();
-        foreach ($novels as $key => $novel) {
-            $novel_html = $this->send(self::DOMAIN . $novel_link);
+
+    /**
+     * 获取小说章节
+     * @param $novel_id
+     */
+    public function getNovelChapter($novel_id) {
+        $novel = Novel::find($novel_id);
+
+            $novel_html = $this->send($novel->biquge_url);
             $chapter_list = $this->getChapterList($novel_html);
             if(!$chapter_list[1]){
                 echo "getChapterList failed:\n";
                 var_dump($novel_html);
                 die;
             }
+            $count= $novel->chapter->count();
+            if(count($chapter_list[1]) <= $count){
+                return ;
+            }
             foreach($chapter_list[1] as $k => $chapter_data){
+                if($k<$count){
+                    continue;
+                }
                 $chapter_link = $chapter_data;
                 $chapter_name = $chapter_list[2][$k];
                 $chapter = Chapter::firstOrCreate(['name'=>$chapter_name, 'novel_id'=>$novel->id]);
@@ -94,7 +115,6 @@ Class Biquge implements SnatchInterface
                     $chapter->save();
                 }
             }
-        }
     }
 
     private function getDivList($html)
@@ -168,68 +188,6 @@ Class Biquge implements SnatchInterface
         $preg = '/<div id="content"><script>readx\(\);<\/script>(.*?)<\/div>/s';
         preg_match($preg, $html, $content);
         return $content[1];
-    }
-
-    public function getNovelList()
-    {
-        $list_url = self::DOMAIN . '/xiaoshuodaquan/';
-        $result_html = $this->send($list_url);
-        $res = phpQuery::newDocument($result_html);
-        $novellist = phpQuery::pq($res)->find('.novellist');
-        phpQuery::each($novellist, function ($item, $data) {
-            $name = phpQuery::pq($data)->find('h2')->html();
-            switch ($name){
-                case '玄幻小说列表':
-                    $this->type = 'xuanhuan';
-                    break;
-                case '修真小说列表':
-                    $this->type = 'xiuzhen';
-                    break;
-                case '都市小说列表':
-                    $this->type = 'dushi';
-                    break;
-                case '历史小说列表':
-                    $this->type = 'lishi';
-                    break;
-                case '网游小说列表':
-                    $this->type = 'wangyou';
-                    break;
-                case '科幻小说列表':
-                    $this->type = 'kehuan';
-                    break;
-            }
-            dd($name);
-            $li_list = phpQuery::pq($data)->find('li');
-            phpQuery::each($li_list, function ($index, $li) {
-                $book_a = phpQuery::pq($li)->find('a');
-                $book_name = $book_a->html();
-                $book_link = $book_a->attr('href');
-                $li_html = phpQuery::pq($li)->html();
-                preg_match('/<a.*?>.*?<\/a>\((.*?)\).*?\/(.*?)$/i', $li_html, $match);
-                $is_over = ($match[1] == '载') ? 0 : 1;
-                $author = $match[2];
-                $Mauthor = Author::firstOrCreate(['name'=>$author]);
-                $novel = Novel::firstOrCreate(['name'=>$book_name, 'author_id'=>$Mauthor->id, 'type'=>$this->type, 'is_over'=>$is_over]);
-               $this->getChapter($book_link, $novel);
-            });
-        });
-
-    }
-
-    public function getChapter($link, $novel)
-    {
-        $url = self::DOMAIN . $link;
-        $chapter_html = $this->send($url);
-        $res = phpQuery::newDocument($chapter_html);
-        $chapter_list = phpQuery::pq($res)->find('#list dd');
-        phpQuery::each($chapter_list, function($index, $cap){
-            $cap_a = phpQuery::pq($cap)->find('a');
-            $cap_name = $cap_a->html();
-            $cap_link = $cap_a->attr('href');
-            $cap_detail = $this->send(self::DOMAIN . $cap_link);
-            $result = phpQuery::newDocument($cap_detail);
-            $cap_content = phpQuery::pq($result)->find('#content');
-        });
     }
 
     private function send($url, $type = 'GET', $params = false, $encoding = 'gbk')

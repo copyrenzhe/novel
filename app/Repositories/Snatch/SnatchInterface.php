@@ -11,5 +11,8 @@ namespace App\Repositories\Snatch;
 
 Interface SnatchInterface
 {
-    
+    public function getNovelList();
+
+    public function getNovelChapter($novel_id);
+
 }
