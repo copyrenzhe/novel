@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Novel;
 use Illuminate\Console\Command;
 
 class Snatch extends Command
@@ -38,5 +39,6 @@ class Snatch extends Command
     public function handle()
     {
         //
+        Novel::continued()->orderBy('hot');
     }
 }

@@ -16,50 +16,49 @@ Route::get('/', function () {
 });
 
 
-Route::get('/test', function() {
+Route::get('test', function() {
     return App\Repositories\Snatch\Biquge::init();
 });
 
 
-Route::get('/authors', function() {
+Route::group(['middleware'=>['web']], function(){
+
+    Route::get('authors', 'AuthorController@authors');
+
+    Route::get('top-novel', 'IndexController@top');
+
+    Route::get('over-novel', 'IndexController@over');
+
+    Route::get('search/{bookName}', 'IndexController@search');
+
+    Route::get('book/{bookId}', 'IndexController@book');
+
+    //novel categories
+    Route::get('xuanhuan', function() {
+
+    });
+
+    Route::get('xiuzhen', function() {
+
+    });
+
+    Route::get('dushi', function() {
+
+    });
+
+    Route::get('lishi', function() {
+
+    });
+
+    Route::get('wangyou', function() {
+
+    });
+
+    Route::get('kehuan', function() {
+
+    });
 });
 
-Route::get('/top-novel', function() {
-
-});
-
-Route::get('/over-novel', function() {
-
-});
-
-Route::get('/search', function() {
-
-});
-
-//novel categories
-Route::get('/xuanhuan', function() {
-
-});
-
-Route::get('/xiuzhen', function() {
-
-});
-
-Route::get('/dushi', function() {
-
-});
-
-Route::get('/lishi', function() {
-
-});
-
-Route::get('/wangyou', function() {
-
-});
-
-Route::get('/kehuan', function() {
-
-});
 
 //wechat route
 Route::any('/wechat', 'WechatController@serve');
