@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 Route::get('test', function() {
@@ -22,6 +19,8 @@ Route::get('test', function() {
 
 
 Route::group(['middleware'=>['web']], function(){
+
+    Route::get('/', 'IndexController@index');
 
     Route::get('authors', 'AuthorController@authors');
 
@@ -58,6 +57,7 @@ Route::group(['middleware'=>['web']], function(){
 
     });
 });
+
 
 
 //wechat route
