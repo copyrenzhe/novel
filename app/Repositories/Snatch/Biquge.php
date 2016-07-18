@@ -62,14 +62,19 @@ Class Biquge implements SnatchInterface
                 die;
             }
             foreach($info_arr[1] as $key => $info){
-                $novel_link = $info;
+                $novel_link = self::DOMAIN . $info;
+                if(Novel::where('biquge_url', '=', $novel_link)->first()){
+                    continue;
+                }
                 $novel_name = $info_arr[2][$key];
                 $novel_is_over = $info_arr[3][$key] == '载' ? 0 : 1;
                 $novel_author = $info_arr[4][$key];
                 $author = Author::firstOrCreate(['name'=>$novel_author]);
-                $novel = Novel::firstOrCreate(['name'=>$novel_name, 'author_id'=>$author->id, 'type'=>$type, 'is_over'=>$novel_is_over]);
-                $novel->biquge_url = self::DOMAIN . $novel_link;
-                $novel_html = $this->send(self::DOMAIN . $novel_link);
+                $novel = Novel::firstOrCreate(['name'=>$novel_name, 'author_id'=>$author->id]);
+                $novel->type = $type;
+                $novel->is_over = $novel_is_over;
+                $novel->biquge_url = $novel_link;
+                $novel_html = $this->send($novel_link);
                 $novel->description = $this->getNovelInfo($novel_html);
                 $cover_link = $this->getNovelCover($novel_html);
                 if(!empty($cover_link)){

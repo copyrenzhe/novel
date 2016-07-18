@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Repositories\Snatch\Biquge;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        \App\Repositories\Snatch\Biquge::init();
+        Biquge::init();
+        $novels = \App\Models\Novel::all();
+        foreach($novels as $novel){
+            Biquge::update($novel->id);
+        }
     }
 }
