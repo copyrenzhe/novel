@@ -13,10 +13,19 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        Biquge::init();
-        $novels = \App\Models\Novel::all();
-        foreach($novels as $novel){
+//        Biquge::init();
+//        echo "小说信息已更新完毕\n";
+
+        $overNovels = \App\Models\Novel::over()->get();
+        foreach($overNovels as $novel){
             Biquge::update($novel->id);
         }
+        echo "完结小说已更新完毕\n";
+
+        $continueNovels = \App\Models\Novel::continued()->get();
+        foreach ($continueNovels as $novel){
+            Biquge::update($novel->id);
+        }
+        echo "连载小说已更新完毕\n";
     }
 }

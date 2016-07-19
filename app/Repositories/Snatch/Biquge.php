@@ -103,7 +103,7 @@ Class Biquge implements SnatchInterface
                 var_dump($novel_html);
                 die;
             }
-            $count= $novel->chapter->count();
+            $count= $novel->chapter->where('content', '<>', '')->count();
             if(count($chapter_list[1]) <= $count){
                 return ;
             }
@@ -171,14 +171,14 @@ Class Biquge implements SnatchInterface
     private function getNovelInfo($html)
     {
         preg_match('/<div id="intro">(.*?)<\/div>/s', $html, $match);
-        return $match[1];
+        return @$match[1];
     }
 
     private function getNovelCover($html)
     {
         $preg = '/<div id="fmimg"><img alt=".*?" src="(.*?)" width="120" height="150" \/><span class="b"><\/span><\/div>/';
         preg_match($preg, $html, $match);
-        return $match[1];
+        return @$match[1];
     }
 
     private function getChapterList($html)

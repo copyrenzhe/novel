@@ -12,23 +12,23 @@ class Novel extends Model
     //
     public function tags()
     {
-    	return $this->belongsToMany('App\Model\Tag', 'novel_tag');
+    	return $this->belongsToMany('App\Models\Tag', 'novel_tag');
     }
 
     public function author()
     {
-    	return $this->belongsTo('App\Model\Author');
+    	return $this->belongsTo('App\Models\Author');
     }
 
     public function chapter()
     {
-    	return $this->hasMany('App\Model\Chapter');
+    	return $this->hasMany('App\Models\Chapter');
     }
 
     //该小说订阅用户
     public function user()
     {
-    	return $this->belongsToMany('App\Model\User', 'user_novel');
+    	return $this->belongsToMany('App\Models\User', 'user_novel');
     }
 
     public function scopeContinued($query)
