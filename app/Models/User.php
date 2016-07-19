@@ -11,6 +11,6 @@ class User extends Model
     //所有的订阅小说
     public function novel()
     {
-    	return $this->belongsToMany('App\Model\Novel', 'user_novel');
+    	return $this->belongsToMany('App\Models\Novel', 'user_novel');
     }
 }
