@@ -22,15 +22,15 @@ Route::group(['middleware'=>['web']], function(){
 
     Route::get('/', 'IndexController@index');
 
-    Route::get('authors', 'AuthorController@authors');
-
     Route::get('top-novel', 'IndexController@top');
+
+    Route::get('authors', 'AuthorController@novelList');
 
     Route::get('over-novel', 'IndexController@over');
 
     Route::get('search/{bookName}', 'IndexController@search');
 
-    Route::get('book/{bookId}', 'IndexController@book');
+    Route::get('book/{bookId}', 'BookController@index');
 
     //novel categories
     Route::get('xuanhuan', function() {
