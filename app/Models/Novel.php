@@ -40,4 +40,40 @@ class Novel extends Model
     {
         return $query->where('is_over', '=', 1);
     }
+
+    public function scopeTop($query)
+    {
+        return $query->orderBy('sort', 'desc')->take(8);
+    }
+
+    //热门
+    public function scopeHot($query)
+    {
+        return $query->orderBy('hot', 'desc')->take(8);
+    }
+
+    //最新
+    public function scopeLast($query)
+    {
+        return $query->orderBy('updated_at', 'desc')->take(15);
+    }
+
+    //周热门
+    public function scopeWeekHot($query)
+    {
+        return $query->whereExists(function ($query) {
+            $query
+                ->leftJoin('chapter', 'novel.id', '=', 'chapter.novel_id')
+                ->select(DB::raw('count(views) as views'))
+                ->from('chapter')
+                ->whereRaw('chapter.novel_id=novel.id');
+            })
+            ->take(8);
+    }
+
+    //月热门
+    public function scopeMonthHot($query)
+    {
+        return $query->take(8);
+    }
 }
