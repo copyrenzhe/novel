@@ -6,12 +6,12 @@
         <h2 class="title">TOP NOVELS</h2>
         <div class="l-grid">
             <div class="e-wrapper">
-                @foreach($topNovels as $novel)
+                @foreach($TopNovels as $novel)
                 <div class="element">
                     <a href="/book/{{ $novel->id }}" class="crop" title=""><img class="thumb" src="{{ $novel->cover }}" border="0" alt="{{ $novel->name }}" /></a>
                     <div class="content">
                         <a class="e-title" href="/book/{{ $novel->id }}" title="{{ $novel->name }}" >{{ $novel->name }}</a>
-                        <span class="e-view">Views: 3413</span>
+                        <span class="e-view">Views: {{ $novel->hot }}</span>
                     </div>
                 </div>
                 @endforeach
@@ -22,7 +22,7 @@
         <h1 class="title"><a href="/" title="Books online free" >BOOKS ONLINE FREE</a></h1>
         <div class="l-category box category-home">
             <ul class="content">
-                @foreach($recentNovels as $novel)
+                @foreach($LastNovels as $novel)
                 <li>
                     <a href="/author/{{ $novel->author->id }}" title="{{ $novel->author->name }}" class="cate-li-right">{{ $novel->author->name }}</a>
                     <a class="c-title" href="/book/{{ $novel->id }}" title="{{ $novel->name }}">{{ $novel->name }}</a>

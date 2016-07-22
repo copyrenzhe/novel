@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-class IndexController extends Controller
+class IndexController extends CommonController
 {
-    public function index()
+    /**
+     * IndexController constructor.
+     */
+    public function __construct()
     {
-        $TopNovels = Novel::top()->get();
+        parent::__construct();
         $HotNovels = Novel::hot()->get();
-        $LastNovels = Novel::last()->get();
         $genres = [
             'xuanhuan'  =>  '玄幻小说',
             'xiuzhen'   =>  '修真小说',
@@ -23,13 +25,27 @@ class IndexController extends Controller
             'kehuan'    =>  '科幻小说',
             'other'     =>  '其他'
         ];
+        view()->composer('common.right', function($view) use($HotNovels, $genres) {
+            $view->with('HotNovels', $HotNovels)->with('genres', $genres);
+        });
+    }
 
-        view('index', compact('TopNovels', 'HotNovels', 'LastNovels', 'genres'));
+    public function index()
+    {
+        $TopNovels = Novel::top()->get();
+        $LastNovels = Novel::last()->get();
+        return view('index.index', compact('TopNovels', 'LastNovels'));
+    }
+
+    public function category($category)
+    {
+        $novels = Novel::where('type', '=', $category)->paginate(15);
+        return view('index.category', compact('novels'));
     }
 
     public function search($keywords)
     {
-        $novels = Novel::where('name', 'like', '%'.$keywords.'%')->get();
-        view('search', compact('novels'));
+        $novels = Novel::where('name', 'like', '%'.$keywords.'%')->paginate(15);
+        return view('index.search', compact('novels'));
     }
 }
