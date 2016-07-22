@@ -32,30 +32,9 @@ Route::group(['middleware'=>['web']], function(){
 
     Route::get('book/{bookId}', 'BookController@index');
 
-    //novel categories
-    Route::get('xuanhuan', function() {
+    Route::get('{category}', ['uses'=>'IndexController@category'])
+        ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan)');
 
-    });
-
-    Route::get('xiuzhen', function() {
-
-    });
-
-    Route::get('dushi', function() {
-
-    });
-
-    Route::get('lishi', function() {
-
-    });
-
-    Route::get('wangyou', function() {
-
-    });
-
-    Route::get('kehuan', function() {
-
-    });
 });
 
 

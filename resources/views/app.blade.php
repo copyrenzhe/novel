@@ -2,9 +2,16 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Match info</title>
-    <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
-    <script type="text/javascript" src="{{ asset('/js/app.js')}}"></script>
+    <title>Novel</title>
+    {{--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">--}}
+    {{--<script type="text/javascript" src="{{ asset('/js/app.js')}}"></script>--}}
+    <script src="http://booksonlinefree.net/js/ipos.core.js" type="text/javascript"></script>
+    <script src="http://booksonlinefree.net/js/ipos.comic.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/main.css" />
+    <script type="text/javascript" src="http://booksonlinefree.net/js/santruyen.js"></script>
+    <script type="text/javascript" src="http://booksonlinefree.net/js/tabs.js"></script>
+
 </head>
 <body>
     <div class="wrapper">
