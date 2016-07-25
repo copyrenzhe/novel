@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\Inspire::class,
-         Commands\Snatch::class,
+        Commands\SnatchHourly::class,
+        Commands\SnatchDaily::class,
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-         $schedule->command('snatch')->hourly();
+        $schedule->command('snatch:updatehot')->hourly();
+        $schedule->command('snatch:initnovel')->daily();
     }
 }
