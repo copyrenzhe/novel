@@ -14,7 +14,7 @@
 
 
 Route::get('test', function() {
-    return App\Repositories\Snatch\Biquge::init();
+    Log::error('this is a test error');
 });
 
 
@@ -45,7 +45,7 @@ Route::group(['prefix'=>'biquge'], function() {
    Route::get('over/{page}', function($page){
        $page_size = 500;
        $offset = ($page-1)*$page_size;
-       $novels = \App\Models\Novel::over()->skip($offset)->take($page_size)->get();
+       $novels = \App\Models\Novel::over()->orderBy('id', 'asc')->skip($offset)->take($page_size)->get();
        foreach ($novels as $novel) {
            \App\Repositories\Snatch\Biquge::update($novel);
        }
@@ -55,7 +55,7 @@ Route::group(['prefix'=>'biquge'], function() {
     Route::get('continued/{page}', function ($page) {
         $page_size = 1000;
         $offset = ($page - 1) * $page_size;
-        $novels = \App\Models\Novel::continued()->skip($offset)->take($page_size)->get();
+        $novels = \App\Models\Novel::continued()->orderBy('id', 'asc')->skip($offset)->take($page_size)->get();
         foreach ($novels as $novel) {
             \App\Repositories\Snatch\Biquge::update($novel);
         }

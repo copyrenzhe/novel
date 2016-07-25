@@ -96,16 +96,16 @@ Class Biquge implements SnatchInterface
     public function getNovelChapter( Novel $novel ) {
             $novel_html = $this->send($novel->biquge_url);
             $chapter_list = $this->getChapterList($novel_html);
-            if(!$chapter_list[1]){
-                echo "getChapterList failed:\n";
+            if(!$chapter_list[1]) {
+                return "getChapterList failed:\n";
                 var_dump($novel_html);
                 die;
             }
             $count= $novel->chapter->where('content', '<>', '')->count();
-            if(count($chapter_list[1]) <= $count){
+            if(count($chapter_list[1]) <= $count) {
                 return ;
             }
-            foreach($chapter_list[1] as $k => $chapter_data){
+            foreach($chapter_list[1] as $k => $chapter_data) {
                 if($k<$count){
                     continue;
                 }
@@ -118,6 +118,7 @@ Class Biquge implements SnatchInterface
                     $chapter->save();
                 }
             }
+            return $chapter_list[1]-$count;
     }
 
     private function getDivList($html)
