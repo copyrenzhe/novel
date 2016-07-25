@@ -9,10 +9,12 @@
 
 namespace App\Repositories\Snatch;
 
+use App\Models\Novel;
+
 Interface SnatchInterface
 {
     public function getNovelList();
 
-    public function getNovelChapter($novel_id);
+    public function getNovelChapter(Novel $novel);
 
 }

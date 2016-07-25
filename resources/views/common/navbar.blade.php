@@ -8,29 +8,16 @@
             </form>
             <div class="clr"></div>
         </div>
-        <a class="mb-nav-a" href="/" title="Home">Home</a>
-        <a class="mb-nav-a" title="Genres">Genres</a>
+        <a class="mb-nav-a" href="/" title="Home">首页</a>
+        <a class="mb-nav-a" title="Genres">分类</a>
         <div class="mb-nav-sub">
-            <a title="Adventure Novels" href="/280406-adventure.htm">Adventure</a>
-            <a title="Christian Novels" href="/280407-christian.htm">Christian</a>
-            <a title="Fantasy Novels" href="/280408-fantasy.htm">Fantasy</a>
-            <a title="General Novels" href="/280409-general.htm">General</a>
-            <a title="Graphic Novels" href="/280410-graphic.htm">Graphic</a>
-            <a title="Historical Novels" href="/280411-historica.html">Historical</a>
-            <a title="Horror Novels" href="/280412-horror.htm">Horror</a>
-            <a title="Humorous Novels" href="/280413-humorous.htm">Humorous</a>
-            <a title="Mystery Novels" href="/280414-mystery.htm">Mystery</a>
-            <a title="Romance Novels" href="/280415-romance.htm">Romance</a>
-            <a title="Science Fiction Novels" href="/280416-science-fiction.htm">Science Fiction</a>
-            <a title="Thriller Novels" href="/280417-thriller.htm">Thriller</a>
-            <a title="Western Novels" href="/280418-western.htm">Western</a>
-            <a title="Young Adult Novels" href="/280419-young-adult.htm">Young Adult</a>
+            @foreach($genres as $key => $genre)
+            <a title="{{ $key }}" href="/{{ $key }}">{{ $genre }}</a>
+            @endforeach
         </div>
-        <a class="mb-nav-a" href="/new-releases.htm" title="New Releases">New Releases</a>
-        <a class="mb-nav-a" href="/top-novel.htm" title="Top Novel">Top Novel</a>
-        <a class="mb-nav-a" href="/authors.htm" title="New Releases">Authors</a>
-        <a class="mb-nav-a" href="/popular-series.htm" title="Hot Novel">Popular Series</a>
-        <a class="mb-nav-a" href="/top-romance-novels.htm" title="Top Romance Novels">Top Romance Novels</a>
+        <a class="mb-nav-a" href="/new-releases.htm" title="New Releases">最新发布</a>
+        <a class="mb-nav-a" href="/top-novel.htm" title="Top Novel">排行榜单</a>
+        <a class="mb-nav-a" href="/authors.htm" title="New Releases">作者大神</a>
     </div>
 </div>
 <!-- / mobile navbar -->
@@ -41,29 +28,15 @@
         <li><a title="Genres">Genres</a>
             <div class="menu-expand">
                 <ul class="menu-expand-ul">
-                    <li><a title="Adventure Novels" href="/280406-adventure.htm">Adventure</a></li>
-                    <li><a title="Christian Novels" href="/280407-christian.htm">Christian</a></li>
-                    <li><a title="Fantasy Novels" href="/280408-fantasy.htm">Fantasy</a></li>
-                    <li><a title="General Novels" href="/280409-general.htm">General</a></li>
-                    <li><a title="Graphic Novels" href="/280410-graphic.htm">Graphic</a></li>
-                    <li><a title="Historical Novels" href="/280411-historical.htm">Historical</a></li>
-                    <li><a title="Horror Novels" href="/280412-horror.htm">Horror</a></li>
-                    <li><a title="Humorous Novels" href="/280413-humorous.htm">Humorous</a></li>
-                    <li><a title="Mystery Novels" href="/280414-mystery.htm">Mystery</a></li>
-                    <li><a title="Romance Novels" href="/280415-romance.htm">Romance</a></li>
-                    <li><a title="Science Fiction Novels" href="/280416-science-fiction.htm">Science Fiction</a></li>
-                    <li><a title="Thriller Novels" href="/280417-thriller.html">Thriller</a></li>
-                    <li><a title="Western Novels" href="/280418-western.htm">Western</a></li>
-                    <li><a title="Young Adult Novels" href="/280419-young-adult.htm">Young Adult</a></li>
-
+                    @foreach($genres as $key => $genre)
+                        <li><a title="{{ $genre }}" href="/{{ $key }}">{{ $genre }}</a></li>
+                    @endforeach
                 </ul>
             </div>
         </li>
-        <li><a href="/new-releases.htm" title="New Releases">New Releases</a></li>
-        <li><a href="/top-novel.htm" title="Hot Novel">Top Novel</a></li>
-        <li><a href="/authors.htm" title="Authors">Authors</a></li>
-        <li><a href="/popular-series.htm" title="Popular Series">Popular Series</a></li>
-        <li><a title="Top Romance Novels" href="/top-romance-novels.htm">Top Romance Novels</a></li>
+        <li><a href="/new-releases.htm" title="New Releases">最新发布</a></li>
+        <li><a href="/top-novel.htm" title="Hot Novel">排行榜单</a></li>
+        <li><a href="/authors.htm" title="Authors">作者大神</a></li>
     </ul>
     <div class="nav_social"></div>
 </div>

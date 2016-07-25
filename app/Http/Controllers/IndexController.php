@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Novel;
 use Illuminate\Http\Request;
 
@@ -15,19 +16,6 @@ class IndexController extends CommonController
     public function __construct()
     {
         parent::__construct();
-        $HotNovels = Novel::hot()->get();
-        $genres = [
-            'xuanhuan'  =>  '玄幻小说',
-            'xiuzhen'   =>  '修真小说',
-            'dushi'     =>  '都市小说',
-            'lishi'     =>  '历史小说',
-            'wangyou'   =>  '网游小说',
-            'kehuan'    =>  '科幻小说',
-            'other'     =>  '其他'
-        ];
-        view()->composer('common.right', function($view) use($HotNovels, $genres) {
-            $view->with('HotNovels', $HotNovels)->with('genres', $genres);
-        });
     }
 
     public function index()
@@ -39,13 +27,13 @@ class IndexController extends CommonController
 
     public function category($category)
     {
-        $novels = Novel::where('type', '=', $category)->paginate(15);
-        return view('index.category', compact('novels'));
+        $novels = Novel::where('type', '=', $category)->paginate(30);
+        return view('index.category', compact('category', 'novels'));
     }
 
     public function search($keywords)
     {
         $novels = Novel::where('name', 'like', '%'.$keywords.'%')->paginate(15);
-        return view('index.search', compact('novels'));
+        return view('index.search', compact('keywords', 'novels'));
     }
 }

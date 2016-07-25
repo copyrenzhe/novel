@@ -2,7 +2,7 @@
 <div id="right">
     <!-- menu-child -->
     <div class="menu-child">
-        <h2 class="title">Genres</h2>
+        <h2 class="title">分类</h2>
         <ul class="menu-child-ul">
             @foreach($genres as $key => $genre)
                 <li><a title="{{ $genre }}" href="/{{ $key }}">{{ $genre }}</a></li>
@@ -12,7 +12,7 @@
     </div>
     <!--/ menu-child -->
     <!-- top xem nhieu -->
-    <h2 class="title">MOST POPULAR</h2>
+    <h2 class="title">最热</h2>
     <div class="right_tabs">
         <ul class="idTabs">
             <li><a class="selected" href="#ngay" title="DAY">DAY</a></li>
