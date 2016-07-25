@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
 
         $overNovels = \App\Models\Novel::over()->get();
         foreach($overNovels as $novel){
-            Biquge::update($novel->id);
+            Biquge::update($novel);
         }
         echo "完结小说已更新完毕\n";
 
         $continueNovels = \App\Models\Novel::continued()->get();
         foreach ($continueNovels as $novel){
-            Biquge::update($novel->id);
+            Biquge::update($novel);
         }
         echo "连载小说已更新完毕\n";
     }

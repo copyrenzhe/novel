@@ -38,10 +38,10 @@ Class Biquge implements SnatchInterface
      * 更新小说章节
      * @return [type] [description]
      */
-    public static function update($novel_id)
+    public static function update( Novel $novel)
     {
         $Biquge = new Biquge();
-        return $Biquge->getNovelChapter($novel_id);
+        return $Biquge->getNovelChapter($novel);
     }
 
     public function getNovelList()
@@ -93,9 +93,7 @@ Class Biquge implements SnatchInterface
      * 获取小说章节
      * @param $novel_id
      */
-    public function getNovelChapter($novel_id) {
-        $novel = Novel::find($novel_id);
-
+    public function getNovelChapter( Novel $novel ) {
             $novel_html = $this->send($novel->biquge_url);
             $chapter_list = $this->getChapterList($novel_html);
             if(!$chapter_list[1]){
