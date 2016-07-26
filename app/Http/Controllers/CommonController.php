@@ -10,6 +10,7 @@ use App\Http\Requests;
 class CommonController extends Controller
 {
     //
+    protected $genres;
 
     /**
      * CommonController constructor.
@@ -26,7 +27,8 @@ class CommonController extends Controller
             'kehuan'    =>  '科幻小说',
             'other'     =>  '其他'
         ];
-        view()->composer('common.right', function($view) use($HotNovels, $genres) {
+        $this->genres = $genres;
+        view()->composer(['common.right', 'common.navbar'], function($view) use($HotNovels, $genres) {
             $view->with('HotNovels', $HotNovels)->with('genres', $genres);
         });
     }

@@ -12,10 +12,9 @@
     </div>
     <!--/ menu-child -->
     <!-- top xem nhieu -->
-    <h2 class="title">最热</h2>
+    <h2 class="title">排行热榜</h2>
     <div class="right_tabs">
         <ul class="idTabs">
-            <li><a class="selected" href="#ngay" title="DAY">DAY</a></li>
         </ul>
         <div id="ngay" class="l-right box">
             <ul class="content">

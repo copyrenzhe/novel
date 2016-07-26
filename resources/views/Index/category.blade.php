@@ -12,13 +12,7 @@
                 @endforeach
             </ul>
             <div class="pagination">
-                {!! $novels->render() !!}
-                {{--<ul class="pg-ul">--}}
-                    {{--<li>Page »</li>--}}
-                    {{--<li><a class="active">1</a></li>--}}
-                    {{--<li><a href="http://ebook12.com/280406-adventure.htm?start=30">2</a></li>--}}
-                    {{--<li><a href="http://ebook12.com/280406-adventure.htm?start=30">&gt;</a></li>--}}
-                {{--</ul>--}}
+                @include('pagination.novel', ['paginator' => $novels])
                 <div class="clr"></div>
             </div>
             <div class="clr"></div>

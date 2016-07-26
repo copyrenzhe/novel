@@ -11,7 +11,12 @@
                     <a class="c-title" href="/book/{{ $novel->id }}" title="{{ $novel->name }}">{{ $novel->name }}</a>
                 </li>
                 @endforeach
-            </ul><div class="clr"></div>
+            </ul>
+            <div class="pagination">
+                @include('pagination.novel', ['paginator' => $novels])
+                <div class="clr"></div>
+            </div>
+            <div class="clr"></div>
         </div>
         <!--/ truyen moi cap nhat -->
     </div>

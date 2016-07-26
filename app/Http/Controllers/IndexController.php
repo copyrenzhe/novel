@@ -28,7 +28,8 @@ class IndexController extends CommonController
     public function category($category)
     {
         $novels = Novel::where('type', '=', $category)->paginate(30);
-        return view('index.category', compact('category', 'novels'));
+        $genres = $this->genres;
+        return view('index.category', compact('category', 'novels', 'genres'));
     }
 
     public function search($keywords)

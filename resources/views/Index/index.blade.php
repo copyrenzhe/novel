@@ -3,7 +3,7 @@
     <!-- left -->
     <div id="left">
         <!-- Truyen hot -->
-        <h2 class="title">TOP NOVELS</h2>
+        <h2 class="title">热门推荐</h2>
         <div class="l-grid">
             <div class="e-wrapper">
                 @foreach($TopNovels as $novel)
@@ -19,7 +19,7 @@
         </div>
         <!--/ Truyen hot -->
         <!-- truyen moi cap nhat -->
-        <h1 class="title"><a href="/" title="Books online free" >BOOKS ONLINE FREE</a></h1>
+        <h1 class="title"><a href="/" title="Books online free" >最近更新</a></h1>
         <div class="l-category box category-home">
             <ul class="content">
                 @foreach($LastNovels as $novel)
