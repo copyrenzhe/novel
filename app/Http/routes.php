@@ -14,7 +14,13 @@
 
 
 Route::get('test', function() {
-    Log::error('this is a test error');
+    $url_array = array(
+        'http://www.biquge.la/book/5094/3118157.html',
+        'http://www.biquge.la/book/5094/3118156.html'
+    );
+
+    $content = remote($url_array);
+    print_r($content);
 });
 
 

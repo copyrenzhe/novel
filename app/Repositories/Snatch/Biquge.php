@@ -26,7 +26,6 @@ Class Biquge implements SnatchInterface
 
     /**
      * 初始化小说列表，获取当前笔趣阁所有小说
-     * @return [type] [description]
      */
     public static function init()
     {
@@ -36,7 +35,8 @@ Class Biquge implements SnatchInterface
 
     /**
      * 更新小说章节
-     * @return [type] [description]
+     * @param Novel $novel
+     * @return array [type] [description]
      */
     public static function update( Novel $novel)
     {
@@ -91,7 +91,8 @@ Class Biquge implements SnatchInterface
 
     /**
      * 获取小说章节
-     * @param $novel_id
+     * @param Novel $novel
+     * @return array
      */
     public function getNovelChapter( Novel $novel ) {
             $novel_html = $this->send($novel->biquge_url);
@@ -101,7 +102,7 @@ Class Biquge implements SnatchInterface
                 var_dump($novel_html);
                 die;
             }
-            $count= $novel->chapter->where('content', '<>', '')->count();
+            $count= $novel->chapter()->where('content', '<>', '')->count();
             if(count($chapter_list[1]) <= $count) {
                 return ;
             }
@@ -211,7 +212,7 @@ Class Biquge implements SnatchInterface
         } else {
             curl_setopt($ch, CURLOPT_REFERER, self::REFERER);
         }
-       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
         $html = curl_exec($ch);
         if($html === false) {
@@ -219,5 +220,10 @@ Class Biquge implements SnatchInterface
         }
         curl_close($ch);
         return mb_convert_encoding($html, 'UTF-8', $encoding);
+    }
+
+    private function multi_send($url_array)
+    {
+        return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
     }
 }

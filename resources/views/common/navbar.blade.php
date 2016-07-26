@@ -15,9 +15,9 @@
             <a title="{{ $key }}" href="/{{ $key }}">{{ $genre }}</a>
             @endforeach
         </div>
-        <a class="mb-nav-a" href="/new-releases.htm" title="New Releases">最新发布</a>
-        <a class="mb-nav-a" href="/top-novel.htm" title="Top Novel">排行榜单</a>
-        <a class="mb-nav-a" href="/authors.htm" title="New Releases">作者大神</a>
+        <a class="mb-nav-a" href="/new-releases.htm" title="New Releases">最新</a>
+        <a class="mb-nav-a" href="/top-novel.htm" title="Top Novel">排行</a>
+        <a class="mb-nav-a" href="/authors.htm" title="New Releases">作者</a>
     </div>
 </div>
 <!-- / mobile navbar -->
@@ -25,7 +25,7 @@
 <div id="navbar">
     <ul class="top_nav">
         <li class="active"><a class="top_nav_home" href="/" title="Home"></a></li>
-        <li><a title="Genres">Genres</a>
+        <li><a title="Genres">小说分类</a>
             <div class="menu-expand">
                 <ul class="menu-expand-ul">
                     @foreach($genres as $key => $genre)
