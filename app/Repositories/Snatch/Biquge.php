@@ -33,6 +33,13 @@ Class Biquge implements SnatchInterface
         return $Biquge->getNovelList();
     }
 
+    public static function test()
+    {
+        $Biquge = new Biquge();
+        $content = $Biquge->send('http://www.biquge.la/book/110/87768.html');
+        return $Biquge->getChapterContent($content);
+    }
+
     /**
      * 更新小说章节
      * @param Novel $novel
@@ -42,6 +49,12 @@ Class Biquge implements SnatchInterface
     {
         $Biquge = new Biquge();
         return $Biquge->getNovelChapter($novel);
+    }
+
+    public static function updateNew( Novel $novel)
+    {
+        $Biquge = new Biquge();
+        return $Biquge->getChapterNew($novel);
     }
 
     public function getNovelList()
@@ -110,13 +123,14 @@ Class Biquge implements SnatchInterface
             $chapter_list[1][$k] = $novel->biquge_url . $chapter_data;
         }
         $contents = $this->multi_send($chapter_list[1]);
-        $attr_array = array('biquge_url', 'name', 'content', 'novel_id');
         foreach($contents as $k => $content) {
-            $chapter = Chapter::updateOrCreate(['biquge_url'], [$chapter_list[1][$k]]);
-            $chapter->name = $chapter_list[2][$k];
-            $chapter->content = $content;
-            $chapter->novel_id = $novel->id;
-            $chapter->save();
+//            $attr_array = ['biquge_url' => $chapter_list[1][$k]];
+            $value_array = [
+                'name' => $chapter_list[2][$k],
+                'content' => $this->getChapterContent($content),
+                'novel_id' => $novel->id
+            ];
+            Chapter::updateOrCreate(['biquge_url' => $chapter_list[1][$k]], $value_array);
         }
     }
 
@@ -221,9 +235,13 @@ Class Biquge implements SnatchInterface
 
     private function getChapterContent($html)
     {
-        $preg = '/<div id="content"><script>readx\(\);<\/script>(.*?)<\/div>/s';
+        $preg = '/<div id="content"><script>(.*?)<\/script>(.*?)<\/div>/s';
         preg_match($preg, $html, $content);
-        return $content[1];
+        if(!isset($content[2])){
+            \Log::error("html:\n".$html."\ncontent:\n");
+            \Log::error($content);
+        }
+        return @$content[2];
     }
 
     private function send($url, $type = 'GET', $params = false, $encoding = 'gbk')
@@ -255,6 +273,60 @@ Class Biquge implements SnatchInterface
 
     private function multi_send($url_array)
     {
-        return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
+//        return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
+        $contents = array();
+        $len = count($url_array);
+        $max_size = $len;
+        $requestMap = array();
+
+        $mh = curl_multi_init();
+        for ($i = 0; $i < $max_size; $i++)
+        {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_URL, $url_array[$i]);
+            curl_setopt($ch, CURLOPT_COOKIE, self::COOKIE);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            $requestMap[$i] = $ch;
+            curl_multi_add_handle($mh, $ch);
+        }
+
+        do {
+            while (($cme = curl_multi_exec($mh, $active)) == CURLM_CALL_MULTI_PERFORM);
+
+            if ($cme != CURLM_OK) {break;}
+
+            while ($done = curl_multi_info_read($mh))
+            {
+                $info = curl_getinfo($done['handle']);
+                $tmp_result = curl_multi_getcontent($done['handle']);
+                $error = curl_errno($done['handle']);
+
+                $contents[] = $error == 0 ? mb_convert_encoding($tmp_result, 'UTF-8', 'gbk') : '';;
+
+                //保证同时有$max_size个请求在处理
+//                if ($i < sizeof($url_array) && isset($url_array[$i]) && $i < count($url_array))
+//                {
+//                    $ch = curl_init();
+//                    curl_setopt($ch, CURLOPT_HEADER, 0);
+//                    curl_setopt($ch, CURLOPT_URL, $url_array[$i]);
+//                    curl_setopt($ch, CURLOPT_COOKIE, self::COOKIE);
+//                    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
+//                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+//                    $requestMap[$i] = $ch;
+//                    curl_multi_add_handle($mh, $ch);
+//                    $i++;
+//                }
+                curl_multi_remove_handle($mh, $done['handle']);
+            }
+            if ($active)
+                curl_multi_select($mh, 10);
+        } while ($active);
+
+        curl_multi_close($mh);
+        return $contents;
     }
 }
