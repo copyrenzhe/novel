@@ -14,13 +14,11 @@
 
 
 Route::get('test', function() {
-    $url_array = array(
-        'http://www.biquge.la/book/5094/3118157.html',
-        'http://www.biquge.la/book/5094/3118156.html'
-    );
-
-    $content = remote($url_array);
-    print_r($content);
+    $dtStart = microtime_float();
+    $novel = \App\Models\Novel::find(10791);
+    \App\Repositories\Snatch\Biquge::updateNew($novel);
+    $dtEnd = microtime_float();
+    echo $dtEnd-$dtStart;
 });
 
 
