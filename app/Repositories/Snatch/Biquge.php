@@ -90,6 +90,37 @@ Class Biquge implements SnatchInterface
 
 
     /**
+     * @param Novel $novel
+     * @return string|void
+     */
+    public function getChapterNew(Novel $novel)
+    {
+        $novel_html = $this->send($novel->biquge_url);
+        $chapter_list = $this->getChapterList($novel_html);
+        if(!$chapter_list[1]) {
+            return "getChapterList failed:\n";
+            Log::error('getChapterList failed');
+            die;
+        }
+        $count= $novel->chapter()->where('content', '<>', '')->count();
+        if(count($chapter_list[1]) <= $count) {
+            return ;
+        }
+        foreach ($chapter_list[1] as $k => $chapter_data) {
+            $chapter_list[1][$k] = $novel->biquge_url . $chapter_data;
+        }
+        $contents = $this->multi_send($chapter_list[1]);
+        $attr_array = array('biquge_url', 'name', 'content', 'novel_id');
+        foreach($contents as $k => $content) {
+            $chapter = Chapter::updateOrCreate(['biquge_url'], [$chapter_list[1][$k]]);
+            $chapter->name = $chapter_list[2][$k];
+            $chapter->content = $content;
+            $chapter->novel_id = $novel->id;
+            $chapter->save();
+        }
+    }
+
+    /**
      * 获取小说章节
      * @param Novel $novel
      * @return array

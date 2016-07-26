@@ -19,6 +19,7 @@ class CreateTableChapter extends Migration
             $table->string('name');
             $table->longText('content');
             $table->bigInteger('views')->default(0);
+            $table->string('biquge_url')->nullable()->key();
             $table->timestamps();
         });
     }
