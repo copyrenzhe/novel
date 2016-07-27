@@ -33,11 +33,25 @@ Class Biquge implements SnatchInterface
         return $Biquge->getNovelList();
     }
 
-    public static function test()
+    /**
+     * @desc 修复未获取到内容的章节，若传入小说id，则修复该小说的章节，否则修复所有内容为空的章节
+     * @param int|null $novel_id
+     */
+    public static function repair($novel_id=0 )
     {
         $Biquge = new Biquge();
-        $content = $Biquge->send('http://www.biquge.la/book/110/87768.html');
-        return $Biquge->getChapterContent($content);
+        if(!!$novel_id)
+            $url_list = Chapter::where('biquge_url', '<>', '')->where('novel_id', $novel_id)->whereNull('content')->pluck('biquge_url')->toArray();
+        else
+            $url_list = Chapter::where('biquge_url', '<>', '')->whereNull('content')->pluck('biquge_url')->toArray();
+
+        $contents = $Biquge->multi_send($url_list);
+        foreach ($contents as $k => $content) {
+            $value_array = [
+                'content' => $Biquge->getChapterContent($content)
+            ];
+            Chapter::updateOrCreate([ 'biquge_url' => $url_list[$k] ], $value_array);
+        }
     }
 
     /**
@@ -51,7 +65,12 @@ Class Biquge implements SnatchInterface
         return $Biquge->getNovelChapter($novel);
     }
 
-    public static function updateNew( Novel $novel)
+    /**
+     * @desc 使用curl_multi 多线程更新章节
+     * @param Novel $novel
+     * @return string|void
+     */
+    public static function updateNew(Novel $novel)
     {
         $Biquge = new Biquge();
         return $Biquge->getChapterNew($novel);
@@ -74,7 +93,36 @@ Class Biquge implements SnatchInterface
                 var_dump($novel);
                 die;
             }
-            foreach($info_arr[1] as $key => $info){
+            foreach($info_arr[1] as $key => $info) {
+                $info_arr[1][$key] = self::DOMAIN . $info;
+            }
+            $contents = $this->multi_send($info_arr[1]);
+            foreach($contents as $k => $content) {
+                $novel_name = $info_arr[2][$key];
+                $novel_is_over = $info_arr[3][$key] == '载' ? 0 : 1;
+                $novel_author = $info_arr[4][$key];
+                $author = Author::firstOrCreate(['name'=>$novel_author]);
+                $cover_link = $this->getNovelCover(content);
+                $value_arr = [
+                    'name'          =>  $novel_name,
+                    'author_id'     =>  $author->id,
+                    'type'          =>  $type,
+                    'is_over'       =>  $novel_is_over,
+                    'description'   =>  $this->getNovelInfo($content),
+                ];
+                if(!empty($cover_link)) {
+                    $cover_ext = substr($cover_link, strrpos($cover_link, '.')+1);
+                    $path = public_path('cover/'.$novel->id.'_cover.'.$cover_ext);
+                    //文件不存在时才获取图片
+                    if(!file_exists($path)) {
+                        $cover = file_get_contents($cover_link);
+                        file_put_contents($path, $cover);
+                    }
+                    $value_arr['cover'] = '/cover/'.$novel->id.'_cover.'.$cover_ext;
+                }
+                $novel = Novel::updateOrCreate(['biquge_url' => $info_arr[1][$k]], $value_arr);
+            }
+            /*foreach($info_arr[1] as $key => $info){
                 $novel_link = self::DOMAIN . $info;
                 if(Novel::where('biquge_url', '=', $novel_link)->first()){
                     continue;
@@ -90,19 +138,24 @@ Class Biquge implements SnatchInterface
                 $novel_html = $this->send($novel_link);
                 $novel->description = $this->getNovelInfo($novel_html);
                 $cover_link = $this->getNovelCover($novel_html);
-                if(!empty($cover_link)){
+                if(!empty($cover_link)) {
                     $cover_ext = substr($cover_link, strrpos($cover_link, '.')+1);
-                    $cover = file_get_contents($cover_link);
-                    file_put_contents(public_path('cover/'.$novel->id.'_cover.'.$cover_ext), $cover);
+                    $path = public_path('cover/'.$novel->id.'_cover.'.$cover_ext);
+                    //文件不存在时才获取图片
+                    if(!file_exists($path)) {
+                        $cover = file_get_contents($cover_link);
+                        file_put_contents($path, $cover);
+                    }
                     $novel->cover = '/cover/'.$novel->id.'_cover.'.$cover_ext;
                 }
                 $novel->save();
-            }
+            }*/
         }
     }
 
 
     /**
+     * @desc 使用curl_multi 多线程更新章节
      * @param Novel $novel
      * @return string|void
      */
@@ -124,7 +177,6 @@ Class Biquge implements SnatchInterface
         }
         $contents = $this->multi_send($chapter_list[1]);
         foreach($contents as $k => $content) {
-//            $attr_array = ['biquge_url' => $chapter_list[1][$k]];
             $value_array = [
                 'name' => $chapter_list[2][$k],
                 'content' => $this->getChapterContent($content),
@@ -273,7 +325,11 @@ Class Biquge implements SnatchInterface
 
     private function multi_send($url_array)
     {
-//        return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
+        return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
+    }
+
+    private function multi_send_new($url_array)
+    {
         $contents = array();
         $len = count($url_array);
         $max_size = $len;

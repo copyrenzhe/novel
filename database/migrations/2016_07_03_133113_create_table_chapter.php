@@ -17,7 +17,7 @@ class CreateTableChapter extends Migration
             $table->increments('id');
             $table->integer('novel_id');
             $table->string('name');
-            $table->longText('content');
+            $table->longText('content')->nullable();
             $table->bigInteger('views')->default(0);
             $table->string('biquge_url')->nullable()->unique();
             $table->timestamps();
