@@ -47,6 +47,7 @@ class SnatchHourly extends Command
             if($hotNovels) {
                 $this->info('Hot novels to be processed');
                 foreach ($hotNovels as $hotNovel) {
+                    $this->info("-- 开始更新小说[{$hotNovel->name}] --");
                     $return = Biquge::updateNew($hotNovel);
                     if($return['code'])
                         $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新成功");
@@ -54,6 +55,10 @@ class SnatchHourly extends Command
                         $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新失败");
                     $i=0;
                     do{
+                        if($i >= 10){
+                            $this->error("小说[{$hotNovel->id}]：{$hotNovel->name}经过多次修复仍失败，请排查！");
+                            break;
+                        }
                         $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}开始第{$i}次修复");
                         Biquge::repair($hotNovel->id);
                         $i++;
