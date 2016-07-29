@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\Snatch\Biquge;
+use Log;
 use Illuminate\Console\Command;
+use App\Repositories\Snatch\Biquge;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SnatchDaily extends Command
 {
@@ -12,19 +14,18 @@ class SnatchDaily extends Command
      *
      * @var string
      */
-    protected $signature = 'snatch:initnovel';
+    protected $signature = 'snatch:updateAll';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '(Maple) This command is used to init novel from snatch.';
+    protected $description = '(Maple) This command is used to update all novel`s chapters.';
 
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -40,10 +41,21 @@ class SnatchDaily extends Command
     {
         //
         try{
-            $this->info('----- STARTING THE PROCESS FOR INIT NOVEL -----');
-            Biquge::init();
-            $this->info('----- FINISHED THE PROCESS FOR INIT NOVEL -----');
-        }catch (\Exception $e) {
+            $this->info('----- STARTING THE PROCESS FOR UPDATE ALL NOVELS -----');
+            $novels = Novel::all()->get();
+            if($novels) {
+                $this->info('All novels to be processed');
+                foreach ($novels as $novel) {
+                    $return = Biquge::updateNew($novel);
+                    if($return['code'])
+                        $this->info("小说[{$novel->id}]：{$novel->name}更新成功");
+                    else
+                        $this->info("小说[{$novel->id}]：{$novel->name}更新失败");
+                    Biquge::repair($novel->id);
+                }
+                $this->info('----- FINISHED THE PROCESS FOR UPDATE ALL NOVELS -----');
+            }
+        } catch (ModelNotFoundException $e) {
             Log::error($e);
             $this->error('They received errors when running the process. View Log File.');
         }
