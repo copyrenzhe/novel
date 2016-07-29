@@ -15,7 +15,7 @@ class SnatchHourly extends Command
      *
      * @var string
      */
-    protected $signature = 'snatch:updatehot';
+    protected $signature = 'snatch:updateHot';
 
     /**
      * The console command description.
@@ -27,7 +27,6 @@ class SnatchHourly extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -48,11 +47,17 @@ class SnatchHourly extends Command
             if($hotNovels) {
                 $this->info('Hot novels to be processed');
                 foreach ($hotNovels as $hotNovel) {
-                    $return = Biquge::update($hotNovel);
+                    $return = Biquge::updateNew($hotNovel);
                     if($return['code'])
-                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新成功，共更新{$return['info']}章");
+                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新成功");
                     else
-                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新失败，原因：{$return['info']}");
+                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新失败");
+                    $i=0;
+                    do{
+                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}开始第{$i}次修复");
+                        Biquge::repair($hotNovel->id);
+                        $i++;
+                    }while($hotNovel->chapter()->whereNull('content')->count());
                 }
                 $this->info('----- FINISHED THE PROCESS FOR UPDATE OF HOT LIMIT 30 -----');
             }

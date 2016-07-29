@@ -6,6 +6,7 @@ use App\Models\Novel;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Cache;
 
 class CommonController extends Controller
 {
@@ -17,8 +18,10 @@ class CommonController extends Controller
      */
     public function __construct()
     {
-        $HotNovels = Novel::hot()->get();
-        $genres = [
+        $HotNovels = Caceh::remember('HotNovels', 60, function() {
+            return $HotNovels = Novel::hot()->get();
+        });
+        $genres = Cache::rememberForever('genres', [
             'xuanhuan'  =>  '玄幻小说',
             'xiuzhen'   =>  '修真小说',
             'dushi'     =>  '都市小说',
@@ -26,7 +29,7 @@ class CommonController extends Controller
             'wangyou'   =>  '网游小说',
             'kehuan'    =>  '科幻小说',
             'other'     =>  '其他'
-        ];
+        ]);
         $this->genres = $genres;
         view()->composer(['common.right', 'common.navbar'], function($view) use($HotNovels, $genres) {
             $view->with('HotNovels', $HotNovels)->with('genres', $genres);

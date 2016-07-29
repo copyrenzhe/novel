@@ -14,7 +14,7 @@
 
 Route::get('test2', function () {
     $dtStart = microtime_float();
-    \App\Repositories\Snatch\Biquge::repair();
+    \App\Repositories\Snatch\Biquge::init();
     $dtEnd = microtime_float();
     echo $dtEnd-$dtStart;
 });
