@@ -13,10 +13,7 @@
 
 
 Route::get('test2', function () {
-    $dtStart = microtime_float();
-    \App\Repositories\Snatch\Biquge::init();
-    $dtEnd = microtime_float();
-    echo $dtEnd-$dtStart;
+    echo storage_path(). '/logs/'.\Carbon\Carbon::now()->year.'/'.\Carbon\Carbon::now()->month.'/novel.cron.updateHot.tmp.log';
 });
 
 Route::get('test', function() {
