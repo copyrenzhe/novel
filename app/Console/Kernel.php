@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\SnatchHourly::class,
         Commands\SnatchInit::class,
         Commands\SnatchDaily::class,
+        Commands\MailDaily::class,
     ];
 
     /**
@@ -45,5 +46,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('snatch:updateAll')
             ->dailyAt('03:00')
             ->sendOutputTo(storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateAll.log');
+
+        $schedule->command('mail:daily')
+            ->dailyAt('23:00');
     }
 }

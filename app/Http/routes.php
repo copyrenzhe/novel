@@ -11,20 +11,6 @@
 |
 */
 
-
-Route::get('test2', function () {
-    echo storage_path(). '/logs/'.\Carbon\Carbon::now()->year.'/'.\Carbon\Carbon::now()->month.'/novel.cron.updateHot.tmp.log';
-});
-
-Route::get('test', function() {
-    $dtStart = microtime_float();
-    $novel = \App\Models\Novel::find(10791);
-    \App\Repositories\Snatch\Biquge::updateNew($novel);
-    $dtEnd = microtime_float();
-    echo $dtEnd-$dtStart;
-});
-
-
 Route::group(['middleware'=>['web']], function(){
 
     Route::get('/', 'IndexController@index');

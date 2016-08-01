@@ -30,9 +30,11 @@ class BookController extends CommonController
 
     public function chapter($bookId, $chapterId)
     {
-        $chapter = Chapter::where('novel_id', '=', $bookId)->where('id', '=', $chapterId)->first();
+        $chapter = Chapter::where('novel_id', '=', $bookId)->find($chapterId)->first();
         if(!$chapter)
             abort(404);
+        $chapter->increment('views');
+        $chapter->novel()->increment('hot');
         return view('book.chapter', compact('chapter'));
     }
 }
