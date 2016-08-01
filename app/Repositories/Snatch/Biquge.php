@@ -41,13 +41,15 @@ Class Biquge implements SnatchInterface
     public static function repair($novel_id=0 )
     {
         $Biquge = new Biquge();
+        Log::info("开始修复");
         if(!!$novel_id)
-            $url_list = Chapter::where('biquge_url', '<>', '')->where('novel_id', $novel_id)->whereNull('content')->pluck('biquge_url')->toArray();
+            $url_list = Chapter::whereNotNull('biquge_url')->where('novel_id', $novel_id)->whereNull('content')->pluck('biquge_url')->toArray();
         else
-            $url_list = Chapter::where('biquge_url', '<>', '')->whereNull('content')->pluck('biquge_url')->toArray();
+            $url_list = Chapter::whereNotNull('biquge_url')->whereNull('content')->pluck('biquge_url')->toArray();
 
         $contents = $Biquge->multi_send($url_list);
         foreach ($contents as $k => $content) {
+            Log::info("修复小说[$novel_id]，章节：{$url_list[$k]}");
             $value_array = [
                 'content' => $Biquge->getChapterContent($content)
             ];
