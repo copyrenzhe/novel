@@ -12,15 +12,7 @@
 */
 
 Route::get('test', function() {
-    $list = DB::table('chapter')
-                ->select(DB::raw('novel_id, count(*) as num'))
-                ->groupBy('novel_id')
-                ->get();
-    foreach ($list as $key => $value) {
-        $novel = \App\Models\Novel::find($value->novel_id);
-        $novel->chapter_num = $value->num;
-        $novel->save();
-    }
+    \App\Repositories\Snatch\Biquge::repair(1247);
 });
 
 

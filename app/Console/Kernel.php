@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\SnatchInit::class,
         Commands\SnatchDaily::class,
         Commands\MailDaily::class,
+        Commands\RepairData::class,
     ];
 
     /**
