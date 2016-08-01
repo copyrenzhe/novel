@@ -170,15 +170,19 @@ Class Biquge implements SnatchInterface
             Log::error('getChapterList failed');
             return ['code' => 0];
         }
-        $count= $novel->chapter()->whereNotNull('content')->count();
+        $count= $novel->chapter_num;
         if(count($chapter_list[1]) <= $count) {
             return ['code' => 1];
         }
         foreach ($chapter_list[1] as $k => $chapter_data) {
             $chapter_list[1][$k] = $novel->biquge_url . $chapter_data;
+            if(Chapter::where('biquge_url', $chapter_list[1][$k])->whereNotNull('content')->first()){
+                unset($chapter_list[1][$k]);
+            }
         }
         $contents = $this->multi_send($chapter_list[1]);
         foreach($contents as $k => $content) {
+            Log::info("开始更新章节:{$chapter_list[1][$k]}");
             $value_array = [
                 'name' => $chapter_list[2][$k],
                 'content' => $this->getChapterContent($content),
@@ -320,8 +324,7 @@ Class Biquge implements SnatchInterface
         $preg = '/<div id="content"><script>(.*?)<\/script>(.*?)<\/div>/s';
         preg_match($preg, $html, $content);
         if(!isset($content[2])){
-            Log::error("html:\n".$html."\ncontent:\n");
-            Log::error($content);
+            Log::error("get Chapter Content fail");
         }
         return @$content[2];
     }
