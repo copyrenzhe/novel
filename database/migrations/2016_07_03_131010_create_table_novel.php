@@ -24,6 +24,7 @@ class CreateTableNovel extends Migration
             $table->integer('sort')->default(0);
             $table->boolean('is_over');
             $table->string('biquge_url')->nullable()->unique();
+            $table->integer('chapter_num')->default(0);
             $table->timestamps();
         });
     }
