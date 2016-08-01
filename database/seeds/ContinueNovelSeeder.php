@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\Novel;
 use Illuminate\Database\Seeder;
 use App\Repositories\Snatch\Biquge;
 
-class DatabaseSeeder extends Seeder
+class ContinueNovelSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,15 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
-        $this->call(NovelTableSeeder::class);
-
-        $this->call(OverNovelSeeder::class);
-
-        $this->call(ContinueNovelSeeder::class);
-
         $dtStart = microtime_float();
-        $continueNovels = \App\Models\Novel::continued()->get();
+        $continueNovels = Novel::continued()->get();
         foreach ($continueNovels as $novel){
             Biquge::updateNew($novel);
             $i = 0;

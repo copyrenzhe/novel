@@ -51,7 +51,16 @@ class SnatchDaily extends Command
                         $this->info("小说[{$novel->id}]：{$novel->name}更新成功");
                     else
                         $this->info("小说[{$novel->id}]：{$novel->name}更新失败");
-                    Biquge::repair($novel->id);
+                    $i = 0;
+                    do{
+                        if($i >= 10){
+                            $this->error("小说[{$novel->id}]：{$novel->name}经过多次修复仍失败，请排查！");
+                            break;
+                        }
+                        $this->info("小说[{$novel->id}]：{$novel->name}开始第{$i}次修复");
+                        Biquge::repair($novel->id);
+                        $i++;
+                    }while($novel->chapter()->whereNull('content')->count());
                 }
                 $this->info('----- FINISHED THE PROCESS FOR UPDATE ALL NOVELS -----');
             }

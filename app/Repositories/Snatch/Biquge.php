@@ -170,7 +170,7 @@ Class Biquge implements SnatchInterface
             Log::error('getChapterList failed');
             return ['code' => 0];
         }
-        $count= $novel->chapter()->where('content', '<>', '')->count();
+        $count= $novel->chapter()->whereNotNull('content')->count();
         if(count($chapter_list[1]) <= $count) {
             return ['code' => 1];
         }
