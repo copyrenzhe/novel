@@ -12,7 +12,8 @@
 */
 
 Route::get('test', function() {
-    \App\Repositories\Snatch\Biquge::repair(1247);
+    $novel = \App\Models\Novel::find(7648);
+        \App\Repositories\Snatch\Biquge::snatch($novel);
 });
 
 

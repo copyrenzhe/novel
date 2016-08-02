@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Chapter;
-use App\Models\Novel;
 use App\Repositories\Snatch\Biquge;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -43,22 +41,11 @@ class RepairData extends Command
     {
         $list = DB::table('chapter')
             ->select(DB::raw('novel_id, count(*) as num'))
-            ->whereNotNull('content')
+            ->whereNull('content')
             ->groupBy('novel_id')
             ->get();
         foreach ($list as $key => $value) {
-            $num = ceil($value->num/100);
-            $i = 0;
-            do{
-                if($i>=$num){
-                    break;
-                }
-                Biquge::repair($value->novel_id);
-                $i++;
-            }while(Chapter::where('novel_id', $value->novel_id)
-                    ->whereNull('content')
-                    ->count()
-            );
+            Biquge::repair($value->novel_id);
         }
     }
 }

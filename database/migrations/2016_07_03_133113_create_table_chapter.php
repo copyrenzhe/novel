@@ -15,7 +15,7 @@ class CreateTableChapter extends Migration
         //
         Schema::create('chapter', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('novel_id');
+            $table->integer('novel_id')->index();
             $table->string('name');
             $table->longText('content')->nullable();
             $table->bigInteger('views')->default(0);
