@@ -73,3 +73,67 @@ if(!function_exists('microtime_float')) {
         return((float)$usec+ (float)$sec);
     }
 }
+
+if(!function_exists('async_get_url')) {
+    function async_get_url($urls, $append_url, $page_size=500)
+    {
+        $n = (count($urls) > $page_size) ? $page_size : count($urls);
+
+        $options = array(
+            CURLOPT_RETURNTRANSFER => 1, // 返回内容不直接显示
+        );
+
+        // 初始化批处理
+        $mh = curl_multi_init();
+
+        // 先添加 x 个会话资源到批处理中
+
+        $tmp_num = $n > 100 ? 100 : $n;
+        for( $i = 0; $i < $tmp_num; $i ++ )
+        {
+            // 初始化一个会话资源
+            $ch = curl_init( $append_url . $urls[ $i ] );
+            // 设置
+            curl_setopt_array( $ch, $options );
+            // 添加会话到批处理中
+            curl_multi_add_handle( $mh, $ch );
+        }
+
+        // 记录当前应该添加的urls的索引
+        $curI = $i;
+        $recv = array();
+        do
+        {
+            $mrc = curl_multi_exec( $mh, $active );
+            // 获取当前连接的信息, $msgq是当前队列中还有多少条消息
+            $info = curl_multi_info_read( $mh, $msgq );
+            if( $info )
+            {
+                // 当前这条消息的资源
+                $handle = $info[ 'handle' ];
+                // 读取收到的内容
+                $content = curl_multi_getcontent( $handle );
+                $recv[] = curl_errno($handle) == 0 ? mb_convert_encoding($content, 'UTF-8', 'gbk') : '';
+                // 移除本资源
+                curl_multi_remove_handle( $mh, $handle );
+                // 关闭资源
+                curl_close( $handle );
+                // 再添加一个新的, 如果还有urls未处理, 则添加
+                if( $curI < $n )
+                {
+                    $url = $append_url . $urls[ $curI ];
+                    $ch = curl_init( $url );
+                    curl_setopt_array( $ch, $options );
+                    curl_multi_add_handle( $mh, $ch );
+                    $curI ++;
+                }
+            }
+
+        // 判断是否还有会话未结束?
+        // $active 还有 多少个会话
+        // $mrc 未发生错误
+        // $msgq 还有多少个消息未读
+        } while( $active && $mrc == CURLM_OK || $msgq > 0 );
+        return $recv;
+    }
+}

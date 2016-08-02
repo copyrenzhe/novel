@@ -9,10 +9,11 @@
 
 namespace App\Repositories\Snatch;
 
-use Log;
+use Carbon\Carbon;
 use App\Models\Author;
 use App\Models\Chapter;
 use App\Models\Novel;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Biquge
@@ -24,6 +25,8 @@ Class Biquge implements SnatchInterface
     const USERAGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36';
     const REFERER = 'http://www.biquge.la';
     const DOMAIN = 'http://www.biquge.la';
+
+    private $page_size = 500;
 
     /**
      * 初始化小说列表，获取当前笔趣阁所有小说
@@ -78,6 +81,17 @@ Class Biquge implements SnatchInterface
     }
 
     /**
+     * 采集小说章节，不需考虑更新问题
+     * @param Novel $novel
+     * @return string|void
+     */
+    public static function snatch(Novel $novel)
+    {
+        $Biquge = new Biquge();
+        return $Biquge->snatchChapter($novel);
+    }
+
+    /**
      * 获取小说列表
      */
     public function getNovelList()
@@ -97,35 +111,6 @@ Class Biquge implements SnatchInterface
                 Log::error('正则匹配小说名失败');
                 die;
             }
-            /*foreach($info_arr[1] as $key => $info) {
-                $info_arr[1][$key] = self::DOMAIN . $info;
-            }
-            $contents = $this->multi_send($info_arr[1]);
-            foreach($contents as $k => $content) {
-                $novel_name = $info_arr[2][$k];
-                $novel_is_over = $info_arr[3][$k] == '载' ? 0 : 1;
-                $novel_author = $info_arr[4][$k];
-                $author = Author::firstOrCreate(['name'=>$novel_author]);
-                $cover_link = $this->getNovelCover($content);
-                $value_arr = [
-                    'name'          =>  $novel_name,
-                    'author_id'     =>  $author->id,
-                    'type'          =>  $type,
-                    'is_over'       =>  $novel_is_over,
-                    'description'   =>  $this->getNovelInfo($content),
-                ];
-                if(!empty($cover_link)) {
-                    $cover_ext = substr($cover_link, strrpos($cover_link, '.')+1);
-                    $path = public_path('cover/'.md5($novel_name). '.' .$cover_ext);
-                    //文件不存在时才获取图片
-                    if(!file_exists($path)) {
-                        $cover = file_get_contents($cover_link);
-                        file_put_contents($path, $cover);
-                    }
-                    $value_arr['cover'] = $path;
-                }
-                $novel = Novel::updateOrCreate(['biquge_url' => $info_arr[1][$k]], $value_arr);
-            }*/
             foreach($info_arr[1] as $key => $info){
                 $novel_link = self::DOMAIN . $info;
                 if(Novel::where('biquge_url', '=', $novel_link)->first()){
@@ -167,25 +152,88 @@ Class Biquge implements SnatchInterface
         $novel_html = $this->send($novel->biquge_url);
         $chapter_list = $this->getChapterList($novel_html);
         if(!$chapter_list[1]) {
+            Log::error("小说[$novel->id]:[$novel->name]，获取章节列表失败，请注意查看");
+            return ['code' => 0];
+        }
+        $count= $novel->chapter()->count();
+        if(count($chapter_list[1]) <= $count) {
+            //小说未更新
+            return ['code' => 1];
+        }
+
+        $filter_list = [];
+        $chapter_list[1] = array_reverse($chapter_list[1]);
+        $chapter_list[2] = array_reverse($chapter_list[2]);
+
+        foreach ($chapter_list[1] as $key => $value) {
+            if(!Chapter::where('biquge_url', $novel->biquge_url . $value)->first()) {
+                $filter_list[1][] = $value;
+                $filter_list[2][] = $chapter_list[2][$key];
+            } else {
+                break;
+            }
+        }
+        if(count($filter_list[1]) == 0){
+            Log::error("更新小说[$novel->id]:[$novel->name]失败，注意查看");
+            return ;
+        }
+        $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1]));
+        $value_array = array();
+        $now = Carbon::now();
+        foreach($contents as $k => $content) {
+            $value_array[] = [
+                'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
+                'name' => $filter_list[2][$k],
+                'content' => $this->getChapterContent($content),
+                'novel_id' => $novel->id,
+                'created_at' => $now,
+                'updated_at' => $now
+            ];
+        }
+        unset($contents);
+        Chapter::insert($value_array);
+    }
+
+
+    /**
+     * 采集小说章节实现方法
+     * @param Novel $novel
+     * @return array
+     */
+    public function snatchChapter(Novel $novel)
+    {
+        $novel_html = $this->send($novel->biquge_url);
+        $chapter_list = $this->getChapterList($novel_html);
+        if(!$chapter_list[1]) {
             Log::error('getChapterList failed');
             return ['code' => 0];
         }
-        $count= $novel->chapter()->whereNotNull('content')->count();
-        if(count($chapter_list[1]) <= $count) {
-            return ['code' => 1];
+
+        $num = ceil(count($chapter_list[1])/$this->page_size);
+
+        for ($i=0; $i<$num; $i++)
+        {
+            $splice_list = [];
+            $splice_list[1] = array_slice($chapter_list[1], $i*$this->page_size, $this->page_size);
+            $splice_list[2] = array_slice($chapter_list[2], $i*$this->page_size, $this->page_size);
+
+            $contents = $this->multi_send_test($splice_list[1], $novel->biquge_url);
+            $value_array = array();
+            $now = Carbon::now();
+            foreach($contents as $k => $content) {
+                $value_array[] = [
+                    'biquge_url' => $novel->biquge_url . $splice_list[1][$k],
+                    'name' => $splice_list[2][$k],
+                    'content' => $this->getChapterContent($content),
+                    'novel_id' => $novel->id,
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ];
+            }
+            unset($contents);
+            Chapter::insert($value_array);
         }
-        foreach ($chapter_list[1] as $k => $chapter_data) {
-            $chapter_list[1][$k] = $novel->biquge_url . $chapter_data;
-        }
-        $contents = $this->multi_send($chapter_list[1]);
-        foreach($contents as $k => $content) {
-            $value_array = [
-                'name' => $chapter_list[2][$k],
-                'content' => $this->getChapterContent($content),
-                'novel_id' => $novel->id
-            ];
-            Chapter::updateOrCreate(['biquge_url' => $chapter_list[1][$k]], $value_array);
-        }
+
     }
 
     /**
@@ -373,67 +421,8 @@ Class Biquge implements SnatchInterface
         return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
     }
 
-
-    /**
-     * 多线程带线程数目控制的模拟请求
-     * @param $url_array
-     * @return array
-     */
-    private function multi_send_new($url_array)
+    private function multi_send_test($url_array, $append_url)
     {
-        $contents = array();
-        $len = count($url_array);
-        $max_size = $len < 10 ? $len : 10;
-        $requestMap = array();
-
-        $mh = curl_multi_init();
-        for ($i = 0; $i < $max_size; $i++)
-        {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_URL, $url_array[$i]);
-            curl_setopt($ch, CURLOPT_COOKIE, self::COOKIE);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            $requestMap[$i] = $ch;
-            curl_multi_add_handle($mh, $ch);
-        }
-
-        do {
-            while (($cme = curl_multi_exec($mh, $active)) == CURLM_CALL_MULTI_PERFORM);
-
-            if ($cme != CURLM_OK) {break;}
-
-            while ($done = curl_multi_info_read($mh))
-            {
-                $info = curl_getinfo($done['handle']);
-                $tmp_result = curl_multi_getcontent($done['handle']);
-                $error = curl_errno($done['handle']);
-
-                $contents[] = $error == 0 ? mb_convert_encoding($tmp_result, 'UTF-8', 'gbk') : '';;
-
-                //保证同时有$max_size个请求在处理
-                if ($i < sizeof($url_array) && isset($url_array[$i]) && $i < count($url_array))
-                {
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    curl_setopt($ch, CURLOPT_URL, $url_array[$i]);
-                    curl_setopt($ch, CURLOPT_COOKIE, self::COOKIE);
-                    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-                    $requestMap[$i] = $ch;
-                    curl_multi_add_handle($mh, $ch);
-                    $i++;
-                }
-                curl_multi_remove_handle($mh, $done['handle']);
-            }
-            if ($active)
-                curl_multi_select($mh, 10);
-        } while ($active);
-
-        curl_multi_close($mh);
-        return $contents;
+        return async_get_url($url_array, $append_url, $this->page_size);
     }
 }
