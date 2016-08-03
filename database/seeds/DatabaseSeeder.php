@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
 //
 //        $this->call(OverNovelSeeder::class);
 //
-//        $this->call(ContinueNovelSeeder::class);
+        $this->call(ContinueNovelSeeder::class);
 //
 //        $dtStart = microtime_float();
 //        $continueNovels = \App\Models\Novel::continued()->get();

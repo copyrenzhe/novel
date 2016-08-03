@@ -12,8 +12,12 @@
 */
 
 Route::get('test', function() {
-    $novel = \App\Models\Novel::find(7648);
+    $dtStart = microtime_float();
+    $novel = \App\Models\Novel::find(294);
         \App\Repositories\Snatch\Biquge::snatch($novel);
+    $continueEnd = microtime_float();
+    echo "更新完毕\n";
+    echo "耗时：".$continueEnd-$dtStart."秒\n";
 });
 
 

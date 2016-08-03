@@ -31,8 +31,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function() {
-            $foo = file_get_contents(storage_path(). '/logs/novel.cron.updateHot.tmp.log');
-            file_put_contents(storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateHot.log', $foo);
+            if(file_exists(storage_path(). '/logs/novel.cron.updateHot.tmp.log')){
+                $foo = file_get_contents(storage_path(). '/logs/novel.cron.updateHot.tmp.log');
+                file_put_contents(storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateHot.log', $foo);
+            }
         })->everyTenMinutes();
 
         $schedule->command('snatch:updateHot')

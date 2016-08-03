@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -39,9 +40,7 @@ class MailDaily extends Command
     {
         //
         $title = "获取小说信息日志";
-
         Mail::raw($title, function($message) use($title) {
-            $message->from('novel@dev.com', 'Novel');
             $message->to('275804511@qq.com');
             $message->subject($title);
 

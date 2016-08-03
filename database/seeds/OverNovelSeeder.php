@@ -2,6 +2,7 @@
 
 use App\Models\Novel;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\Snatch\Biquge;
 
 class OverNovelSeeder extends Seeder
