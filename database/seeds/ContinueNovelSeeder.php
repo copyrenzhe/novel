@@ -2,6 +2,7 @@
 
 use App\Models\Novel;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\Snatch\Biquge;
 
 class ContinueNovelSeeder extends Seeder
@@ -14,17 +15,11 @@ class ContinueNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $continueNovels = Novel::continued()->get();
+        $continueNovels = Novel::continued()->where('id', '<', '50')->get();
         foreach ($continueNovels as $novel){
-            Biquge::updateNew($novel);
-            $i = 0;
-            do{
-                if($i >= 10){
-                    break;
-                }
-                Biquge::repair($novel->id);
-                $i++;
-            }while($novel->chapter()->whereNull('content')->count());
+            Log::info("开始采集小说[$novel->id]:[$novel->name]");
+            Biquge::snatch($novel);
+            Log::info("完结小说[$novel->id]:[$novel->name]更新完毕");
         }
         $continueEnd = microtime_float();
         echo "连载小说已更新完毕\n";
