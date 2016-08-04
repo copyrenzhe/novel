@@ -382,7 +382,7 @@ Class Biquge implements SnatchInterface
         $preg = '/<div id="content"><script>(.*?)<\/script>(.*?)<\/div>/s';
         preg_match($preg, $html, $content);
         if(!isset($content[2])){
-            Log::error("get Chapter Content fail");
+//            Log::error("get Chapter Content fail");
         }
         return @$content[2];
     }
