@@ -26,7 +26,7 @@ Class Biquge implements SnatchInterface
     const REFERER = 'http://www.biquge.la';
     const DOMAIN = 'http://www.biquge.la';
 
-    private $page_size = 200;
+    private $page_size = 500;
 
     /**
      * 初始化小说列表，获取当前笔趣阁所有小说
@@ -181,22 +181,16 @@ Class Biquge implements SnatchInterface
             return ['code' => 1];
         }
 
-        $filter_list = [];
-        $chapter_list[1] = array_reverse($chapter_list[1]);
-        $chapter_list[2] = array_reverse($chapter_list[2]);
+        //目前数据库中的最新一章
+        $last_url = $novel->chapter()->orderBy('id', 'desc')->first()->biquge_url;
+        $urlArr = explode('/', $last_url);
+        $curr_key = array_search($urlArr[count($urlArr)-1], $chapter_list[1]);
 
-        foreach ($chapter_list[1] as $key => $value) {
-            if(!Chapter::where('biquge_url', $novel->biquge_url . $value)->first()) {
-                $filter_list[1][] = $value;
-                $filter_list[2][] = $chapter_list[2][$key];
-            } else {
-                break;
-            }
-        }
-        if(count($filter_list[1]) == 0){
-            Log::error("更新小说[$novel->id]:[$novel->name]失败，注意查看");
-            return ;
-        }
+
+        $filter_list = [];
+        $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
+        $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
+
         $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1]));
         $value_array = array();
         $now = Carbon::now();
@@ -405,22 +399,8 @@ Class Biquge implements SnatchInterface
     private function send($url, $type = 'GET', $params = false, $encoding = 'gbk')
     {
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_ENCODING, $encoding);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, self::COOKIE);
-        curl_setopt($ch, CURLOPT_COOKIEJAR, self::COOKIE);
-        if($type == 'POST'){
-            curl_setopt($ch, CURLOPT_PORT, 1);
-        }
-        if(!empty($params) && is_array($params)) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_REFERER, self::REFERER);
-        } else {
-            curl_setopt($ch, CURLOPT_REFERER, self::REFERER);
-        }
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
         $html = curl_exec($ch);
         if($html === false) {
             echo "curl error: " . curl_errno($ch);
@@ -440,8 +420,8 @@ Class Biquge implements SnatchInterface
         return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
     }
 
-    private function multi_send_test($url_array, $append_url)
+    private function multi_send_test($url_array, $append_url, $page_count=0)
     {
-        return async_get_url($url_array, $append_url, $this->page_size);
+        return async_get_url($url_array, $append_url, $page_count ? $page_count : $this->page_size);
     }
 }

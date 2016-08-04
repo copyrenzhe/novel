@@ -15,7 +15,7 @@ class OverNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $overNovels = Novel::over()->where('id', '>', 8701)->get();
+        $overNovels = Novel::over()->where('id', '>', 10076)->get();
         foreach($overNovels as $novel){
             Log::info("开始采集小说[$novel->id]:[$novel->name]");
             Biquge::snatch($novel);
