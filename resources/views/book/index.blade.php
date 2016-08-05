@@ -28,7 +28,7 @@
                 <div class="clr"></div>
                 <div class="desc-story" style="padding-top:10px;">
                     <strong>简介:</strong>
-                    {{ $novel->description }}
+                    {!! $novel->description !!}
                 </div>
             </div>
         </div>

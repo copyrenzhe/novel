@@ -12,7 +12,7 @@
             <h2 class="chapter-number">{{ $chapter->name }}</h2>
             <br class="clr">
             <div class="contents-comic">
-                {{ $chapter->content }}
+                {!!  $chapter->content !!}
             </div>
         </div>
     </div>
@@ -22,9 +22,13 @@
     <br class="clr">
     <div class="chap-select">
         <div class="flr chap-select-dropdown">
-            <a href="/book/{{ \App\Models\Chapter::where('id', '<', $chapter->id)->first()->id }}" class="btn-blue">上一章</a>
-            <a href="/book/{{ $chapter->novel->id }}">目录</a>
-            <a href="/book/{{ \App\Models\Chapter::where('id', '>', $chapter->id)->first()->id }}" class="btn-blue">下一章</a>
+            @if(isset($prev))
+            <a href="/book/{{ $chapter->novel_id }}/{{ $prev->id }}" class="btn-blue">上一章</a>
+            @endif
+            <a href="/book/{{ $chapter->novel->id }}" class="btn-blue">目录</a>
+            @if(isset($next))
+            <a href="/book/{{ $chapter->novel_id }}/{{ $next->id }}" class="btn-blue">下一章</a>
+            @endif
         </div>
     </div>
 </div>
