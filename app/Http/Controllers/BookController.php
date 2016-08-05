@@ -24,17 +24,20 @@ class BookController extends CommonController
     {
         $novel = Novel::find($bookId);
         $novel->increment('hot');
-        $recentChapter = $novel->chapter()->orderBy('update_at', 'desc')->orderBy('id', 'desc')->first();
-        return view('book.index', compact('novel', 'recentChapter'));
+        $recentChapter = Chapter::where('novel_id', $bookId)->orderBy('updated_at', 'desc')->orderBy('id', 'desc')->first();
+        $genres = $this->genres;
+        return view('book.index', compact('novel', 'recentChapter', 'genres'));
     }
 
     public function chapter($bookId, $chapterId)
     {
-        $chapter = Chapter::where('novel_id', '=', $bookId)->find($chapterId)->first();
+        $chapter = Chapter::where('novel_id', '=', $bookId)->find($chapterId);
+        $prev = Chapter::where('novel_id', $bookId)->where('id', '<', $chapterId)->first();
+        $next = Chapter::where('novel_id', $bookId)->where('id', '>', $chapterId)->first();
         if(!$chapter)
             abort(404);
         $chapter->increment('views');
         $chapter->novel()->increment('hot');
-        return view('book.chapter', compact('chapter'));
+        return view('book.chapter', compact('chapter', 'prev', 'next'));
     }
 }

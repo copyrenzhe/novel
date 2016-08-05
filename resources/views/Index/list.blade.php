@@ -1,7 +1,7 @@
 @extends('app')
 @section('content')
     <div id="left">
-        <h1 class="title">{{ $genres[$category] }}</h1>
+        <h1 class="title">{{ $name }}</h1>
         <h4 class="desc margin-less"></h4>
         <div class="l-category box">
             <ul class="content">
