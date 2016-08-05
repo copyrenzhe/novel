@@ -24,6 +24,8 @@ Route::group(['middleware'=>['web']], function(){
 
     Route::get('/', 'IndexController@index');
 
+    Route::get('new-release', 'IndexController@newRelease');
+
     Route::get('top-novel', 'IndexController@top');
 
     Route::get('author/{authorId}', 'AuthorController@info');

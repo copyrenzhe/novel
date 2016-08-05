@@ -15,9 +15,10 @@
             <a title="{{ $key }}" href="/{{ $key }}">{{ $genre }}</a>
             @endforeach
         </div>
-        <a class="mb-nav-a" href="/new-releases.htm" title="New Releases">最新</a>
-        <a class="mb-nav-a" href="/top-novel.htm" title="Top Novel">排行</a>
-        <a class="mb-nav-a" href="/authors.htm" title="New Releases">作者</a>
+        <a class="mb-nav-a" href="/new-releases.htm" title="最新">最新</a>
+        <a class="mb-nav-a" href="/top-novel.htm" title="排行">排行</a>
+        <a class="mb-nav-a" href="/authors.htm" title="作者">作者</a>
+        <a href="/over-novel" class="mb-nav-a" title="完结小说">完结</a>
     </div>
 </div>
 <!-- / mobile navbar -->
@@ -34,9 +35,10 @@
                 </ul>
             </div>
         </li>
-        <li><a href="/new-releases.htm" title="New Releases">最新发布</a></li>
-        <li><a href="/top-novel.htm" title="Hot Novel">排行榜单</a></li>
-        <li><a href="/authors.htm" title="Authors">作者大神</a></li>
+        <li><a href="/new-releases.htm" title="最新发布">最新发布</a></li>
+        <li><a href="/top-novel.htm" title="排行榜单">排行榜单</a></li>
+        <li><a href="/authors.htm" title="作者大神">作者大神</a></li>
+        <li><a href="/over-novel" title="完结小说">完结</a></li>
     </ul>
     <div class="nav_social"></div>
 </div>

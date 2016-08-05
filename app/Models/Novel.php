@@ -43,19 +43,19 @@ class Novel extends Model
 
     public function scopeTop($query)
     {
-        return $query->orderBy('sort', 'desc')->take(8);
+        return $query->orderBy('sort', 'desc');
     }
 
     //热门
     public function scopeHot($query)
     {
-        return $query->orderBy('hot', 'desc')->take(8);
+        return $query->orderBy('hot', 'desc');
     }
 
     //最新
     public function scopeLast($query)
     {
-        return $query->orderBy('updated_at', 'desc')->take(15);
+        return $query->orderBy('updated_at', 'desc');
     }
 
     //周热门
