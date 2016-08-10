@@ -48,7 +48,7 @@ Class Biquge implements SnatchInterface
     }
 
     /**
-     * 更新小说章节
+     * 更新小说章节，当执行updateNew内存溢出时，执行此方法代替
      * @param Novel $novel
      * @return array [type] [description]
      */
@@ -186,7 +186,6 @@ Class Biquge implements SnatchInterface
         $urlArr = explode('/', $last_url);
         $curr_key = array_search($urlArr[count($urlArr)-1], $chapter_list[1]);
 
-
         $filter_list = [];
         $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
         $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
@@ -256,31 +255,40 @@ Class Biquge implements SnatchInterface
      * @return array
      */
     public function getNovelChapter( Novel $novel ) {
-            $novel_html = $this->send($novel->biquge_url);
-            $chapter_list = $this->getChapterList($novel_html);
-            if(!$chapter_list[1]) {
-                return "getChapterList failed:\n";
-                var_dump($novel_html);
-                die;
-            }
-            $count= $novel->chapter()->where('content', '<>', '')->count();
-            if(count($chapter_list[1]) <= $count) {
-                return ;
-            }
-            foreach($chapter_list[1] as $k => $chapter_data) {
-                if($k<$count){
-                    continue;
-                }
-                $chapter_link = $chapter_data;
-                $chapter_name = $chapter_list[2][$k];
-                $chapter = Chapter::firstOrCreate(['name'=>$chapter_name, 'novel_id'=>$novel->id]);
-                if(!$chapter->content) {
-                    $chapter_html = $this->send($novel->biquge_url. $chapter_link);
-                    $chapter->content = $this->getChapterContent($chapter_html);
-                    $chapter->save();
-                }
-            }
-            return $chapter_list[1]-$count;
+        $novel_html = $this->send($novel->biquge_url);
+        $chapter_list = $this->getChapterList($novel_html);
+        if(!$chapter_list[1]) {
+            Log::error("小说[$novel->id]:[$novel->name]，获取章节列表失败，请注意查看");
+            return ['code' => 0];
+        }
+        $count= $novel->chapter_num;
+        if(count($chapter_list[1]) <= $count) {
+            //小说未更新
+            return ['code' => 1];
+        }
+
+        //目前数据库中的最新一章
+        $last_url = $novel->chapter()->orderBy('id', 'desc')->first()->biquge_url;
+        $urlArr = explode('/', $last_url);
+        $curr_key = array_search($urlArr[count($urlArr)-1], $chapter_list[1]);
+
+        $filter_list = [];
+        $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
+        $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
+
+        $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1]));
+        $now = Carbon::now();
+        foreach($contents as $k => $content) {
+            $value_array = [
+                'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
+                'name' => $filter_list[2][$k],
+                'content' => $this->getChapterContent($content),
+                'novel_id' => $novel->id,
+                'created_at' => $now,
+                'updated_at' => $now
+            ];
+            Chapter::create($value_array);
+        }
     }
 
     private function getDivList($html)

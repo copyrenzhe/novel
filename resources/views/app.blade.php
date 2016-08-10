@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/style.css" />
     <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/main.css" />
     <script type="text/javascript" src="http://booksonlinefree.net/js/santruyen.js"></script>
-    <script type="text/javascript" src="http://booksonlinefree.net/js/tabs.js"></script>
+    <script type="text/javascript" src="http://booksonlinefree.net/js/tabs.js"></script>w
 
 </head>
 <body>
