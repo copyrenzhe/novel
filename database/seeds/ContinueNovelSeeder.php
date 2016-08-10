@@ -15,7 +15,7 @@ class ContinueNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $continueNovels = Novel::continued()->whereBetween('id', [191,250])->get();
+        $continueNovels = Novel::continued()->whereBetween('id', [3501,4000])->get();
         foreach ($continueNovels as $novel){
             Log::info("开始采集小说[$novel->id]:[$novel->name]");
             Biquge::snatch($novel);
@@ -23,6 +23,6 @@ class ContinueNovelSeeder extends Seeder
         }
         $continueEnd = microtime_float();
         echo "连载小说已更新完毕\n";
-        echo "耗时：".$continueEnd-$dtStart."秒\n";
+        echo "耗时：".($continueEnd-$dtStart)."秒\n";
     }
 }
