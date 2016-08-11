@@ -160,6 +160,7 @@ Class Biquge implements SnatchInterface
                 $novel->save();
             }
         }
+        return true;
     }
 
     /**

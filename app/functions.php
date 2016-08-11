@@ -81,7 +81,6 @@ if(!function_exists('async_get_url')) {
 
         $options = array(
             CURLOPT_RETURNTRANSFER => 1, // 返回内容不直接显示
-            CURLOPT_FOLLOWLOCATION => 1,
         );
 
         // 初始化批处理
