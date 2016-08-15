@@ -13,7 +13,7 @@
 
 Route::get('test', function() {
     $dtStart = microtime_float();
-    $novel = \App\Models\Novel::find(3631);
+    $novel = \App\Models\Novel::find(5125);
         \App\Repositories\Snatch\Biquge::updateNew($novel);
     $dtEnd = microtime_float();
     echo "耗时：".($dtEnd-$dtStart)."秒";
