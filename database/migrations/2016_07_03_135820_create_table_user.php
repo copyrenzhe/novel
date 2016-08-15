@@ -15,7 +15,7 @@ class CreateTableUser extends Migration
         Schema::create('user', function (Blueprint $table) {
             //
             $table->increments('id');
-            $table->string('open_id')->index(); //订阅者微信open_id
+            $table->string('open_id')->unique(); //订阅者微信open_id
             $table->string('nickname');
             $table->boolean('is_subscribe');
             $table->timestamp('push_time');
