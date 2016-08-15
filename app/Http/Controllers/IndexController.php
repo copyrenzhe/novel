@@ -7,6 +7,7 @@ use App\Models\Novel;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Cache;
 
 class IndexController extends CommonController
 {
@@ -20,7 +21,9 @@ class IndexController extends CommonController
 
     public function index()
     {
-        $TopNovels = Novel::top()->take(8)->get();
+        $TopNovels = Cache::remember('TopNovels', 60, function() {
+            return Novel::top()->take(8)->get();
+        });
         $LastNovels = Novel::last()->take(15)->get();
         return view('index.index', compact('TopNovels', 'LastNovels'));
     }

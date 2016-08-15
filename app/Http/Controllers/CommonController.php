@@ -17,7 +17,7 @@ class CommonController extends Controller
     public function __construct()
     {
         $HotNovels = Cache::remember('HotNovels', 60, function() {
-            return $HotNovels = Novel::hot()->take(8)->get();
+            return Novel::hot()->take(8)->get();
         });
         $genres = Cache::rememberForever('genres', function() {
             return [
