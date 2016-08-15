@@ -22,7 +22,6 @@
             @yield('content')
         </div>
         <!-- /main -->
-        @include('common.footer')
     </div>
 </body>
 </html>
