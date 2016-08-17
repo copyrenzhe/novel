@@ -21,7 +21,7 @@ class WechatController extends Controller
         $wechat = app('wechat');
         $user = $wechat->user;
         $wechat->server->setMessageHandler(function($message) use ($user) {
-            /*switch ($message->MsgType) {
+            switch ($message->MsgType) {
                 case 'event':
                     if($message->Event=='subscribe'){
                         User::firstOrNew(['open_id'=>$message->FromUserName, 'is_subscribe'=>1]);
@@ -34,7 +34,7 @@ class WechatController extends Controller
                     }
                     break;
                 case 'text':
-                    $novels = Novel::where('name', 'like', $message->Content)->orderBy('hot', 'desc')->get();
+                    $novels = Novel::where('name', 'like', $message->Content)->hot()->take(8)->get();
                     $news = [];
                     foreach($novels as $novel) {
                         $new = new News([
@@ -60,8 +60,7 @@ class WechatController extends Controller
                     break;
                 default:
                     break;
-            }*/
-            return '这是来自novel的信息';
+            }
         });
 
         return $wechat->server->serve();
