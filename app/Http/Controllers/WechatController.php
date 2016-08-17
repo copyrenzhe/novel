@@ -34,7 +34,7 @@ class WechatController extends Controller
                     }
                     break;
                 case 'text':
-                    $novels = Novel::where('name', 'like', $message->Content)->hot()->take(8)->get();
+                    $novels = Novel::where('name', 'like', '%'.$message->Content.'%')->hot()->take(8)->get();
                     $news = [];
                     foreach($novels as $novel) {
                         $new = new News([
