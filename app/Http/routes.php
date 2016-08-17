@@ -43,9 +43,11 @@ Route::group(['middleware'=>['web']], function(){
 
 });
 
-Route::group(['prefix'=>'book', 'middleware' => ['web','wechat.oauth']], function() {
-    Route::get('/{bookId}', 'BookController@index');
-    Route::get('/{bookId}/{chapterId}', 'BookController@chapter');
+Route::group(['prefix'=>'book/{bookId}', 'middleware' => ['web','wechat']], function() {
+    Route::get('/{openId?}', 'BookController@index')
+        ->where(['bookId'=> '[0-9]+', 'openId' => '[a-zA-Z]+']);
+    Route::get('/{chapterId}/{openId?}', 'BookController@chapter')
+        ->where(['bookId'=> '[0-9]+', 'chapterId' => '[0-9]+', 'openId' => '[a-zA-Z]+']);
 });
 
 //wechat route
