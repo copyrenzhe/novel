@@ -41,7 +41,7 @@ class WechatController extends Controller
                             'title'         =>  $novel->name,
                             'description'   =>  $novel->description,
                             'url'           =>  env('APP_URL', ''). '/book/'.$novel->id,
-                            'image'         =>  $novel->cover
+                            'image'         =>  env('APP_URL', ''). $novel->cover
                         ]);
                         array_push($news, $new);
                         return $news;
