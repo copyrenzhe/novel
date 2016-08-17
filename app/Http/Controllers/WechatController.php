@@ -24,7 +24,7 @@ class WechatController extends Controller
             switch ($message->MsgType) {
                 case 'event':
                     if($message->Event=='subscribe'){
-                        User::firstOrNew(['open_id'=>$message->FromUserName, 'is_subscribe'=>1]);
+                        User::firstOrCreate(['open_id'=>$message->FromUserName, 'is_subscribe'=>1]);
                         return '感谢您的关注，您可以直接输入小说名进行小说搜索。';
                     }
                     if($message->Event=='unsubscribe'){
@@ -40,7 +40,7 @@ class WechatController extends Controller
                         $new = new News([
                             'title'         =>  $novel->name,
                             'description'   =>  $novel->description,
-                            'url'           =>  '/book/'.$novel->id,
+                            'url'           =>  env('APP_URL', ''). '/book/'.$novel->id,
                             'image'         =>  $novel->cover
                         ]);
                         array_push($news, $new);
