@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    protected $fillable =['open_id', 'nickname', 'is_subscribe', 'push_time'];
+    protected $table = 'user';
+
+    protected $fillable =['open_id', 'is_subscribe'];
     
     //所有的订阅小说
     public function novel()
