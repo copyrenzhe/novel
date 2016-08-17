@@ -17,6 +17,7 @@ class WechatController extends Controller
      */
     public function serve()
     {
+        echo '';
         $wechat = app('wechat');
         $user = $wechat->user;
         $wechat->server->setMessageHandler(function($message) use ($user) {
