@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\Event;
 use App\Models\Novel;
 use App\Models\User;
+use EasyWeChat\Message\News;
 use Log;
 
 class WechatController extends Controller
