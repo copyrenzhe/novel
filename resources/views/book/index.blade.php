@@ -19,7 +19,7 @@
                     </div>
                     <div class="d-s-col d-s-col-noright">
                         <p>最新章节: <a href="/book/{{ $novel->id }}/{{ $recentChapter->id }}" title="{{ $recentChapter->name }}">{{ $recentChapter->name }}</a></p>
-                        <p>更新时间: {{ $novel->update_at }}</p>
+                        <p>更新时间: {{ $novel->updated_at }}</p>
                         <p>上次看到: <a href="" title=""></a></p>
                     </div>
                     <div class="clr"></div>

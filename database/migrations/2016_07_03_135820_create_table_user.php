@@ -18,7 +18,7 @@ class CreateTableUser extends Migration
             $table->string('open_id')->unique(); //订阅者微信open_id
             $table->string('nickname');
             $table->boolean('is_subscribe');
-            $table->timestamp('push_time');
+            $table->integer('push_time');
             $table->timestamps();
         });
     }

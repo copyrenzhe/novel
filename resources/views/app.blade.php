@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Novel</title>
     {{--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">--}}
     {{--<script type="text/javascript" src="{{ asset('/js/app.js')}}"></script>--}}

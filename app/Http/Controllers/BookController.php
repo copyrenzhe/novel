@@ -18,6 +18,8 @@ class BookController extends CommonController
     public function __construct()
     {
         parent::__construct();
+        $user = session('wechat.oauth_user');
+        dd($user);
     }
 
     public function index($bookId)
