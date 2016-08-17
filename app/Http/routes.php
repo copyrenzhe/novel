@@ -68,8 +68,8 @@ Route::group(['prefix'=>'biquge'], function() {
 });
 
 //wechat route
-Route::any('/wechat', 'WechatController@serve');
+Route::any('wechat', 'WechatController@serve');
 
 //wechat user
-Route::get('/users', 'UserController@users');
-Route::get('/user/{openId}', 'UserController@user');
+Route::get('users', 'UserController@users');
+Route::get('user/{openId}', 'UserController@user');
