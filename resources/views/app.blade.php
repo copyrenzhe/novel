@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Novel</title>
     {{--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">--}}
     {{--<script type="text/javascript" src="{{ asset('/js/app.js')}}"></script>--}}
@@ -10,8 +11,7 @@
     <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/style.css" />
     <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/main.css" />
     <script type="text/javascript" src="http://booksonlinefree.net/js/santruyen.js"></script>
-    <script type="text/javascript" src="http://booksonlinefree.net/js/tabs.js"></script>w
-
+    <script type="text/javascript" src="http://booksonlinefree.net/js/tabs.js"></script>
 </head>
 <body>
     <div class="wrapper">
