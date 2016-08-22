@@ -6,12 +6,12 @@
     <title>Novel</title>
     {{--<link href="{{ asset('/css/app.css') }}" rel="stylesheet">--}}
     {{--<script type="text/javascript" src="{{ asset('/js/app.js')}}"></script>--}}
-    <script src="http://booksonlinefree.net/js/ipos.core.js" type="text/javascript"></script>
-    <script src="http://booksonlinefree.net/js/ipos.comic.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="http://booksonlinefree.net/css/main.css" />
-    <script type="text/javascript" src="http://booksonlinefree.net/js/santruyen.js"></script>
-    <script type="text/javascript" src="http://booksonlinefree.net/js/tabs.js"></script>
+    <script src="/dist/js/ipos.core.js" type="text/javascript"></script>
+    <script src="/dist/js/ipos.comic.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/dist/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
+    <script type="text/javascript" src="/dist/js/santruyen.js"></script>
+    <script type="text/javascript" src="/dist/js/tabs.js"></script>
 </head>
 <body>
     <div class="wrapper">
