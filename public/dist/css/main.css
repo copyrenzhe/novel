@@ -1,0 +1,116 @@
+#adbox {text-align:center; margin:0 auto;}
+#adbox .banner {text-align:center;
+    display:inline-block;
+    padding:1px;}
+.contents-comic {font-size:17px;}
+/* Begin search-autocomplete*/
+.search-autocomplete {
+    position: absolute;
+    z-index: 99999;
+    display: block;
+    left: 484.85px!important;
+    top: 30.5px!important;
+    width: 333px!important;
+    background-color: #000000;
+    border: 1px solid #dfdfdf;
+}
+.zme-autocomplete-activeItem {
+    background-color: #f2f2f2;
+}
+.search-item li{
+    list-style: none;
+}
+.search-for {
+    border-bottom: 1px solid #dfdfdf;
+    padding: 5px 15px;
+    color: #555; font-weight: bold;
+    display: block;
+}
+.tgt-autocomplete-activeItem {
+    background-color: #fafafa;
+}
+.search-item a {
+    padding: 5px;
+    display: block;
+    color: #555;
+    border-bottom: 1px solid #dfdfdf;
+}
+.search-item a:hover {
+    background-color: #e5e5e5;
+    border-bottom: 1px solid #dfdfdf;
+}
+.search-item span {
+    display: block;
+}
+.tipsy { padding: 5px; position: absolute; z-index: 100000; }
+.tipsy-inner { padding: 5px 8px 4px 8px; background-color: #ffffff; color:#555555; max-width: 200px; text-align: center; }
+.tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+.tipsy-arrow { position: absolute; background: url('../img/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+.tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+.tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+.tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+.tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+.tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+.tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+.tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+.tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+.jColorSelect {
+    overflow:hidden; /* for IE6 */
+    border:1px solid #d9dcdd;
+    float:left;
+    margin:2px;
+}
+.jColorSelect div{
+    background:url(../img/syronex-colorpicker.gif) no-repeat;
+    float:left;
+    width:13px;
+    height:13px;
+    cursor:pointer;
+    overflow:hidden; /* for IE6 */
+    border:1px solid #666666;
+    margin:1px;
+}
+
+.jColorSelect .checkwht {
+    cursor:default;
+    background-position:-13px 0;
+}
+.jColorSelect .checkblk {
+    cursor:default;
+    background-position:-26px 0;
+}
+.selColor{
+    float:left;
+    background:url(../images/selcolor.png) no-repeat center left;
+    padding-left:90px;
+    border:1px solid #eae1c7;
+    height:46px;
+    width:217px;
+}
+.selSize{
+    float:left;
+    background:url(../images/selfontsize.png) no-repeat center left;
+    border:1px solid #eae1c7;
+    padding-top:25px;
+    width:97px;
+    height:20px;
+    margin-left:3px;
+}
+.decreaseFont{
+    font-size:10px;
+    padding:3px 5px 1px 5px;
+    margin-left:3px;
+}
+.resetFont{
+    padding:0 4px 0 4px;
+    margin-left:1px;
+}
+.increaseFont{
+    font-size:14px;
+    padding:0 4px;
+    margin-left:1px;
+}
+.boldFont{
+    padding:0 4px;
+    margin-left:9px;
+}
