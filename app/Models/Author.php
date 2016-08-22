@@ -14,6 +14,6 @@ class Author extends Model
 
     public function novel()
     {
-    	return $this->hasMany('App\Models\Novel');
+    	return $this->hasMany(Novel::class);
     }
 }

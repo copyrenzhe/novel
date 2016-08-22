@@ -28,7 +28,7 @@ class Novel extends Model
     //该小说订阅用户
     public function user()
     {
-    	return $this->belongsToMany('App\Models\User', 'user_novel');
+    	return $this->belongsToMany(User::class, 'user_novel');
     }
 
     public function scopeContinued($query)

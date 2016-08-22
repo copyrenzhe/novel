@@ -9,6 +9,6 @@ class Tag extends Model
     //
     public function novel()
     {
-    	return $this->belongToMany('App\Models\Novel');
+    	return $this->belongToMany(Novel::class);
     }
 }

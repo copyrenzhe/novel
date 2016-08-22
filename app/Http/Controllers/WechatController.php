@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\Event;
 use App\Models\Novel;
 use App\Models\User;
+use EasyWeChat\Message\News;
 use Log;
 
 class WechatController extends Controller
@@ -23,7 +24,7 @@ class WechatController extends Controller
             switch ($message->MsgType) {
                 case 'event':
                     if($message->Event=='subscribe'){
-                        User::firstOrNew(['open_id'=>$message->FromUserName, 'is_subscribe'=>1]);
+                        User::firstOrCreate(['open_id'=>$message->FromUserName, 'is_subscribe'=>1]);
                         return '感谢您的关注，您可以直接输入小说名进行小说搜索。';
                     }
                     if($message->Event=='unsubscribe'){
@@ -33,14 +34,14 @@ class WechatController extends Controller
                     }
                     break;
                 case 'text':
-                    $novels = Novel::where('name', 'like', $message->Content)->orderBy('hot', 'desc')->get();
+                    $novels = Novel::where('name', 'like', '%'.$message->Content.'%')->hot()->take(8)->get();
                     $news = [];
                     foreach($novels as $novel) {
                         $new = new News([
                             'title'         =>  $novel->name,
                             'description'   =>  $novel->description,
-                            'url'           =>  '/book/'.$novel->id,
-                            'image'         =>  $novel->cover
+                            'url'           =>  env('APP_URL', ''). '/book/'.$novel->id,
+                            'image'         =>  env('APP_URL', ''). $novel->cover
                         ]);
                         array_push($news, $new);
                         return $news;
