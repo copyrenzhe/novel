@@ -41,6 +41,8 @@ Route::group(['middleware'=>['web']], function(){
     Route::get('{category}', ['uses'=>'IndexController@category'])
         ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan)');
 
+    Route::get('feedback', 'IndexController@feedback');
+
 });
 
 Route::group(['prefix'=>'book/{bookId}', 'middleware' => ['web','wechat']], function() {
