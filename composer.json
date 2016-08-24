@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "barryvdh/laravel-ide-helper": "~2.2.1",
         "wittiws/phpquery": "dev-master",
-        "overtrue/laravel-wechat": "~3.0"
+        "overtrue/laravel-wechat": "~3.0",
+        "laravelcollective/html": "v5.2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
