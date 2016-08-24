@@ -65,4 +65,14 @@ class IndexController extends CommonController
         $name = "关键词：".$keywords;
         return view('index.list', compact('name', 'novels'));
     }
+
+    public function feedback()
+    {
+        return view('index.feedback');
+    }
+
+    public function postFeedback()
+    {
+        
+    }
 }
