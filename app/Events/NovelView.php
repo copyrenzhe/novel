@@ -11,6 +11,8 @@ class NovelView extends Event
 {
     use SerializesModels;
 
+    public $chapter;
+
     /**
      * Create a new event instance.
      *

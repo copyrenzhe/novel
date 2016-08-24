@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Event;
 use App\Events\NovelView;
 use App\Models\Chapter;
 use App\Models\Novel;
@@ -11,6 +10,7 @@ use App\Models\UserNovel;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Event;
 
 class BookController extends CommonController
 {
