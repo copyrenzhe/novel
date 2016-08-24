@@ -70,4 +70,9 @@ class IndexController extends CommonController
     {
         return view('index.feedback');
     }
+
+    public function postFeedback()
+    {
+        
+    }
 }

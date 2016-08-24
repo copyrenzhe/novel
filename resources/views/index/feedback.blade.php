@@ -4,16 +4,35 @@
     <div id="left">
         <h1 class="title">Feed Back</h1>
         <div class="box register-page">
-            <p style="font-size:14px;"></p><center></center><p></p>
+            <p style="font-size:14px;"></p>
+            <center>
+                <font color="red">Sussesful!</font>
+            </center>
+            <p></p>
             <div class="content">
-                <form id="submit" method="post">
-                    <p><label for="booktitle">书名</label><input id="booktitle" class="input-site" type="text" name="book_title" value=""></p>
-                    <p><label for="bookurl">书链接</label><input id="bookurl" class="input-site" type="text" name="book_url" value=""></p>
-                    <p><label for="name">您的昵称</label><input id="name" class="input-site" name="name" type="text" value=""></p>
-                    <p><label for="email">您的邮箱</label><input id="email" class="input-site" type="text" name="email" value=""></p>
-                    <p><label for="message">内容</label><br><textarea id="message" rows="4" cols="80" style="width: 606px; height: 130px; margin: 0px;" name="message" value=""> </textarea></p>
-                    <input type="submit" value="提交" name="submit" class="btn-big">
-                </form>
+                {!! Form::open(['url' => 'feedback', 'method' => 'post']) !!}
+                    <p>
+                        {!! Form::label('title', '书名:') !!}
+                        {!! Form::text('title', null, ['class' => 'input-site']) !!}
+                    </p>
+                    <p>
+                        {!! Form::label('url', '书链接:') !!}
+                        {!! Form::text('url', null, ['class' => 'input-site']) !!}
+                    </p>
+                    <p>
+                        {!! Form::label('name', '您的昵称:') !!}
+                        {!! Form::text('name', null, ['class' => 'input-site']) !!}
+                    </p>
+                    <p>
+                        {!! Form::label('email', '您的邮箱:') !!}
+                        {!! Form::text('email', null, ['class' => 'input-site']) !!}
+                    </p>
+                    <p>
+                        {!! Form::label('content', '内容:') !!}
+                        {!! Form::text('name', null, ['class' => 'input-site', 'style' => 'width: 606px; height: 130px; margin: 0px;']) !!}
+                    </p>
+                    {!! Form::submit('提交', ['class' => 'btn-big']) !!}
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

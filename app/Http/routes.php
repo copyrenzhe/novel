@@ -42,6 +42,7 @@ Route::group(['middleware'=>['web']], function(){
         ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan)');
 
     Route::get('feedback', 'IndexController@feedback');
+    Route::post('feedback', 'IndexController@postFeedback');
 
 });
 
