@@ -2,12 +2,10 @@
 @section('content')
     <!--left-->
     <div id="left">
-        <h1 class="title">Feed Back</h1>
+        <h1 class="title">意见反馈</h1>
         <div class="box register-page">
             <p style="font-size:14px;"></p>
-            <center>
-                <font color="red">Sussesful!</font>
-            </center>
+            @include('common.errors')
             <p></p>
             <div class="content">
                 {!! Form::open(['url' => 'feedback', 'method' => 'post']) !!}
@@ -29,7 +27,7 @@
                     </p>
                     <p>
                         {!! Form::label('content', '内容:') !!}
-                        {!! Form::text('name', null, ['class' => 'input-site', 'style' => 'width: 606px; height: 130px; margin: 0px;']) !!}
+                        {!! Form::text('content', null, ['class' => 'input-site', 'style' => 'width: 606px; height: 130px; margin: 0px;']) !!}
                     </p>
                     {!! Form::submit('提交', ['class' => 'btn-big']) !!}
                 {!! Form::close() !!}

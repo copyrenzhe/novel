@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Models\Author;
 use App\Models\Novel;
 use Illuminate\Http\Request;
@@ -71,8 +72,19 @@ class IndexController extends CommonController
         return view('index.feedback');
     }
 
-    public function postFeedback()
+    public function postFeedback(Request $request)
     {
-        
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:20', 
+            'url' => 'max:100',
+            'name' => 'required|max:20',
+            'email' => 'required',
+            'content' => 'required|max:500'
+        ]);
+
+        if($validator->fails()) {
+            return redirect('feedback')
+                ->withErrors($validator);
+        }
     }
 }
