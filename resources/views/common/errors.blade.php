@@ -1,7 +1,7 @@
 <center>
     @if(count($errors) > 0)
     <ul>
-        @foreach($messages->all() as $error)
+        @foreach($errors->all() as $error)
         <li><font color="red">{{ $error }}</font></li>
         @endforeach
     </ul>

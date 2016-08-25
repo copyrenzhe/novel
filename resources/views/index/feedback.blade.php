@@ -27,7 +27,7 @@
                     </p>
                     <p>
                         {!! Form::label('content', '内容:') !!}
-                        {!! Form::text('content', null, ['class' => 'input-site', 'style' => 'width: 606px; height: 130px; margin: 0px;']) !!}
+                        {!! Form::textarea('content', null, ['class' => 'input-site', 'style' => 'width: 606px; height: 130px; margin: 0px;']) !!}
                     </p>
                     {!! Form::submit('提交', ['class' => 'btn-big']) !!}
                 {!! Form::close() !!}
