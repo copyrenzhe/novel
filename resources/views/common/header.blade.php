@@ -1,7 +1,7 @@
 <!-- header -->
 <div id="header">
     <a class="menu-btn"></a><a class="panel-btn"></a>
-    <a href="{{ url('/') }}" id="logo" title=""></a>
+    <a href="{{ url('/') }}" id="logo" title="书虫网"></a>
     <div id="search">
         <div class="search-wrap clearfix">
             <form action="{{ url('search') }}" method="GET">
