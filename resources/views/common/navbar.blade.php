@@ -8,8 +8,8 @@
             </form>
             <div class="clr"></div>
         </div>
-        <a class="mb-nav-a" href="/" title="Home">首页</a>
-        <a class="mb-nav-a" title="Genres">分类</a>
+        <a class="mb-nav-a" href="/" title="首页">首页</a>
+        <a class="mb-nav-a" title="分类">分类</a>
         <div class="mb-nav-sub">
             @foreach($genres as $key => $genre)
             <a title="{{ $key }}" href="/{{ $key }}">{{ $genre }}</a>
@@ -25,7 +25,7 @@
 <!-- navbar -->
 <div id="navbar">
     <ul class="top_nav">
-        <li class="active"><a class="top_nav_home" href="/" title="Home"></a></li>
+        <li class="active"><a class="top_nav_home" href="/" title="首页"></a></li>
         <li><a title="Genres">小说分类</a>
             <div class="menu-expand">
                 <ul class="menu-expand-ul">
