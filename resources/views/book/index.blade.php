@@ -1,4 +1,7 @@
 @extends('app')
+@section('title')
+书虫网-{{ $novel->name }}无弹窗-{{ $novel->name }}最新章节
+@stop
 @section('content')
     <!--left-->
     <div id="left">
