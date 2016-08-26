@@ -1,4 +1,7 @@
 @extends('app')
+@section('title')
+书虫网-{{ $chapter->novel->name }}-{{ $chapter->name }}无弹窗-{{ $chapter->novel->name }}最新章节
+@stop
 @section('content')
 <div id="view-page">
     <!-- Thong tin truyen -->
