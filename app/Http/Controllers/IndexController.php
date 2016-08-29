@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Feedback;
+use Session;
 use Validator;
-use App\Models\Author;
 use App\Models\Novel;
+use App\Models\Author;
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -89,7 +90,10 @@ class IndexController extends CommonController
                 ->withErrors($validator);
         }
 
-        Feedback::create($request->input());
-
+        $feedback = Feedback::create($request->input());
+        if($feedback) {
+            Session::flash('flash_message', '提交成功!');
+            return redirect('/');
+        }
     }
 }

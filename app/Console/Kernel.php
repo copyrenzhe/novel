@@ -30,27 +30,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function() {
+        $subPath = Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day;
+        $schedule->call(function() use($subPath) {
             if(file_exists(storage_path(). '/logs/novel.cron.updateHot.tmp.log')){
                 $foo = file_get_contents(storage_path(). '/logs/novel.cron.updateHot.tmp.log');
-                file_put_contents(storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateHot.log', $foo);
+                file_put_contents(storage_path(). '/logs/'.$subPath.'/updateHot.log', $foo);
             }
         })->everyTenMinutes();
 
         $schedule->command('snatch:updateHot')
-            ->hourly()
-            ->withoutOverlapping()
-            ->sendOutputTo(storage_path(). '/logs/novel.cron.updateHot.tmp.log');
+                ->hourly()
+                ->withoutOverlapping()
+                ->sendOutputTo(storage_path(). '/logs/novel.cron.updateHot.tmp.log');
 
         $schedule->command('snatch:initNovel')
-            ->dailyAt('02:00')
-            ->sendOutputTo(storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.initNovel.log');
+                ->dailyAt('02:00')
+                ->sendOutputTo(storage_path(). '/logs/'.$subPath.'./initNovel.log');
 
         $schedule->command('snatch:updateAll')
-            ->dailyAt('03:00')
-            ->sendOutputTo(storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateAll.log');
+                ->dailyAt('03:00')
+                ->sendOutputTo(storage_path(). '/logs/'.$subPath.'./updateAll.log');
 
         $schedule->command('mail:daily')
-            ->dailyAt('23:00');
+                ->dailyAt('23:00');
     }
 }
