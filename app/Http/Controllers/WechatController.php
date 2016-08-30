@@ -39,7 +39,7 @@ class WechatController extends Controller
                     foreach($novels as $novel) {
                         $new = new News([
                             'title'         =>  $novel->name,
-                            'description'   =>  $novel->description,
+                            'description'   =>  strip_tags($novel->description),
                             'url'           =>  env('APP_URL', ''). '/book/'.$novel->id,
                             'image'         =>  env('APP_URL', ''). $novel->cover
                         ]);

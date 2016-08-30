@@ -20,10 +20,16 @@ class BookController extends CommonController
     /**
      * BookController constructor.
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         parent::__construct();
         $this->user = session('wechat.oauth_user');
+        if($bookId = $request->route('bookId')){
+            $novel = Novel::find($bookId);
+            view()->composer(['book.index', 'book.chapter'], function($view) use($novel) {
+                $view->with('novel', $novel);
+            });
+        }
     }
 
     public function index($bookId, $openId='')

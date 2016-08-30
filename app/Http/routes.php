@@ -24,21 +24,19 @@ Route::group(['middleware'=>['web']], function(){
 
     Route::get('/', 'IndexController@index');
 
-    Route::get('new-release', 'IndexController@newRelease');
+    Route::get('new-releases', ['as' => 'release','uses' => 'IndexController@newRelease']);
 
-    Route::get('top-novel', 'IndexController@top');
+    Route::get('top-novels', ['as' => 'top', 'uses' => 'IndexController@top']);
 
-    Route::get('author/{authorId}', 'AuthorController@info');
+    Route::get('over-novels', ['as' => 'over', 'uses' => 'IndexController@over']);
 
-    Route::get('authors', 'AuthorController@all');
+    Route::get('authors/{authorId}', ['as' => 'author', 'uses' => 'AuthorController@info']);
 
-    Route::get('over-novel', 'IndexController@over');
+    Route::get('authors', ['as' => 'authors', 'uses' => 'AuthorController@all']);
 
-    Route::get('search/{bookName}', 'IndexController@search');
+    Route::get('search?keyword={keywords}', ['as' => 'search', 'uses' => 'IndexController@search']);
 
-
-
-    Route::get('{category}', ['uses'=>'IndexController@category'])
+    Route::get('{category}', ['as' => 'category', 'uses'=>'IndexController@category'])
         ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan)');
 
     Route::get('feedback', 'IndexController@feedback');
@@ -46,10 +44,10 @@ Route::group(['middleware'=>['web']], function(){
 
 });
 
-Route::group(['prefix'=>'book/{bookId}', 'middleware' => ['web','wechat']], function() {
-    Route::get('/{openId?}', 'BookController@index')
+Route::group(['prefix'=>'books/{bookId}', 'middleware' => ['web','wechat']], function() {
+    Route::get('/{openId?}', ['as' => 'book', 'uses' => 'BookController@index'])
         ->where(['bookId'=> '[0-9]+', 'openId' => '[a-zA-Z]+']);
-    Route::get('/{chapterId}/{openId?}', 'BookController@chapter')
+    Route::get('/chapters/{chapterId}/{openId?}', ['as' => 'chapter', 'uses' => 'BookController@chapter'])
         ->where(['bookId'=> '[0-9]+', 'chapterId' => '[0-9]+', 'openId' => '[a-zA-Z]+']);
 });
 

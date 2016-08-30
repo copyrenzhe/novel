@@ -7,8 +7,8 @@
         <div class="l-category box">
             <ul class="content">
                 @foreach($novels as $novel)
-                <li><a href="/author/{{ $novel->author_id }}" title="{{ $novel->author->name }}" class="cate-li-right">{{ $novel->author->name }}</a>
-                    <a class="c-title" href="/book/{{ $novel->id }}" title="{{ $novel->name }}">{{ $novel->name }}</a>
+                <li><a href="{{ route('author', ['authorId' => $novel->author_id]) }}" title="{{ $novel->author->name }}" class="cate-li-right">{{ $novel->author->name }}</a>
+                    <a class="c-title" href="{{ route('book', ['bookId' => $novel->id]) }}" title="{{ $novel->name }}">{{ $novel->name }}</a>
                 </li>
                 @endforeach
             </ul>
