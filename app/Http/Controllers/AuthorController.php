@@ -29,6 +29,7 @@ class AuthorController extends CommonController
     public function all()
     {
         $authors = Author::all();
-        return view('author.all', compact('authors'));
+        $name = '所有作者';
+        return view('index.list', compact('authors', 'name'));
     }
 }

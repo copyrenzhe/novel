@@ -6,7 +6,7 @@
         <div class="search-wrap clearfix">
             <form action="{{ url('search') }}" method="GET">
                 <input type="text" class="top_search" name="keyword">
-                <input type="submit" title="search" value="search" class="top_search_submit sprites">
+                <input type="submit" title="搜索" value="search" class="top_search_submit sprites">
             </form>
         </div>
     </div>
