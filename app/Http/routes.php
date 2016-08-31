@@ -12,11 +12,6 @@
 */
 
 Route::get('test', function() {
-    $dtStart = microtime_float();
-    $novel = \App\Models\Novel::find(5125);
-        \App\Repositories\Snatch\Biquge::updateNew($novel);
-    $dtEnd = microtime_float();
-    echo "耗时：".($dtEnd-$dtStart)."秒";
 });
 
 
@@ -34,7 +29,7 @@ Route::group(['middleware'=>['web']], function(){
 
     Route::get('authors', ['as' => 'authors', 'uses' => 'AuthorController@all']);
 
-    Route::get('search?keyword={keywords}', ['as' => 'search', 'uses' => 'IndexController@search']);
+    Route::get('search', ['as' => 'search', 'uses' => 'IndexController@search']);
 
     Route::get('{category}', ['as' => 'category', 'uses'=>'IndexController@category'])
         ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan)');
@@ -42,11 +37,12 @@ Route::group(['middleware'=>['web']], function(){
     Route::get('feedback', 'IndexController@feedback');
     Route::post('feedback', 'IndexController@postFeedback');
 
+    Route::get('ajax/subscribe', ['as' => 'subscribe','uses' =>'BookController@subscribe']);
 });
 
 Route::group(['prefix'=>'books/{bookId}', 'middleware' => ['web','wechat']], function() {
     Route::get('/{openId?}', ['as' => 'book', 'uses' => 'BookController@index'])
-        ->where(['bookId'=> '[0-9]+', 'openId' => '[a-zA-Z]+']);
+        ->where(['bookId'=> '[0-9]+', 'openId' => '[a-zA-Z0-9]+']);
     Route::get('/chapters/{chapterId}/{openId?}', ['as' => 'chapter', 'uses' => 'BookController@chapter'])
         ->where(['bookId'=> '[0-9]+', 'chapterId' => '[0-9]+', 'openId' => '[a-zA-Z]+']);
 });

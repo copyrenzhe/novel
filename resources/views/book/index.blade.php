@@ -27,6 +27,15 @@
                     </div>
                     <div class="clr"></div>
                     <a href="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $novel->chapter->first()->id]) }}" rel="nofollow" class="btn-big">在线阅读</a>
+                    @if(isset($user))
+                    <a href="javascript:void(0);" rel="nofollow" class="btn-big subscribe">
+                        @if(in_array($novel->id, $user->novel->pluck('id')->all()))
+                            取消订阅
+                        @else
+                            订阅
+                        @endif
+                    </a>
+                    @endif
                 </div>
                 <div class="clr"></div>
                 <div class="desc-story" style="padding-top:10px;">
@@ -59,4 +68,29 @@
     <!--/ left -->	 <!-- right -->
     @include('common.right')
     <div class="clr"></div>
+    <script type="text/javascript">
+        var book_id = {{ $novel->id }};
+        @if(isset($user))
+        var user_id = {{ $user->id }};
+        $(function() {
+            $('.subscribe').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/ajax/subscribe',
+                    data: { book_id: book_id, user_id: user_id},
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data.isSubscribe==0){
+                            alert('取消成功');
+                            $('.subscribe').html('订阅');
+                        } else {
+                            alert('订阅成功');
+                            $('.subscribe').html('取消订阅');
+                        }
+                    }
+                })
+            })
+        })
+        @endif
+    </script>
 @stop
