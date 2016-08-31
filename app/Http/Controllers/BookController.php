@@ -23,7 +23,13 @@ class BookController extends CommonController
     public function __construct(Request $request)
     {
         parent::__construct();
-        $this->user = session('wechat.oauth_user');
+        $user = session('wechat.oauth_user');
+        if($openId = $request->route('openId')){
+            $user = User::where('open_id', $openId)->first();
+        }
+        $user && view()->composer(['book.index', 'book.chapter'], function($view) use($user) {
+            $view->with('user', $user);
+        });
         if($bookId = $request->route('bookId')){
             $novel = Novel::find($bookId);
             view()->composer(['book.index', 'book.chapter'], function($view) use($novel) {
@@ -35,10 +41,9 @@ class BookController extends CommonController
     public function index($bookId, $openId='')
     {
         $subList = $this->subList($openId);
-        $novel = Novel::find($bookId);
         $recentChapter = Chapter::where('novel_id', $bookId)->orderBy('updated_at', 'desc')->orderBy('id', 'desc')->first();
         $genres = $this->genres;
-        return view('book.index', compact('novel', 'recentChapter', 'genres', 'openId', 'subList'));
+        return view('book.index', compact('recentChapter', 'genres', 'openId', 'subList'));
     }
 
     public function chapter($bookId, $chapterId, $openId='')
@@ -64,5 +69,26 @@ class BookController extends CommonController
         $userId = User::where('open_id', $request->input('openId'))->first()->id;
         UserNovel::firstOrCreate(['user_id' => $userId, 'novel_id' => $request->input('novelId')]);
         return true;
+    }
+
+    public function subscribe(Request $request)
+    {
+        $isSubscribe = 0;
+        $novel_id = $request->get('book_id');
+        $user_id = $request->get('user_id');
+        $userNovel = UserNovel::where('novel_id', $novel_id)->where('user_id', $user_id)->first();
+        if($userNovel){
+            //取消订阅
+            UserNovel::where('novel_id', $novel_id)->where('user_id', $user_id)->delete();
+            $isSubscribe = 0;
+        } else {
+            //订阅
+            UserNovel::create(['novel_id'=> $novel_id, 'user_id' =>$user_id]);
+            $isSubscribe = 1;
+        }
+        return response()->json([
+            'status' => 1,
+            'isSubscribe' => $isSubscribe
+        ]);
     }
 }

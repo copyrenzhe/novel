@@ -60,8 +60,9 @@ class IndexController extends CommonController
         return view('index.list', compact('novels', 'name'));
     }
 
-    public function search($keywords)
+    public function search(Request $request)
     {
+        $keywords = $request->get('keyword');
         $authors = Author::where('name', 'like', '%'.$keywords.'%')->pluck('id')->toArray();
         $novels = Novel::where('name', 'like', '%'.$keywords.'%')
                     ->orwhereIn('author_id', $authors)->paginate(30);
