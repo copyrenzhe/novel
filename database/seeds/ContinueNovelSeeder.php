@@ -15,7 +15,7 @@ class ContinueNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $continueNovels = Novel::continued()->whereBetween('id', [5851,10791])->get();
+        $continueNovels = Novel::continued()->whereBetween('id', [290,493])->get();
         foreach ($continueNovels as $novel){
             Log::info("开始采集小说[$novel->id]:[$novel->name]");
             Biquge::snatch($novel);
