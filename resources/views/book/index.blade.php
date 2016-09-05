@@ -1,6 +1,12 @@
 @extends('app')
 @section('title')
-书虫网-{{ $novel->name }}无弹窗-{{ $novel->name }}最新章节
+{{ $novel->name }}无弹窗-
+@if($novel->is_over)
+    {{ $novel->name }}全集-{{ $novel->name }}全文完整版
+@else
+    {{ $novel->name }}最新章节-{{ $novel->name }}最新章节列表
+@endif
+-书虫网
 @stop
 @section('content')
     <!--left-->
