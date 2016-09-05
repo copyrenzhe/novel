@@ -14,7 +14,7 @@ class RepairNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $continueNovels = Novel::continued()->where('chapter_num', 0)->get();
+        $continueNovels = Novel::where('chapter_num', 0)->get();
         foreach ($continueNovels as $novel){
             Log::info("开始采集小说[$novel->id]:[$novel->name]");
             Biquge::snatch($novel);
