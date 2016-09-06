@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('test', function() {
-});
-
-
 Route::group(['middleware'=>['web']], function(){
 
     Route::get('/', 'IndexController@index');
