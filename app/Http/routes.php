@@ -11,6 +11,14 @@
 |
 */
 
+Route::group(['prefix' => 'admin', 'middleware' => ['web']], function(){
+    Route::get('login', 'Admin\AuthController@getLogin');
+    Route::post('login', 'Admin\AuthController@postLogin');
+    Route::get('register', 'Admin\AuthController@getRegister');
+    Route::post('register', 'Admin\AuthController@postRegister');
+    Route::get('/', 'AdminController@index');
+});
+
 Route::group(['middleware'=>['web']], function(){
 
     Route::get('/', 'IndexController@index');
