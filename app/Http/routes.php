@@ -11,13 +11,15 @@
 |
 */
 
-Route::group(['prefix' => 'admin', 'middleware' => ['web']], function(){
-    Route::get('login', 'Admin\AuthController@getLogin');
-    Route::post('login', 'Admin\AuthController@postLogin');
-    Route::get('register', 'Admin\AuthController@getRegister');
-    Route::post('register', 'Admin\AuthController@postRegister');
-    Route::get('logout', 'Admin\AuthController@getLogout');
-    Route::get('/', 'AdminController@index');
+Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
+    Route::get('login', 'AuthController@getLogin');
+    Route::post('login', 'AuthController@postLogin');
+    Route::get('register', 'AuthController@getRegister');
+    Route::post('register', 'AuthController@postRegister');
+    Route::get('logout', 'AuthController@getLogout');
+    Route::get('/', 'IndexController@index');
+
+    Route::resource('novels', 'NovelsController', ['only' => ['index', 'show']]);
 });
 
 Route::group(['middleware'=>['web']], function(){

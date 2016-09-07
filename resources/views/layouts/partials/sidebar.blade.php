@@ -34,7 +34,7 @@
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a href="{{ url('/admin') }}"><i class='fa fa-dashboard'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
-            <li><a href="#"><i class='fa fa-link'></i> <span>{{ trans('message.anotherlink') }}</span></a></li>
+            <li><a href="{{ url('/admin/novels') }}"><i class='fa fa-link'></i> <span>{{ trans('message.anotherlink') }}</span></a></li>
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>{{ trans('message.multilevel') }}</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
