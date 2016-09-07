@@ -5,13 +5,13 @@
     <section class="sidebar">
 
         <!-- Sidebar user panel (optional) -->
-        @if (! Auth::guest())
+        @if (! Auth::guard('admin')->guest())
             <div class="user-panel">
                 <div class="pull-left image">
                     <img src="{{asset('/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p>{{ Auth::user()->name }}</p>
+                    <p>{{ Auth::guard('admin')->user()->username }}</p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> {{ trans('message.online') }}</a>
                 </div>
@@ -33,7 +33,7 @@
         <ul class="sidebar-menu">
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="{{ url('home') }}"><i class='fa fa-link'></i> <span>{{ trans('message.home') }}</span></a></li>
+            <li class="active"><a href="{{ url('/admin') }}"><i class='fa fa-dashboard'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
             <li><a href="#"><i class='fa fa-link'></i> <span>{{ trans('message.anotherlink') }}</span></a></li>
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>{{ trans('message.multilevel') }}</span> <i class="fa fa-angle-left pull-right"></i></a>

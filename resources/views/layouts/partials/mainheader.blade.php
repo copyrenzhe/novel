@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{ url('/home') }}" class="logo">
+    <a href="{{ url('/admin') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>A</b>LT</span>
         <!-- logo for regular state and mobile devices -->
@@ -108,9 +108,9 @@
                         </li>
                     </ul>
                 </li>
-                @if (Auth::guest())
-                    <li><a href="{{ url('/register') }}">{{ trans('message.register') }}</a></li>
-                    <li><a href="{{ url('/login') }}">{{ trans('message.login') }}</a></li>
+                @if (Auth::guard('admin')->guest())
+                    <li><a href="{{ url('/admin/register') }}">{{ trans('message.register') }}</a></li>
+                    <li><a href="{{ url('/admin/login') }}">{{ trans('message.login') }}</a></li>
                 @else
                     <!-- User Account Menu -->
                     <li class="dropdown user user-menu">
@@ -119,14 +119,14 @@
                             <!-- The user image in the navbar-->
                             <img src="{{asset('/img/user2-160x160.jpg')}}" class="user-image" alt="User Image"/>
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">{{ Auth::user()->name }}</span>
+                            <span class="hidden-xs">{{ Auth::guard('admin')->user()->username }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
                                 <img src="{{asset('/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image" />
                                 <p>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::guard('admin')->user()->username }}
                                     <small>{{ trans('message.login') }} Nov. 2012</small>
                                 </p>
                             </li>
@@ -148,7 +148,7 @@
                                     <a href="#" class="btn btn-default btn-flat">{{ trans('message.profile') }}</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="{{ url('/logout') }}" class="btn btn-default btn-flat">{{ trans('message.signout') }}</a>
+                                    <a href="{{ url('/admin/logout') }}" class="btn btn-default btn-flat">{{ trans('message.signout') }}</a>
                                 </div>
                             </li>
                         </ul>
