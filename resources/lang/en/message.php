@@ -53,6 +53,7 @@ return [
     'seecode'                 => 'See code at',
     'online'                  => 'Online',
     'home'                    => 'Home',
+    'dashboard'               => 'Dashboard',
     'header'                  => 'HEADER',
     'anotherlink'             => 'Another Link',
     'multilevel'              => 'Multilevel',
