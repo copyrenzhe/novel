@@ -9,25 +9,25 @@
     <div class="tab-content">
         <!-- Home tab content -->
         <div class="tab-pane active" id="control-sidebar-home-tab">
-            <h3 class="control-sidebar-heading">{{ trans('adminlte_lang::message.recentactivity') }}</h3>
+            <h3 class="control-sidebar-heading">{{ trans('message.recentactivity') }}</h3>
             <ul class='control-sidebar-menu'>
                 <li>
                     <a href='javascript::;'>
                         <i class="menu-icon fa fa-birthday-cake bg-red"></i>
                         <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">{{ trans('adminlte_lang::message.birthday') }}</h4>
-                            <p>{{ trans('adminlte_lang::message.birthdaydate') }}</p>
+                            <h4 class="control-sidebar-subheading">{{ trans('message.birthday') }}</h4>
+                            <p>{{ trans('message.birthdaydate') }}</p>
                         </div>
                     </a>
                 </li>
             </ul><!-- /.control-sidebar-menu -->
 
-            <h3 class="control-sidebar-heading">{{ trans('adminlte_lang::message.progress') }}</h3>
+            <h3 class="control-sidebar-heading">{{ trans('message.progress') }}</h3>
             <ul class='control-sidebar-menu'>
                 <li>
                     <a href='javascript::;'>
                         <h4 class="control-sidebar-subheading">
-                            {{ trans('adminlte_lang::message.customtemplate') }}
+                            {{ trans('message.customtemplate') }}
                             <span class="label label-danger pull-right">70%</span>
                         </h4>
                         <div class="progress progress-xxs">
@@ -39,18 +39,18 @@
 
         </div><!-- /.tab-pane -->
         <!-- Stats tab content -->
-        <div class="tab-pane" id="control-sidebar-stats-tab">{{ trans('adminlte_lang::message.statstab') }}</div><!-- /.tab-pane -->
+        <div class="tab-pane" id="control-sidebar-stats-tab">{{ trans('message.statstab') }}</div><!-- /.tab-pane -->
         <!-- Settings tab content -->
         <div class="tab-pane" id="control-sidebar-settings-tab">
             <form method="post">
-                <h3 class="control-sidebar-heading">{{ trans('adminlte_lang::message.generalset') }}</h3>
+                <h3 class="control-sidebar-heading">{{ trans('message.generalset') }}</h3>
                 <div class="form-group">
                     <label class="control-sidebar-subheading">
-                        {{ trans('adminlte_lang::message.reportpanel') }}
-                        <input type="checkbox" class="pull-right" {{ trans('adminlte_lang::message.checked') }} />
+                        {{ trans('message.reportpanel') }}
+                        <input type="checkbox" class="pull-right" {{ trans('message.checked') }} />
                     </label>
                     <p>
-                        {{ trans('adminlte_lang::message.informationsettings') }}
+                        {{ trans('message.informationsettings') }}
                     </p>
                 </div><!-- /.form-group -->
             </form>

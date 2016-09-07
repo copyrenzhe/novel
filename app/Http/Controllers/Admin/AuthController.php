@@ -13,20 +13,22 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     protected $redirectTo = '/admin';
+    protected $redirectAfterLogout = '/admin/login';
     protected $guard = 'admin';
     protected $loginView = 'admin.login';
     protected $registerView = 'admin.register';
+    protected $username = 'username';
 
     public function __construct()
     {
-        $this->middleware('guest:admin', ['except' => 'logout']);
+        $this->middleware('guest:admin', ['except' => 'getLogout']);
     }
 
     protected function validator(array $data)
     {
 
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'username' => 'required|max:255|unique:admin',
             'email' => 'required|email|max:255|unique:admin',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -36,7 +38,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return Admin::create([
-            'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);

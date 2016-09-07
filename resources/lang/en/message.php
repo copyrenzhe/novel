@@ -119,6 +119,7 @@ return [
     'address'                 => 'Address',
     'dropus'                  => 'Drop Us A Line',
     'yourname'                => 'Your Name',
+    'username'                => 'Username',
     'emailaddress'            => 'Email Address',
     'enteremail'              => 'Enter Email',
     'yourtext'                => 'Your Text',
