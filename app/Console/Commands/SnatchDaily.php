@@ -43,7 +43,7 @@ class SnatchDaily extends Command
         //
         try{
             $this->info('----- STARTING THE PROCESS FOR UPDATE ALL NOVELS -----');
-            $novels = Novel::all()->continued()->get();
+            $novels = Novel::continued()->get();
             if($novels) {
                 $this->info('All novels to be processed');
                 foreach ($novels as $novel) {
