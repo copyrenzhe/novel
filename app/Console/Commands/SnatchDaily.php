@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Log;
+use App\Models\Novel;
 use Illuminate\Console\Command;
 use App\Repositories\Snatch\Biquge;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
