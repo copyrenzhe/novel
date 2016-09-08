@@ -48,14 +48,14 @@ class IndexController extends CommonController
 
     public function top()
     {
-        $novels = Novel::hot()->paginate(30);
+        $novels = Novel::with('author')->hot()->paginate(30);
         $name = '排行榜单';
         return view('index.list', compact('novels', 'name'));
     }
 
     public function over()
     {
-        $novels = Novel::over()->hot()->paginate(30);
+        $novels = Novel::with('author')->over()->hot()->paginate(30);
         $name = '完结小说';
         return view('index.list', compact('novels', 'name'));
     }

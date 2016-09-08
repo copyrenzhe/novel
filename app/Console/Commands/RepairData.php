@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Novel;
 use App\Repositories\Snatch\Biquge;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -39,13 +40,9 @@ class RepairData extends Command
      */
     public function handle()
     {
-        $list = DB::table('chapter')
-            ->select(DB::raw('novel_id, count(*) as num'))
-            ->whereNull('content')
-            ->groupBy('novel_id')
-            ->get();
-        foreach ($list as $key => $value) {
-            Biquge::repair($value->novel_id);
+        $novels = Novel::all();
+        foreach ($novels as $novel) {
+            Biquge::repair($novel);
         }
     }
 }

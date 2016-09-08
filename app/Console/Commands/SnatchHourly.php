@@ -15,7 +15,9 @@ class SnatchHourly extends Command
      *
      * @var string
      */
-    protected $signature = 'snatch:updateHot';
+    protected $signature = 'snatch:updateHot
+                            {number? : 按热度更新小说数量}
+                            {--queue : 是否进入队列}';
 
     /**
      * The console command description.
@@ -42,8 +44,9 @@ class SnatchHourly extends Command
     {
         //
         try{
-            $this->info('----- STARTING THE PROCESS FOR UPDATE OF HOT LIMIT 30 -----');
-            $hotNovels = Novel::continued()->orderBy('hot', 'desc')->take(30)->get();
+            $number = $this->argument('number') ? intval($this->argument('number')) : 30;
+            $this->info('----- STARTING THE PROCESS FOR UPDATE OF HOT LIMIT '.$number.' -----');
+            $hotNovels = Novel::continued()->orderBy('hot', 'desc')->take($number)->get();
             if($hotNovels) {
                 $this->info('Hot novels to be processed');
                 foreach ($hotNovels as $hotNovel) {
@@ -53,18 +56,8 @@ class SnatchHourly extends Command
                         $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新成功");
                     else
                         $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新失败");
-                    $i=0;
-                    do{
-                        if($i >= 10){
-                            $this->error("小说[{$hotNovel->id}]：{$hotNovel->name}经过多次修复仍失败，请排查！");
-                            break;
-                        }
-                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}开始第{$i}次修复");
-                        Biquge::repair($hotNovel->id);
-                        $i++;
-                    }while($hotNovel->chapter()->whereNull('content')->count());
                 }
-                $this->info('----- FINISHED THE PROCESS FOR UPDATE OF HOT LIMIT 30 -----');
+                $this->info('----- FINISHED THE PROCESS FOR UPDATE OF HOT LIMIT '.$number.' -----');
             }
         } catch (ModelNotFoundException $e) {
             Log::error($e);
