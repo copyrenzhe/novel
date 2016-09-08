@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Novel;
-use App\Repositories\Snatch\Biquge;
+use App\Jobs\SnatchRepair;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class RepairData extends Command
 {
@@ -14,7 +12,9 @@ class RepairData extends Command
      *
      * @var string
      */
-    protected $signature = 'repair:data';
+    protected $signature = 'snatch:repair
+                            {novel_id?* : 小说id}
+                            {--queue : 是否进入队列}';
 
     /**
      * The console command description.
@@ -40,9 +40,11 @@ class RepairData extends Command
      */
     public function handle()
     {
-        $novels = Novel::all();
-        foreach ($novels as $novel) {
-            Biquge::repair($novel);
+        if($this->option('queue')) {
+            dispatch(new SnatchRepair($this->argument('novel_id')));
+        } else {
+            $snatch = new SnatchRepair($this->argument('novel_id'));
+            $snatch->handle();
         }
     }
 }

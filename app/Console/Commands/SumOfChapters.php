@@ -41,16 +41,11 @@ class SumOfChapters extends Command
      */
     public function handle()
     {
-        $this->info('----- STARTING THE PROCESS FOR SUM OF CHAPTER -----');
-        if($novel_id = $this->argument('novel_id')){
-            $novels = Novel::whereIn('id', $novel_id)->get();
+        if($this->option('queue')) {
+            dispatch(new \App\Jobs\SumOfChapters($this->argument('novel_id')));
         } else {
-            $novels = Novel::all();
+            $snatch = new \App\Jobs\SumOfChapters($this->argument('novel_id'));
+            $snatch->handle();
         }
-        foreach ($novels as $novel) {
-            $novel->chapter_num = Chapter::where('novel_id', $novel->id)->count();
-            $novel->save();
-        }
-        $this->info('----- FINISHED THE PROCESS FOR SUM OF CHAPTER -----');
     }
 }

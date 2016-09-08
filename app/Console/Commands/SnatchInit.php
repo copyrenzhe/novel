@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Log;
-use App\Repositories\Snatch\Biquge;
 use Illuminate\Console\Command;
 
 class SnatchInit extends Command
@@ -13,7 +11,8 @@ class SnatchInit extends Command
      *
      * @var string
      */
-    protected $signature = 'snatch:initNovel';
+    protected $signature = 'snatch:initNovel
+                            {--queue : 是否进入队列}';
 
     /**
      * The console command description.
@@ -38,17 +37,11 @@ class SnatchInit extends Command
      */
     public function handle()
     {
-        //
-        try{
-            $this->info('----- STARTING THE PROCESS FOR INIT NOVEL -----');
-            $dtStart = microtime_float();
-            Biquge::init();
-            $dtEnd = microtime_float();
-            $this->info('expire time '.$dtEnd-$dtStart.' seconds');
-            $this->info('----- FINISHED THE PROCESS FOR INIT NOVEL -----');
-        }catch (\Exception $e) {
-            Log::error($e);
-            $this->error('They received errors when running the process. View Log File.');
+        if($this->option('queue')) {
+            dispatch(new \App\Jobs\SnatchInit());
+        } else {
+            $snatch = new \App\Jobs\SnatchInit();
+            $snatch->handle();
         }
     }
 }
