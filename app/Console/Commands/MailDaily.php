@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Admin;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -41,13 +42,15 @@ class MailDaily extends Command
         //
         $title = "获取小说信息日志";
         Mail::raw($title, function($message) use($title) {
-            $message->to('275804511@qq.com');
+            $email = Admin::first()->email;
+            $message->to($email);
             $message->subject($title);
 
             $filePath = [
-                storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateHot.log',
-                storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.initNovel.log',
-                storage_path(). '/logs/'.Carbon::now()->year.'/'.Carbon::now()->month.'/'.Carbon::now()->day.'.updateAll.log'
+                storage_path(). '/logs/update-'.Carbon::now()->toDateString(),
+                storage_path(). '/logs/init-'.Carbon::now()->toDateString(),
+                storage_path(). '/logs/repair-'.Carbon::now()->toDateString(),
+                storage_path(). '/logs/sum-'.Carbon::now()->toDateString()
             ];
             foreach ($filePath as $path) {
                 if(file_exists($path))

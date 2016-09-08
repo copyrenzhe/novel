@@ -32,15 +32,7 @@ class Inspire extends Command
      */
     public function handle()
     {
-//        dispatch(new Test($this->argument('novel_id')));
-        $test = new Test($this->argument('novel_id'));
-        $test->handle();
-//        $count = 100;
-//        $bar = $this->output->createProgressBar($count);
-//        for ($i=1; $i<$count; $i++){
-//            sleep(1);
-//            $bar->advance();
-//        }
-//        $bar->finish();
+        Log::useDailyFiles(storage_path().'/logs/update', 5);
+        Log::info('hello world222');
     }
 }
