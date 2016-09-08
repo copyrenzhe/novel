@@ -2,8 +2,8 @@
 <div class="mb-nav">
     <div class="mb-nav-wrap">
         <div class="mb-nav-search">
-            <form action="{{ url('search') }}" method="post" enctype="multipart/form-data">
-                <input class="top_search" id="searchInput_mobile" type="text" value="Search Title, Author" name="keyword" onkeydown="EnterKey(event);" />
+            <form action="{{ url('search') }}" method="get" enctype="multipart/form-data">
+                <input class="top_search" id="searchInput_mobile" type="text" placeholder="输入小说名或作者" name="keyword" onkeydown="EnterKey(event);" />
                 <input class="top_search_submit" type="submit" value="搜索" title="Search" />
             </form>
             <div class="clr"></div>

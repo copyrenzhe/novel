@@ -1,3 +1,4 @@
+
 @charset "utf-8";
 body {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -461,6 +462,7 @@ h5 {
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
     background: url("../images/arrow-down.png") no-repeat scroll 4px -20px #FFFFFF;
+    border-color: #D2D2D2 #D2D2D2 -moz-use-text-color;
     border-image: none;
     border-radius: 3px 3px 0 0;
     border-style: solid solid none;
@@ -1230,7 +1232,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
 }
 #footer {
     background: none repeat scroll 0 0 #F1F1F1;
-    text-align: center;
+    height: 120px;
     position: relative;
     width: 100%;
 }
@@ -1509,7 +1511,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         padding: 0 10px;
     }
     .mb-nav .mb-nav-wrap a.mb-nav-a:before {
-        content: "â€º";
+        content: "›";
         padding-right: 10px;
     }
     .mb-nav .mb-nav-wrap .mb-nav-panel {
@@ -1535,6 +1537,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         -moz-border-right-colors: none;
         -moz-border-top-colors: none;
         background: none repeat scroll 0 0 #FFFFFF;
+        border-color: #D0D0D0;
         border-image: none;
         border-style: solid;
         border-width: 1px 1px 1px 3px;
