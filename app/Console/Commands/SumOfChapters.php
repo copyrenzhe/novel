@@ -13,7 +13,9 @@ class SumOfChapters extends Command
      *
      * @var string
      */
-    protected $signature = 'sum:chapter';
+    protected $signature = 'sum:chapter
+                            {novel_id?* : 小说id}
+                            {--queue : 是否进入队列}';
 
     /**
      * The console command description.
@@ -40,7 +42,11 @@ class SumOfChapters extends Command
     public function handle()
     {
         $this->info('----- STARTING THE PROCESS FOR SUM OF CHAPTER -----');
-        $novels = Novel::all();
+        if($novel_id = $this->argument('novel_id')){
+            $novels = Novel::whereIn('id', $novel_id)->get();
+        } else {
+            $novels = Novel::all();
+        }
         foreach ($novels as $novel) {
             $novel->chapter_num = Chapter::where('novel_id', $novel->id)->count();
             $novel->save();

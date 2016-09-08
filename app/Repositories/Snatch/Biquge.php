@@ -41,10 +41,10 @@ Class Biquge implements SnatchInterface
      * @desc 修复未获取到内容的章节，若传入小说id，则修复该小说的章节，否则修复所有内容为空的章节
      * @param int|null $novel_id
      */
-    public static function repair($novel_id=0 )
+    public static function repair(Novel $novel )
     {
         $Biquge = new Biquge();
-        return $Biquge->repairNovel($novel_id);
+        return $Biquge->repairNovel($novel);
     }
 
     /**
@@ -80,12 +80,12 @@ Class Biquge implements SnatchInterface
         return $Biquge->snatchChapter($novel);
     }
 
-    public function repairNovel($novel_id)
+    public function repairNovel(Novel $novel)
     {
         Log::info("开始修复");
-        if(!!$novel_id)
+        if(!!$novel)
             $url_list = Chapter::whereNotNull('biquge_url')
-                ->where('novel_id', $novel_id)
+                ->where('novel_id', $novel->id)
                 ->whereNull('content')
                 ->pluck('biquge_url')
                 ->toArray();
@@ -102,7 +102,7 @@ Class Biquge implements SnatchInterface
             $contents = $this->multi_send_test($splice_list, '');
 
             foreach ($contents as $k => $content) {
-                Log::info("修复小说[$novel_id]，章节：{$url_list[$k]}");
+                Log::info("修复小说[{$novel->id}]，章节：{$url_list[$k]}");
                 $value_array = [
                     'content' => $this->getChapterContent($content)
                 ];
@@ -147,6 +147,8 @@ Class Biquge implements SnatchInterface
                 $novel_html = $this->send($novel_link);
                 $novel->description = $this->getNovelInfo($novel_html);
                 $cover_link = $this->getNovelCover($novel_html);
+                $chapter_match = $this->getChapterList($novel_html);
+                $novel->chapter_num = count($chapter_match[0]);
                 if(!empty($cover_link)) {
                     $cover_ext = substr($cover_link, strrpos($cover_link, '.')+1);
                     $path = public_path('cover/'.$novel->id.'_cover.'.$cover_ext);
@@ -171,6 +173,7 @@ Class Biquge implements SnatchInterface
     public function getChapterNew(Novel $novel)
     {
         $novel_html = $this->send($novel->biquge_url);
+
         $chapter_list = $this->getChapterList($novel_html);
         if(!$chapter_list[1]) {
             Log::error("小说[$novel->id]:[$novel->name]，获取章节列表失败，请注意查看");
@@ -181,6 +184,16 @@ Class Biquge implements SnatchInterface
             //小说未更新
             return ['code' => 1];
         }
+        //更新小说状态
+        preg_match('/<meta property="og:novel:status" content="(.*?)">/s', $novel_html, $overMatch);
+        if(@$overMatch[1]=='连载中'){
+            $novel->is_over = 0;
+        }
+        if(@$overMatch[1]=='完结'){
+            $novel->is_over = 1;
+        }
+        $novel->chapter_num = count($chapter_list[1]);
+        $novel->save();
 
         //目前数据库中的最新一章
         $last_url = $novel->chapter()->orderBy('id', 'desc')->first()->biquge_url;
