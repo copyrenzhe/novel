@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\Test;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use Log;
@@ -31,14 +32,15 @@ class Inspire extends Command
      */
     public function handle()
     {
-        if(is_array($this->argument('novel_id'))){
-            Log::info('id in('.implode(';', $this->argument('novel_id')).')');
-        }elseif(is_string($this->argument('novel_id'))){
-            Log::info('id ='.$this->argument('novel_id'));
-        } else {
-            $this->info('no novel_id');
-        }
-        Log::info($this->argument('novel_id'));
-        Log::info($this->option('queue'));
+//        dispatch(new Test($this->argument('novel_id')));
+        $test = new Test($this->argument('novel_id'));
+        $test->handle();
+//        $count = 100;
+//        $bar = $this->output->createProgressBar($count);
+//        for ($i=1; $i<$count; $i++){
+//            sleep(1);
+//            $bar->advance();
+//        }
+//        $bar->finish();
     }
 }

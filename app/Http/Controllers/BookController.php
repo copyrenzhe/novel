@@ -73,7 +73,6 @@ class BookController extends CommonController
 
     public function subscribe(Request $request)
     {
-        $isSubscribe = 0;
         $novel_id = $request->get('book_id');
         $user_id = $request->get('user_id');
         $userNovel = UserNovel::where('novel_id', $novel_id)->where('user_id', $user_id)->first();

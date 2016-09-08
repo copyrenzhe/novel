@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Log;
+use App\Jobs\SnatchUpdate;
 use App\Models\Novel;
-use App\Repositories\Snatch\Biquge;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SnatchHourly extends Command
 {
@@ -42,26 +40,13 @@ class SnatchHourly extends Command
      */
     public function handle()
     {
-        //
-        try{
-            $number = $this->argument('number') ? intval($this->argument('number')) : 30;
-            $this->info('----- STARTING THE PROCESS FOR UPDATE OF HOT LIMIT '.$number.' -----');
-            $hotNovels = Novel::continued()->orderBy('hot', 'desc')->take($number)->get();
-            if($hotNovels) {
-                $this->info('Hot novels to be processed');
-                foreach ($hotNovels as $hotNovel) {
-                    $this->info("-- 开始更新小说[{$hotNovel->name}] --");
-                    $return = Biquge::updateNew($hotNovel);
-                    if($return['code'])
-                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新成功");
-                    else
-                        $this->info("小说[{$hotNovel->id}]：{$hotNovel->name}更新失败");
-                }
-                $this->info('----- FINISHED THE PROCESS FOR UPDATE OF HOT LIMIT '.$number.' -----');
-            }
-        } catch (ModelNotFoundException $e) {
-            Log::error($e);
-            $this->error('They received errors when running the process. View Log File.');
+        $number = $this->argument('number') ? intval($this->argument('number')) : 30;
+        $hot_ids = Novel::continued()->orderBy('hot', 'desc')->take($number)->lists('id');
+        if($this->option('queue')) {
+            dispatch(new SnatchUpdate($hot_ids));
+        } else {
+            $snatch = new SnatchUpdate($hot_ids);
+            $snatch->handle();
         }
     }
 }

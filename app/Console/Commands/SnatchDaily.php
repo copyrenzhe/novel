@@ -2,11 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Log;
-use App\Models\Novel;
+use App\Jobs\SnatchUpdate;
 use Illuminate\Console\Command;
-use App\Repositories\Snatch\Biquge;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SnatchDaily extends Command
 {
@@ -42,31 +39,11 @@ class SnatchDaily extends Command
      */
     public function handle()
     {
-        //
-        try{
-            $this->info('----- STARTING THE PROCESS FOR UPDATE ALL NOVELS -----');
-            $dtStart = microtime_float();
-            if($novel_id = $this->argument('novel_id')){
-                $novels = Novel::whereIn('id', $novel_id)->get();
-            } else {
-                $novels = Novel::continued()->get();
-            }
-            if($novels) {
-                $this->info('All novels to be processed');
-                foreach ($novels as $novel) {
-                    $return = Biquge::updateNew($novel);
-                    if($return['code'])
-                        $this->info("小说[{$novel->id}]：{$novel->name}更新成功");
-                    else
-                        $this->info("小说[{$novel->id}]：{$novel->name}更新失败");
-                }
-                $this->info('----- FINISHED THE PROCESS FOR UPDATE ALL NOVELS -----');
-                $dtEnd = microtime_float();
-                $this->info('----- 耗时'.($dtEnd-$dtStart).'秒');
-            }
-        } catch (ModelNotFoundException $e) {
-            Log::error($e);
-            $this->error('They received errors when running the process. View Log File.');
+        if($this->option('queue')) {
+            dispatch(new SnatchUpdate($this->argument('novel_id')));
+        } else {
+            $snatch = new SnatchUpdate($this->argument('novel_id'));
+            $snatch->handle();
         }
     }
 }

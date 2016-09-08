@@ -11,7 +11,8 @@
         "wittiws/phpquery": "dev-master",
         "overtrue/laravel-wechat": "~3.0",
         "laravelcollective/html": "v5.2.4",
-        "acacha/admin-lte-template-laravel": "2.*"
+        "acacha/admin-lte-template-laravel": "2.*",
+        "pda/pheanstalk": "~3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
