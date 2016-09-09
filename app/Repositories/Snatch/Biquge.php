@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use App\Models\Author;
 use App\Models\Chapter;
 use App\Models\Novel;
-use Illuminate\Support\Facades\Log;
+use Log;
 
 /**
  * Class Biquge
@@ -84,8 +84,8 @@ Class Biquge implements SnatchInterface
     {
         Log::info("开始修复");
         if(!!$novel)
-            $url_list = Chapter::whereNotNull('biquge_url')
-                ->where('novel_id', $novel->id)
+            $url_list = Chapter::where('novel_id', $novel->id)
+                ->whereNotNull('biquge_url')
                 ->whereNull('content')
                 ->pluck('biquge_url')
                 ->toArray();
@@ -186,19 +186,16 @@ Class Biquge implements SnatchInterface
         }
         //更新小说状态
         preg_match('/<meta property="og:novel:status" content="(.*?)">/s', $novel_html, $overMatch);
-        if(@$overMatch[1]=='连载中'){
-            $novel->is_over = 0;
-        }
-        if(@$overMatch[1]=='完结'){
-            $novel->is_over = 1;
-        }
-        $novel->chapter_num = count($chapter_list[1]);
-        $novel->save();
 
         //目前数据库中的最新一章
-        $last_url = $novel->chapter()->orderBy('id', 'desc')->first()->biquge_url;
-        $urlArr = explode('/', $last_url);
-        $curr_key = array_search($urlArr[count($urlArr)-1], $chapter_list[1]);
+        $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
+        if($last_novel) {
+            $last_url = $last_novel->biquge_url;
+            $urlArr = explode('/', $last_url);
+            $curr_key = array_search($urlArr[count($urlArr)-1], $chapter_list[1]);
+        } else {
+            $curr_key = -1;
+        }
 
         $filter_list = [];
         $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
@@ -219,6 +216,14 @@ Class Biquge implements SnatchInterface
         }
         unset($contents);
         Chapter::insert($value_array);
+        if(@$overMatch[1]=='连载中'){
+            $novel->is_over = 0;
+        }
+        if(@$overMatch[1]=='完结'){
+            $novel->is_over = 1;
+        }
+        $novel->chapter_num = count($chapter_list[1]);
+        $novel->save();
     }
 
 

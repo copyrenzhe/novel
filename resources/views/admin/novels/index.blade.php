@@ -32,26 +32,22 @@
                             <th>章节数</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
-                            <th>操作时间</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        @foreach($novels as $novel)
-                            <tr>
-                                <td>{{ $novel->id }}</td>
-                                <td>{{ $novel->name }}</td>
-                                <td>{{ $novel->author->name }}</td>
-                                <td>{{ $novel->type }}</td>
-                                <td>{{ $novel->hot }}</td>
-                                <td>{{ $novel->chapter_num }}</td>
-                                <td>{{ $novel->created_at }}</td>
-                                <td>{{ $novel->updated_at }}</td>
-                                <td>
-                                    <input type="text" class="btn btn-primary" value="更新">
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>小说名</th>
+                            <th>作者</th>
+                            <th>类型</th>
+                            <th>热度</th>
+                            <th>章节数</th>
+                            <th>创建时间</th>
+                            <th>更新时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <!-- /.box-body -->
@@ -65,7 +61,22 @@
 @section('script')
     <script>
         $(function () {
-            $('#novels').DataTable();
+            $('#novels').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('admin/novels/datatables') }}",
+                "columns": [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'a_name', name: 'a_name'},
+                    {data: 'type', name: 'type'},
+                    {data: 'hot', name: 'hot'},
+                    {data: 'chapter_num', name: 'chapter_num'},
+                    {data: 'created_at', name: 'created_at'},
+                    {data: 'updated_at', name: 'updated_at'},
+                    {data: 'operations', name: 'operations'}
+                ]
+            });
         });
     </script>
     <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
