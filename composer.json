@@ -12,7 +12,8 @@
         "overtrue/laravel-wechat": "~3.0",
         "laravelcollective/html": "v5.2.4",
         "acacha/admin-lte-template-laravel": "2.*",
-        "pda/pheanstalk": "~3.0"
+        "pda/pheanstalk": "~3.0",
+        "yajra/laravel-datatables-oracle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

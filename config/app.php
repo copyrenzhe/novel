@@ -162,6 +162,7 @@ return [
         Overtrue\LaravelWechat\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Acacha\AdminLTETemplateLaravel\Providers\AdminLTETemplateServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
 
     ],
 

@@ -36,7 +36,10 @@ class SnatchRepair extends Job implements ShouldQueue
         Log::info('----- STARTING THE PROCESS FOR REPAIR NOVEL -----');
         $dtStart = microtime_float();
         if($novel_id = $this->novel_id){
-            $novels = Novel::whereIn('id', $novel_id)->get();
+            if(is_array($novel_id))
+                $novels = Novel::whereIn('id', $novel_id)->get();
+            else
+                $novels = Novel::where('id', $novel_id)->get();
         } else {
             $novels = Novel::all();
         }
