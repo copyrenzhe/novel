@@ -34,11 +34,12 @@
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a href="{{ url('/admin') }}"><i class='fa fa-dashboard'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
-            <li><a href="{{ url('/admin/novels') }}"><i class='fa fa-link'></i> <span>{{ trans('message.anotherlink') }}</span></a></li>
+            <li><a href="{{ url('/admin/novels') }}"><i class='fa fa-book'></i> <span>{{ trans('message.book') }}</span></a></li>
+            <li><a href="{{ url('/admin/system') }}"><i class='fa fa-gear'></i> <span>{{ trans('message.system') }}</span></a></li>
             <li class="treeview">
-                <a href="#"><i class='fa fa-link'></i> <span>{{ trans('message.multilevel') }}</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class='fa fa-street-view'></i> <span>{{ trans('message.users') }}</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="#">{{ trans('message.linklevel2') }}</a></li>
+                    <li><a href="{{ url('/admin/users') }}"><i class="fa fa-user"></i><span>{{ trans('message.userlist') }}</span></a></li>
                     <li><a href="#">{{ trans('message.linklevel2') }}</a></li>
                 </ul>
             </li>
