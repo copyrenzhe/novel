@@ -428,6 +428,7 @@ Class Biquge implements SnatchInterface
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT,60);
         $html = curl_exec($ch);
         if($html === false) {
             echo "curl error: " . curl_errno($ch);
