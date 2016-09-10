@@ -129,4 +129,8 @@ return [
     'password'                => 'Password',
     'retrypepassword'         => 'Retype password',
     'fullname'                => 'Full Name',
+    'book'                    => 'books',
+    'system'                  => 'system',
+    'users'                   => 'users',
+    'userlist'                => 'userlist'
 ];
