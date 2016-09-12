@@ -17,10 +17,9 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testLandingPage()
     {
-        $this->visit('/')
-             ->see('Acacha')
-             ->see('adminlte-laravel')
-             ->see('Pratt');
+        $this->visit('/admin')
+             ->see('AdminLTE')
+             ->see('Log in');
     }
 
     /**
@@ -30,14 +29,13 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testLandingPageWithUserLogged()
     {
-        $user = factory(App\User::class)->create();
+        $user = factory(\App\Models\Admin::class)->create();
 
-        $this->actingAs($user)
-            ->visit('/')
+        $this->actingAs($user, 'admin')
+            ->visit('/admin')
             ->see('Acacha')
             ->see('adminlte-laravel')
-            ->see('Pratt')
-            ->see($user->name);
+            ->see($user->username);
     }
 
     /**
@@ -47,7 +45,7 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testLoginPage()
     {
-        $this->visit('/login')
+        $this->visit('/admin/login')
             ->see('Sign in to start your session');
     }
 
@@ -58,14 +56,14 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testLogin()
     {
-        $user = factory(App\User::class)->create(['password' => Hash::make('passw0RD')]);
+        $user = factory(\App\Models\Admin::class)->create(['password' => Hash::make('passw0RD')]);
 
-        $this->visit('/login')
-            ->type($user->email, 'email')
+        $this->visit('/admin/login')
+            ->type($user->username, 'username')
             ->type('passw0RD', 'password')
             ->press('Sign In')
-            ->seePageIs('/home')
-            ->see($user->name);
+            ->seePageIs('/admin')
+            ->see($user->username);
     }
 
     /**
@@ -75,11 +73,11 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testLoginRequiredFields()
     {
-        $this->visit('/login')
-            ->type('', 'email')
+        $this->visit('/admin/login')
+            ->type('', 'username')
             ->type('', 'password')
             ->press('Sign In')
-            ->see('The email field is required')
+            ->see('The username field is required')
             ->see('The password field is required');
     }
 
@@ -90,19 +88,8 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testRegisterPage()
     {
-        $this->visit('/register')
+        $this->visit('/admin/register')
             ->see('Register a new membership');
-    }
-
-    /**
-     * Test Password reset Page.
-     *
-     * @return void
-     */
-    public function testPasswordResetPage()
-    {
-        $this->visit('/password/reset')
-            ->see('Reset Password');
     }
 
     /**
@@ -112,8 +99,8 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testHomePageForUnauthenticatedUsers()
     {
-        $this->visit('/home')
-            ->seePageIs('/login');
+        $this->visit('/admin')
+            ->seePageIs('/admin/login');
     }
 
     /**
@@ -123,11 +110,11 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testHomePageForAuthenticatedUsers()
     {
-        $user = factory(App\User::class)->create();
+        $user = factory(\App\Models\Admin::class)->create();
 
-        $this->actingAs($user)
-            ->visit('/home')
-            ->see($user->name);
+        $this->actingAs($user, 'admin')
+            ->visit('/admin')
+            ->see($user->username);
     }
 
     /**
@@ -137,11 +124,11 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testLogout()
     {
-        $user = factory(App\User::class)->create();
+        $user = factory(\App\Models\Admin::class)->create();
 
-        $this->actingAs($user)
-            ->visit('/logout')
-            ->seePageIs('/');
+        $this->actingAs($user, 'admin')
+            ->visit('/admin/logout')
+            ->seePageIs('/admin/login');
     }
 
     /**
@@ -163,16 +150,16 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testNewUserRegistration()
     {
-        $this->visit('/register')
-            ->type('Sergi Tur Badenas', 'name')
+        $this->visit('/admin/register')
+            ->type('fortest', 'username')
             ->type('sergiturbadenas@gmail.com', 'email')
             ->check('terms')
             ->type('passw0RD', 'password')
             ->type('passw0RD', 'password_confirmation')
             ->press('Register')
-            ->seePageIs('/home')
-            ->seeInDatabase('users', ['email' => 'sergiturbadenas@gmail.com',
-                                      'name'  => 'Sergi Tur Badenas', ]);
+            ->seePageIs('/admin')
+            ->seeInDatabase('admin', ['email' => 'sergiturbadenas@gmail.com',
+                                      'username'  => 'fortest', ]);
     }
 
     /**
@@ -182,38 +169,10 @@ class AcachaAdminLTELaravelTest extends TestCase
      */
     public function testRequiredFieldsOnRegistrationPage()
     {
-        $this->visit('/register')
+        $this->visit('/admin/register')
             ->press('Register')
-            ->see('The name field is required')
+            ->see('The username field is required')
             ->see('The email field is required')
             ->see('The password field is required');
-    }
-
-    /**
-     * Test send password reset.
-     *
-     * @return void
-     */
-    public function testSendPasswordReset()
-    {
-        $user = factory(App\User::class)->create();
-
-        $this->visit('password/reset')
-            ->type($user->email, 'email')
-            ->press('Send Password Reset Link')
-            ->see('We have e-mailed your password reset link!');
-    }
-
-    /**
-     * Test send password reset user not exists.
-     *
-     * @return void
-     */
-    public function testSendPasswordResetUserNotExists()
-    {
-        $this->visit('password/reset')
-            ->type('notexistingemail@gmail.com', 'email')
-            ->press('Send Password Reset Link')
-            ->see('There were some problems with your input');
     }
 }
