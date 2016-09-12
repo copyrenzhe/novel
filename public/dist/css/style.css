@@ -1232,9 +1232,9 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
 }
 #footer {
     background: none repeat scroll 0 0 #F1F1F1;
-    height: 120px;
     position: relative;
     width: 100%;
+    text-align: center;
 }
 #footer a {
     color: #444444;

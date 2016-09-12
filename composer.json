@@ -13,7 +13,8 @@
         "laravelcollective/html": "v5.2.4",
         "acacha/admin-lte-template-laravel": "2.*",
         "pda/pheanstalk": "~3.0",
-        "yajra/laravel-datatables-oracle": "~6.0"
+        "yajra/laravel-datatables-oracle": "~6.0",
+        "barryvdh/laravel-debugbar": "^2.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
