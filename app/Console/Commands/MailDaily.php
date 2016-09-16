@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Mail;
 use App\Models\Admin;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 
 class MailDaily extends Command
 {
