@@ -26,6 +26,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admi
 
     Route::get('system', 'SystemController@index');
 
+    Route::get('users/datatables', 'UserController@datatables');
     Route::resource('users', 'UserController');
 });
 

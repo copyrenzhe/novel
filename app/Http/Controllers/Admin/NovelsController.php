@@ -6,6 +6,7 @@ use App\Jobs\SnatchRepair;
 use App\Jobs\SnatchUpdate;
 use App\Models\Novel;
 use Illuminate\Http\Request;
+use Session;
 use Yajra\Datatables\Facades\Datatables;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -31,10 +32,16 @@ class NovelsController extends Controller
     public function snatchUpdate($novel_id)
     {
         $this->dispatch(new SnatchUpdate($novel_id));
+        $novel = Novel::find($novel_id);
+        Session::flash('novel_message', '小说:'.$novel->name.'加入更新队列');
+        return redirect('admin/novels/index');
     }
 
     public function snatchRepair($novel_id)
     {
         $this->dispatch(new SnatchRepair($novel_id));
+        $novel = Novel::find($novel_id);
+        Session::flash('novel_message', '小说:'.$novel->name.'加入修复队列');
+        return redirect('admin/novels/index');
     }
 }
