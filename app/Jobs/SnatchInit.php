@@ -30,7 +30,7 @@ class SnatchInit extends Job implements ShouldQueue
      */
     public function handle()
     {
-        Log::useDailyFiles(storage_path().'/logs/init', 5);
+        Log::useDailyFiles(storage_path().'/logs/novel', 5);
         Log::info('----- STARTING THE PROCESS FOR INIT NOVEL -----');
         $dtStart = microtime_float();
         Biquge::init();
