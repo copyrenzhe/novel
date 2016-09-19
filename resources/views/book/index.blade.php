@@ -9,6 +9,11 @@
 -书虫网
 @stop
 @section('content')
+    <style>
+        .dsort{
+            transform: rotate(180deg);
+        }
+    </style>
     <!--left-->
     <div id="left">
         <!-- Thong tin truyen -->
@@ -52,7 +57,7 @@
         </div>
         <!--/ thong tin truyen -->
         <!-- chap -->
-        <h2 class="title mt10">章节列表:</h2>
+        <h2 class="title mt10">章节列表 <a style="float: right;" href="javascript:revert();">倒序</a>:</h2>
         <div class="box search-chap">
             <div class="content">
                 <div class="list-chap-wrap">
@@ -95,8 +100,13 @@
                         }
                     }
                 })
-            })
-        })
+            });
+        });
         @endif
+        //旋转章节列表
+        function revert() {
+            $("#_pchapter").find("ul").toggleClass('dsort');
+            $("#_pchapter").find("ul li").toggleClass('dsort');
+        }
     </script>
 @stop
