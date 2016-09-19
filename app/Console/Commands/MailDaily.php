@@ -48,7 +48,7 @@ class MailDaily extends Command
 
             $filePath = storage_path(). '/logs/novel-'.Carbon::now()->toDateString();
             if(file_exists($filePath))
-                $message->attach($path);
+                $message->attach($filePath);
         });
     }
 }

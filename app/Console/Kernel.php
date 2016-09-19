@@ -43,7 +43,8 @@ class Kernel extends ConsoleKernel
 
         //每天更新所有小说章节
         $schedule->command('snatch:update --queue')
-                ->dailyAt('03:00');
+                ->dailyAt('03:00')
+                ->withoutOverlapping();
 
         //每天更新所有小说章节数
         $schedule->command('sum:chapter --queue')
