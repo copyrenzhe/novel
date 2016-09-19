@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
     {
         //每个小时更新热门小说
         $schedule->command('snatch:updateHot --queue')
-                ->hourly()
+                ->dailyAt('06:00')
                 ->withoutOverlapping();
 
         //每天更新小说列表与小说信息
