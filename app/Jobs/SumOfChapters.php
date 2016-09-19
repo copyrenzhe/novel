@@ -32,7 +32,7 @@ class SumOfChapters extends Job implements ShouldQueue
      */
     public function handle()
     {
-        Log::useDailyFiles(storage_path().'/logs/sum', 5);
+        Log::useDailyFiles(storage_path().'/logs/novel', 5);
         Log::info('----- STARTING THE PROCESS FOR SUM OF CHAPTER -----');
         $dtStart = microtime_float();
         if($novel_id = $this->novel_id){
