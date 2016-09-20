@@ -31,10 +31,13 @@ Class Biquge implements SnatchInterface
     /**
      * 初始化小说列表，获取当前笔趣阁所有小说
      */
-    public static function init()
+    public static function init($link)
     {
         $Biquge = new Biquge();
-        return $Biquge->getNovelList();
+        if(!$link)
+            return $Biquge->getNovelList();
+        else
+            return $Biquge->getSingleNovel($link);
     }
 
     /**
@@ -147,8 +150,7 @@ Class Biquge implements SnatchInterface
                 $novel_html = $this->send($novel_link);
                 $novel->description = $this->getNovelInfo($novel_html);
                 $cover_link = $this->getNovelCover($novel_html);
-                $chapter_match = $this->getChapterList($novel_html);
-                $novel->chapter_num = count($chapter_match[0]);
+                $novel->chapter_num = 0;
                 if(!empty($cover_link)) {
                     $cover_ext = substr($cover_link, strrpos($cover_link, '.')+1);
                     $path = public_path('cover/'.$novel->id.'_cover.'.$cover_ext);
@@ -163,6 +165,44 @@ Class Biquge implements SnatchInterface
             }
         }
         return true;
+    }
+
+    /**
+     * 根据链接初始化单个小说
+     * @param $link 小说网址
+     */
+    public function getSingleNovel($link)
+    {
+        $novel_html = $this->send($link);
+        if(preg_match('/property="og:novel:book_name" content="(.*?)"/s', $novel_html, $novel_name)){
+            preg_match('/property="og:novel:author" content="(.*?)"/s', $novel_html, $novel_author);
+            preg_match('/property="og:novel:category" content="(.*?)"/s', $novel_html, $category);
+            preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
+            $author = Author::firstOrCreate(['name'=>$novel_author[1]]);
+            if(!Novel::where('name', $novel_name[1])->where('author_id', $author->id)->first()){
+                $novel = Novel::firstOrCreate(['name'=>$novel_name[1], 'author_id'=>$author->id]);
+                $novel->biquge_url = $link;
+                if(@$overMatch[1]=='连载中'){
+                    $novel->is_over = 0;
+                }
+                if(@$overMatch[1]=='完结'){
+                    $novel->is_over = 1;
+                }
+                $novel->type = $this->returnType($category[1]);
+                $novel->description = $this->getNovelInfo($novel_html);
+                if(preg_match('/property="og:image" content="(.*?)"/s', $novel_html, $image)) {
+                    $cover_ext = substr($image[1], strrpos($image[1], '.')+1);
+                    $path = public_path('cover/'.$novel->id.'_cover.'.$cover_ext);
+                    //文件不存在时才获取图片
+                    if(!file_exists($path)) {
+                        $cover = file_get_contents($image[1]);
+                        file_put_contents($path, $cover);
+                    }
+                    $novel->cover = '/cover/'.$novel->id.'_cover.'.$cover_ext;
+                }
+                $novel->save();
+            }
+        }
     }
 
     /**
@@ -185,7 +225,7 @@ Class Biquge implements SnatchInterface
             return ['code' => 1];
         }
         //更新小说状态
-        preg_match('/<meta property="og:novel:status" content="(.*?)">/s', $novel_html, $overMatch);
+        preg_match('/<meta property="og:novel:status" content="(.*?)"/>/s', $novel_html, $overMatch);
 
         //目前数据库中的最新一章
         $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
@@ -325,28 +365,25 @@ Class Biquge implements SnatchInterface
 
     private function returnType($name)
     {
-        $type = 'other';
-        switch ($name){
-            case '玄幻小说列表':
-                $type = 'xuanhuan';
-                break;
-            case '修真小说列表':
-                $type = 'xiuzhen';
-                break;
-            case '都市小说列表':
-                $type = 'dushi';
-                break;
-            case '历史小说列表':
-                $type = 'lishi';
-                break;
-            case '网游小说列表':
-                $type = 'wangyou';
-                break;
-            case '科幻小说列表':
-                $type = 'kehuan';
-                break;
+        if(preg_match('/玄幻小说/s', $name, $match)){
+            return 'xuanhuan';
         }
-        return $type;
+        if(preg_match('/修真小说/s', $name, $match)){
+            return 'xiuzhen';
+        }
+        if(preg_match('/都市小说/s', $name, $match)){
+            return 'dushi';
+        }
+        if(preg_match('/历史小说/s', $name, $match)){
+            return 'lishi';
+        }
+        if(preg_match('/网游小说/s', $name, $match)){
+            return 'wangyou';
+        }
+        if(preg_match('/科幻小说/s', $name, $match)){
+            return 'kehuan';
+        }
+        return 'other';
     }
 
     /**

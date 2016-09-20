@@ -5,15 +5,14 @@
         <h4 class="desc margin-less"></h4>
         <div class="l-category box">
             <ul class="content">
-                @foreach($novels as $novel)
-                <li>
-                    <a href="{{ route('author', ['authorId' => $novel->author_id]) }} }}" title="{{ $novel->author->name }}" class="cate-li-right">{{ $novel->author->name }}</a>
-                    <a class="c-title" href="{{ route('book', ['bookId' => $novel->id]) }}" title="Destroyed">{{ $novel->name }}</a>
-                </li>
+                @foreach($authors as $author)
+                    <li>
+                        <a class="c-title" href="{{ route('author', ['authorId' => $author->id]) }}" title="Destroyed">{{ $author->name }}</a>
+                    </li>
                 @endforeach
             </ul>
             <div class="pagination">
-                @include('pagination.novel', ['paginator' => $novels])
+                @include('pagination.novel', ['paginator' => $authors])
                 <div class="clr"></div>
             </div>
             <div class="clr"></div>
