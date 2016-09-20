@@ -13,14 +13,16 @@ class SnatchInit extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
+    private $link;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($link)
     {
-        //
+        $this->link = $link;
     }
 
     /**
@@ -31,11 +33,11 @@ class SnatchInit extends Job implements ShouldQueue
     public function handle()
     {
         Log::useDailyFiles(storage_path().'/logs/novel', 5);
-        Log::info('----- STARTING THE PROCESS FOR INIT NOVEL -----');
+        Log::info('----- STARTING THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');
         $dtStart = microtime_float();
-        Biquge::init();
+        Biquge::init($this->link);
         $dtEnd = microtime_float();
-        Log::info('expire time '.$dtEnd-$dtStart.' seconds');
-        Log::info('----- FINISHED THE PROCESS FOR INIT NOVEL -----');
+        Log::info('expire time '.($dtEnd-$dtStart).' seconds');
+        Log::info('----- FINISHED THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');
     }
 }
