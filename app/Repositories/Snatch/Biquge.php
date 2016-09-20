@@ -170,6 +170,7 @@ Class Biquge implements SnatchInterface
     /**
      * 根据链接初始化单个小说
      * @param $link 小说网址
+     * @return Novel $novel 返回小说实例
      */
     public function getSingleNovel($link)
     {
@@ -179,7 +180,7 @@ Class Biquge implements SnatchInterface
             preg_match('/property="og:novel:category" content="(.*?)"/s', $novel_html, $category);
             preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
             $author = Author::firstOrCreate(['name'=>$novel_author[1]]);
-            if(!Novel::where('name', $novel_name[1])->where('author_id', $author->id)->first()){
+            if(!$novel = Novel::where('name', $novel_name[1])->where('author_id', $author->id)->first()){
                 $novel = Novel::firstOrCreate(['name'=>$novel_name[1], 'author_id'=>$author->id]);
                 $novel->biquge_url = $link;
                 if(@$overMatch[1]=='连载中'){
@@ -202,6 +203,7 @@ Class Biquge implements SnatchInterface
                 }
                 $novel->save();
             }
+            return $novel;
         }
     }
 
