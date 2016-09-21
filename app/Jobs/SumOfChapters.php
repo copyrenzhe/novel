@@ -46,5 +46,6 @@ class SumOfChapters extends Job implements ShouldQueue
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
         Log::info('----- FINISHED THE PROCESS FOR SUM OF CHAPTER -----');
+        $this->job->delete();
     }
 }

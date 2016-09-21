@@ -36,6 +36,7 @@ class SnatchRepair extends Job implements ShouldQueue
      */
     public function handle()
     {
+        Log::useDailyFiles(storage_path().'/logs/repair', 5);
         Log::info('----- STARTING THE PROCESS FOR REPAIR NOVEL -----');
         $dtStart = microtime_float();
         if($novel_id = $this->novel_id){
@@ -52,5 +53,6 @@ class SnatchRepair extends Job implements ShouldQueue
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
         Log::info('----- FINISHED THE PROCESS FOR REPAIR NOVELS -----');
+        $this->job->delete();
     }
 }
