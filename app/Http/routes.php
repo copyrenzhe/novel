@@ -11,18 +11,6 @@
 |
 */
 
-Route::get('test', function(){
-    Log::useDailyFiles(storage_path().'/logs/test', 5);
-    Log::info('yes, I am OK');
-    Log::useDailyFiles(storage_path().'/logs/test', 5);
-    Log::info('try second time');
-});
-
-Route::get('boo', function(){
-    $novel = \App\Repositories\Snatch\Biquge::init('http://www.biquge.la/book/16431/');
-    \App\Repositories\Snatch\Biquge::snatch($novel);
-});
-
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');
