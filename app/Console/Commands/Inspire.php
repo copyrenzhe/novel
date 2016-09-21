@@ -16,6 +16,7 @@ class Inspire extends Command
      */
     protected $signature = 'inspire
                             {novel_id?* : 小说id}
+                            {--force : 是否强制}
                             {--queue : 是否进入队列}';
 
     /**
@@ -33,6 +34,6 @@ class Inspire extends Command
     public function handle()
     {
         Log::useDailyFiles(storage_path().'/logs/update', 5);
-        Log::info('hello world222');
+        Log::info('是否强制:'.$this->option('force'));
     }
 }

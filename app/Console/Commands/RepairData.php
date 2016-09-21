@@ -14,6 +14,7 @@ class RepairData extends Command
      */
     protected $signature = 'snatch:repair
                             {novel_id?* : 小说id}
+                            {--force : 是否强制}
                             {--queue : 是否进入队列}';
 
     /**
@@ -41,9 +42,9 @@ class RepairData extends Command
     public function handle()
     {
         if($this->option('queue')) {
-            dispatch(new SnatchRepair($this->argument('novel_id')));
+            dispatch(new SnatchRepair($this->argument('novel_id'), $this->option('force') ? true : false));
         } else {
-            $snatch = new SnatchRepair($this->argument('novel_id'));
+            $snatch = new SnatchRepair($this->argument('novel_id', $this->option('force') ? true : false));
             $snatch->handle();
         }
     }
