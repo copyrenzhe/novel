@@ -227,7 +227,7 @@ Class Biquge implements SnatchInterface
             return ['code' => 1];
         }
         //更新小说状态
-        preg_match('/<meta property="og:novel:status" content="(.*?)"/>/s', $novel_html, $overMatch);
+        preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
 
         //目前数据库中的最新一章
         $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
