@@ -14,7 +14,7 @@ class RepairNovelSeeder extends Seeder
     {
         $dtStart = microtime_float();
 
-        for ($id =1; $id<1000; $id++){
+        for ($id =4; $id<1000; $id++){
             dispatch(new SnatchRepair($id, true));
         }
         $continueEnd = microtime_float();
