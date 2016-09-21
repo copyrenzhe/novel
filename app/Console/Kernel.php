@@ -32,8 +32,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::useDailyFiles(storage_path().'/logs/novel', 5);
-        
         //每个小时更新热门小说
         $schedule->command('snatch:updateHot --queue')
                 ->dailyAt('06:00')
