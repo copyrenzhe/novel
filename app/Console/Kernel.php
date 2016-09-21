@@ -5,6 +5,7 @@ namespace App\Console;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -31,6 +32,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        Log::useDailyFiles(storage_path().'/logs/novel', 5);
+        
         //每个小时更新热门小说
         $schedule->command('snatch:updateHot --queue')
                 ->dailyAt('06:00')

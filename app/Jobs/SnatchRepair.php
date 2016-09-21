@@ -32,7 +32,6 @@ class SnatchRepair extends Job implements ShouldQueue
      */
     public function handle()
     {
-        Log::useDailyFiles(storage_path().'/logs/novel', 5);
         Log::info('----- STARTING THE PROCESS FOR REPAIR NOVEL -----');
         $dtStart = microtime_float();
         if($novel_id = $this->novel_id){
