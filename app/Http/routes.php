@@ -11,8 +11,11 @@
 |
 */
 
-Route::get('test/{id}', function($id){
-    return $id;
+Route::get('test', function(){
+    Log::useDailyFiles(storage_path().'/logs/test', 5);
+    Log::info('yes, I am OK');
+    Log::useDailyFiles(storage_path().'/logs/test', 5);
+    Log::info('try second time');
 });
 
 Route::get('boo', function(){

@@ -15,14 +15,18 @@ class SnatchRepair extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     private $novel_id;
+    private $force;
+
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $novel_id
+     * @param bool $force
      */
-    public function __construct($novel_id)
+    public function __construct($novel_id, $force=false)
     {
         $this->novel_id = $novel_id;
+        $this->force = $force;
     }
 
     /**
@@ -43,7 +47,7 @@ class SnatchRepair extends Job implements ShouldQueue
             $novels = Novel::all();
         }
         foreach ($novels as $novel) {
-            Biquge::repair($novel);
+            Biquge::repair($novel, $this->force);
         }
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');

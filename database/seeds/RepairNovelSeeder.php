@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Novel;
-use App\Repositories\Snatch\Biquge;
+use App\Jobs\SnatchRepair;
 use Illuminate\Database\Seeder;
 
 class RepairNovelSeeder extends Seeder
@@ -14,14 +13,12 @@ class RepairNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $continueNovels = Novel::where('chapter_num', 0)->get();
-        foreach ($continueNovels as $novel){
-            Log::info("开始采集小说[$novel->id]:[$novel->name]");
-            Biquge::snatch($novel);
-            Log::info("小说[$novel->id]:[$novel->name]更新完毕");
+
+        for ($id =1; $id<1000; $id++){
+            dispatch(new SnatchRepair($id, true));
         }
         $continueEnd = microtime_float();
-        echo "小说已修复完毕\n";
+        echo "添加队列完毕\n";
         echo "耗时：".($continueEnd-$dtStart)."秒\n";
     }
 }

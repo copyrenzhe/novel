@@ -18,7 +18,7 @@ class SnatchInit extends Job implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $link
      */
     public function __construct($link)
     {
