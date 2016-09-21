@@ -32,7 +32,11 @@
                         <p>热度: {{ $novel->hot }}</p>
                     </div>
                     <div class="d-s-col d-s-col-noright">
+                        @if($recentChapter)
                         <p>最新章节: <a href="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $recentChapter->id]) }} " title="{{ $recentChapter->name }}">{{ $recentChapter->name }}</a></p>
+                        @else
+                        <p>最新章节：</p>
+                        @endif
                         <p>更新时间: {{ $novel->updated_at }}</p>
                         <p>上次看到: <a href="" title=""></a></p>
                     </div>
