@@ -25,6 +25,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admi
     Route::resource('novels', 'NovelsController', ['only' => ['index', 'show']]);
 
     Route::get('system', 'SystemController@index');
+    Route::get('system/updateAllNovels', 'SystemController@updateAll');
+    Route::get('system/sumChapters', 'SystemController@sumChapter');
 
     Route::get('users/datatables', 'UserController@datatables');
     Route::resource('users', 'UserController');
