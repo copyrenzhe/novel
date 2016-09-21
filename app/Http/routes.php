@@ -11,6 +11,15 @@
 |
 */
 
+Route::get('test/{id}', function($id){
+    return $id;
+});
+
+Route::get('boo', function(){
+    $novel = \App\Repositories\Snatch\Biquge::init('http://www.biquge.la/book/16431/');
+    \App\Repositories\Snatch\Biquge::snatch($novel);
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');

@@ -32,6 +32,7 @@ class SnatchUpdate extends Job implements ShouldQueue
      */
     public function handle()
     {
+        Log::useDailyFiles(storage_path().'/logs/novel', 5);
         $dtStart = microtime_float();
         if($novel_id = $this->novel_id){
             if(is_array($novel_id))

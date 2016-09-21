@@ -44,10 +44,10 @@ Class Biquge implements SnatchInterface
      * @desc 修复未获取到内容的章节，若传入小说id，则修复该小说的章节，否则修复所有内容为空的章节
      * @param int|null $novel_id
      */
-    public static function repair(Novel $novel )
+    public static function repair(Novel $novel, $force=false )
     {
         $Biquge = new Biquge();
-        return $Biquge->repairNovel($novel);
+        return $Biquge->repairNovel($novel, $force);
     }
 
     /**
@@ -83,26 +83,33 @@ Class Biquge implements SnatchInterface
         return $Biquge->snatchChapter($novel);
     }
 
-    public function repairNovel(Novel $novel)
+    public function repairNovel(Novel $novel, $force)
     {
         Log::info("开始修复");
-        if(!!$novel)
-            $url_list = Chapter::where('novel_id', $novel->id)
-                ->whereNotNull('biquge_url')
-                ->whereNull('content')
-                ->pluck('biquge_url')
-                ->toArray();
-        else
-            $url_list = Chapter::whereNotNull('biquge_url')
-                ->whereNull('content')
-                ->pluck('biquge_url')
-                ->toArray();
+        if(!!$novel){
+            $force ?
+                $url_list = Chapter::where('novel_id', $novel->id)
+                            ->whereNotNull('biquge_url')
+                            ->pluck('biquge_url')
+                            ->toArray()
+                :
+                $url_list = Chapter::where('novel_id', $novel->id)
+                    ->whereNotNull('biquge_url')
+                    ->whereNull('content')
+                    ->pluck('biquge_url')
+                    ->toArray();
+        }
+        else{
+            //需要确认修复的小说编号
+            return false;
+        }
 
         $num = ceil(count($url_list)/$this->page_size);
         for ($i=0; $i<$num; $i++) {
             $splice_list = array_slice($url_list, $i * $this->page_size, $this->page_size);
 
             $contents = $this->multi_send_test($splice_list, '');
+
 
             foreach ($contents as $k => $content) {
                 Log::info("修复小说[{$novel->id}]，章节：{$url_list[$k]}");
@@ -224,6 +231,7 @@ Class Biquge implements SnatchInterface
         $count= $novel->chapter_num;
         if(count($chapter_list[1]) <= $count) {
             //小说未更新
+            Log::error("小说[$novel->id]:[$novel->name]未更新");
             return ['code' => 1];
         }
         //更新小说状态
@@ -244,13 +252,19 @@ Class Biquge implements SnatchInterface
         $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
 
         $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1]));
-        $value_array = array();
+        $temp = [];
+        foreach ($contents as $k => $html) {
+            $name = $this->getChapterName($html);
+            $content = $this->getChapterContent($html);
+            $temp[$name] = $content;
+        }
+        $value_array = [];
         $now = Carbon::now();
-        foreach($contents as $k => $content) {
+        foreach($filter_list[2] as $k => $name) {
             $value_array[] = [
                 'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
-                'name' => $filter_list[2][$k],
-                'content' => $this->getChapterContent($content),
+                'name' => $name,
+                'content' => $temp[$name],
                 'novel_id' => $novel->id,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -292,13 +306,19 @@ Class Biquge implements SnatchInterface
             $splice_list[2] = array_slice($chapter_list[2], $i*$this->page_size, $this->page_size);
 
             $contents = $this->multi_send_test($splice_list[1], $novel->biquge_url);
-            $value_array = array();
+            $temp = [];
+            foreach ($contents as $k => $html) {
+                $name = trim($this->getChapterName($html));
+                $content = $this->getChapterContent($html);
+                $temp[$name] = $content;
+            }
+            $value_array = [];
             $now = Carbon::now();
-            foreach($contents as $k => $content) {
+            foreach($splice_list[2] as $k => $name) {
                 $value_array[] = [
                     'biquge_url' => $novel->biquge_url . $splice_list[1][$k],
-                    'name' => $splice_list[2][$k],
-                    'content' => $this->getChapterContent($content),
+                    'name' => $name,
+                    'content' => $temp[$name],
                     'novel_id' => $novel->id,
                     'created_at' => $now,
                     'updated_at' => $now
@@ -337,13 +357,20 @@ Class Biquge implements SnatchInterface
         $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
         $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
 
-        $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1]));
+        $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1])); //该contents是无序的
+
+        $temp = [];
+        foreach ($contents as $k => $html) {
+            $name = $this->getChapterName($html);
+            $content = $this->getChapterContent($html);
+            $temp[$name] = $content;
+        }
         $now = Carbon::now();
-        foreach($contents as $k => $content) {
+        foreach($filter_list[2] as $k => $name) {
             $value_array = [
                 'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
-                'name' => $filter_list[2][$k],
-                'content' => $this->getChapterContent($content),
+                'name' => $name,
+                'content' => $temp[$name],
                 'novel_id' => $novel->id,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -451,6 +478,18 @@ Class Biquge implements SnatchInterface
 //            Log::error("get Chapter Content fail");
         }
         return @$content[2];
+    }
+
+    /**
+     * 正则匹配章节标题
+     * @param $html
+     * @return mixed
+     */
+    private function getChapterName($html)
+    {
+        $preg = '/<div class="bookname">.*?<h1>(.*?)<\/h1>/s';
+        preg_match($preg, $html, $content);
+        return @$content[1];
     }
 
 
