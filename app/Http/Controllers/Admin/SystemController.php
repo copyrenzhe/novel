@@ -14,4 +14,9 @@ class SystemController extends Controller
     {
         return view('admin.system.index');
     }
+
+    public function updateAll()
+    {
+        return ;
+    }
 }
