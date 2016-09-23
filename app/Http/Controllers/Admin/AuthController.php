@@ -47,7 +47,6 @@ class AuthController extends Controller
 
     public function getLogin()
     {
-        dd('test');
         return view($this->loginView);
     }
 
