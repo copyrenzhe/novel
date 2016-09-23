@@ -18,7 +18,7 @@
                 <h3 class="box-title">工具列表</h3>
             </div>
             <div class="box-body">
-                <a href="" class="btn btn-app">
+                <a href="{{ url('/system/updateAllNovels') }}" class="btn btn-app">
                     <i class="fa fa-book"></i>
                     更新小说
                 </a>
@@ -26,7 +26,7 @@
                     <i class="fa fa-history"></i>
                     修复章节
                 </a>
-                <a href="" class="btn btn-app">
+                <a href="{{ url('/system/sumChapters') }}" class="btn btn-app">
                     <i class="fa fa-line-chart"></i>
                     更新统计
                 </a>
