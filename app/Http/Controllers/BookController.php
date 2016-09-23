@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\NovelView;
-use App\Events\RepairChapter;
 use App\Events\RepairChapterEvent;
 use App\Models\Chapter;
 use App\Models\Novel;

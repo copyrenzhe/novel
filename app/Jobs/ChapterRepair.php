@@ -2,9 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
 use App\Models\Chapter;
-use App\Models\Novel;
 use App\Repositories\Snatch\Biquge;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

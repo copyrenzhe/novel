@@ -11,17 +11,6 @@
             <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
         </div><!-- /.login-logo -->
 
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> {{ trans('message.someproblems') }}<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="login-box-body">
     <p class="login-box-msg"> {{ trans('message.siginsession') }} </p>
     <form action="{{ url('/admin/login') }}" method="post">
