@@ -30,6 +30,8 @@ Class Biquge implements SnatchInterface
 
     /**
      * 初始化小说列表，获取当前笔趣阁所有小说
+     * @param $link
+     * @return Novel|bool
      */
     public static function init($link)
     {
@@ -42,12 +44,20 @@ Class Biquge implements SnatchInterface
 
     /**
      * @desc 修复未获取到内容的章节，若传入小说id，则修复该小说的章节，否则修复所有内容为空的章节
-     * @param int|null $novel_id
+     * @param Novel $novel
+     * @param bool $force
+     * @return bool
      */
     public static function repair(Novel $novel, $force=false )
     {
         $Biquge = new Biquge();
         return $Biquge->repairNovel($novel, $force);
+    }
+
+    public static function repairChapter(Chapter $chapter, $force = false)
+    {
+        $Biquge = new Biquge();
+        return $Biquge->updateChapter($chapter, $force);
     }
 
     /**
@@ -83,6 +93,11 @@ Class Biquge implements SnatchInterface
         return $Biquge->snatchChapter($novel);
     }
 
+    /**
+     * @param Novel $novel
+     * @param $force
+     * @return bool
+     */
     public function repairNovel(Novel $novel, $force)
     {
         Log::info("开始修复");
@@ -121,6 +136,22 @@ Class Biquge implements SnatchInterface
         }
     }
 
+    /**
+     * @param Chapter $chapter
+     * @param $force
+     * @return bool
+     */
+    public function updateChapter(Chapter $chapter, $force)
+    {
+        if($chapter->biquge_url && (!$chapter->content || ($chapter->content && $force))){
+            $html = $this->send($chapter->biquge_url);
+            $content = $this->getChapterContent($html);
+            $chapter->content = $content;
+            return $chapter->save();
+        }
+        return false;
+    }
+    
     /**
      * 获取小说列表
      */
