@@ -20,14 +20,7 @@
 
 
 $(document).ready(function(){
-    var login_post_ck = {postname:'log_panel'}
-    $.post(ajaxurl, login_post_ck, function(data){
-        $('div#log_panel').html(data);
-    });
-    var login_post_ck = {postname:'login_ajax'}
-    $.post(ajaxurl, login_post_ck, function(data){
-        $('div.mb-panel').html(data);
-    });
+
     //$("html").niceScroll();
     //$("#nav a").tipsy({gravity:"s"});
     $("div#nav ul li").hover(function(){
@@ -54,171 +47,10 @@ $(document).ready(function(){
         }
     });
 
-    $("#chapter-search").keyup(function(event) {
-        var	vname	=	$(this).val()
-        loading_chapter(vname);
-    });
-
     $("#searchInput,#searchInput_mobile").autocomplete("search.php",{width:313,max:20,highlight:!1,scroll:!1});
     //$("#searchInput_mobile").autocomplete("search.php",{width:313,max:20,highlight:!1,scroll:!1});
-})
-var	ajaxurl	=	'ajax.php';
-function EnterKey(a){13==(window.event?window.event.keyCode:a.which)&&do_search()}
-function do_search(a){if(searchid=$(".tgt-autocomplete-activeItem a").attr("href"))return window.location.href=searchid,!1;1==a&&(query=$("input[name='query']").val(),window.location.href="./search/"+query+".html");return!1}
-function do_search_mobile(a){if(searchid=$(".tgt-autocomplete-activeItem a").attr("href"))return window.location.href=searchid,!1;1==a&&(query=$("input[name='query_mobile']").val(),window.location.href="./search/"+query+".html");return!1}
-function loading_chapter(type) {
-    var chapter_post = {
-        postname:'chapter',
-        ten:ten,
-        cid:cid,
-        type:type
-    }
-    $.post(ajaxurl, chapter_post, function(html){
-        $("#_pchapter").html(html);
-        $("#ztitle a").tipsy({gravity:"s"});
-        $("#_pchapter").niceScroll();
-    });
-}
-function change_captcha() {
-    document.getElementById('img_captcha').src="./captcha/image.php?rnd=" + Math.random();
-}
+});
 
-document.onkeydown=function(e) {
-    e=e||window.event;
-    if (e.keyCode === 116 ) {
-        e.keyCode = 0;
-        var	url_cache	=	$('input[name="url-cache"]').val();
-        if(url_cache!=undefined) {
-            $.post(ajaxurl,{postname: 'cache',url_cache:url_cache},
-                function(data) {
-                    window.location=url_cache;
-                });
-        }
-        if(e.preventDefault)e.preventDefault();
-        else e.returnValue = false;
-        return false;
-    }
-}
-
-function submit_login() {
-    var username = $("input[name='tt-username']").val();
-    var password = $("input[name='tt-password']").val();
-    var remember = 0;
-    if ($("input[name='tt-remember']").is(":checked"))
-        remember	=	1;
-    var login_post = {
-        postname:'login',
-        username:username,
-        password:password,
-        remember:remember
-    }
-    $.post(ajaxurl, login_post, function(html){
-        if(html == 1) {
-            alert("Đăng nhập thành công!");
-            window.location	=	'/';
-        }else {
-            alert(html);
-        }
-    });
-    return false;
-}
-
-function submit_like(cid) {
-    var like_post = {
-        postname:'like',
-        cid:cid
-    }
-    $.post(ajaxurl, like_post, function(numz){
-        if(numz==0)
-            alert('Bạn chưa đăng nhập!');
-        else if(numz==1)
-            $("#Like a").html('Bạn thích truyện này!');
-        else if(numz==2)
-            $("#Like a").html('Bạn đã hết thích truyện này');
-    });
-}
-
-function submit_bm(cid,eid) {
-    var bm_post = {
-        postname:'bm',
-        cid:cid,
-        eid:eid
-    }
-    $.post(ajaxurl, bm_post, function(numz){
-        if(numz==0)
-            alert('Bạn chưa đăng nhập!');
-        else
-            alert('Chương này đã được bookmark!');
-    });
-}
-function submit_er(cid,eid) {
-    var er_post = {
-        postname:'error',
-        cid:cid,
-        eid:eid
-    }
-    $.post(ajaxurl, er_post, function(numz){
-        if(numz==0)
-            alert('Bạn chưa đăng nhập!');
-        else
-            alert('Cảm ơn bạn đã thông báo! BQT sẽ khắc phục sớm nhất có thể!');
-    });
-}
-
-function list_comment(mid,type,page) {
-    var data_post 	= {
-        postname: 	'listcomment',
-        mid:mid,
-        type:type,
-        page:page
-    }
-    $.post(ajaxurl, data_post, function(data){
-        $('div.comment-list').hide().html(data).fadeIn(300);
-    })
-}
-
-function submit_comment(mid,type) {
-    var camnhantxt 	= $("textarea[name='message']").val();
-    var data_post 	= {
-        postname: 	'comment',
-        mid:mid,
-        type:type,
-        camnhantxt:camnhantxt
-    }
-    if(!camnhantxt) {
-        alert("Vui lòng nhập nội dung bình luận!");
-    }else {
-        if(camnhantxt.length<10 || camnhantxt.length>250) {
-            alert("Nội dung bình luận phải chứa từ 10 đến 250 ký tự!");
-        }else {
-            $.post(ajaxurl, data_post, function(data){
-                if(data == 1) {
-                    alert("Bạn chưa đăng nhập!");
-                }else {
-                    if(data == 2) {
-                        alert("Bình luận của bạn đã được gửi đi!");
-                        $("textarea[name='message']").val('');
-                        list_comment(mid,type,1)
-                    }else {
-                        alert(data);
-                    }
-                }
-            })
-        }
-    }
-}
-
-
-function deletez(num,cid) {
-    var del_post = {
-        postname:'deletez',
-        num:num,
-        cid:cid
-    }
-    $.post(ajaxurl, del_post, function(html){
-        $('#like-'+cid).remove();
-    });
-}
 
 function showImages(maxnum) {
     var pagetype	=	$.inArray($.cookie("pagetype"),new Array(null,"1"))!=-1;
@@ -508,22 +340,4 @@ function isdark(color){
         + ((colr >>> 8) & 0x00ff) // G
         + (colr & 0x0000ff) // B
         < 500;
-}
-
-function checkcolor(color){
-    var c=0;
-    if(color=='#FFFFFF') c=0;
-    else if(color=='#EEEEEE') c=1;
-    else if(color=='#FFFF88') c=2;
-    else if(color=='#FF7400') c=3;
-    else if(color=='#CDEB8B') c=4;
-    else if(color=='#6BBA70') c=5;
-    else if(color=='#006E2E') c=6;
-    else if(color=='#C3D9FF') c=7;
-    else if(color=='#4096EE') c=8;
-    else if(color=='#356AA0') c=9;
-    else if(color=='#FF0096') c=10;
-    else if(color=='#B02B2C') c=11;
-    else if(color=='#000000') c=12;
-    return c;
 }

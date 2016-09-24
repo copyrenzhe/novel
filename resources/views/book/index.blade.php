@@ -32,16 +32,12 @@
                         <p>热度: {{ $novel->hot }}</p>
                     </div>
                     <div class="d-s-col d-s-col-noright">
-                        @if($recentChapter)
-                        <p>最新章节: <a href="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $recentChapter->id]) }} " title="{{ $recentChapter->name }}">{{ $recentChapter->name }}</a></p>
-                        @else
-                        <p>最新章节：</p>
-                        @endif
+                        <p>最新章节: <a id="readNew" href="" title=""></a></p>
                         <p>更新时间: {{ $novel->updated_at }}</p>
-                        <p>上次看到: <a href="" title=""></a></p>
+                        <p>上次看到: <a id="readLast" href="" title=""></a></p>
                     </div>
                     <div class="clr"></div>
-                    <a href="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $novel->chapter->first()->id]) }}" rel="nofollow" class="btn-big">在线阅读</a>
+                    <a id="readStart" href="" rel="nofollow" class="btn-big">开始阅读</a>
                     @if(isset($user))
                     <a href="javascript:void(0);" rel="nofollow" class="btn-big subscribe">
                         @if(in_array($novel->id, $user->novel->pluck('id')->all()))
@@ -68,7 +64,7 @@
                     <div class="list-chap" id="_pchapter">
                         <ul>
                             @foreach($novel->chapter as $chapter)
-                            <li><p><a title="{{ $chapter->name }}" href="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $chapter->id]) }}">{{ $chapter->name }}</a></p></li>
+                            <li data-id="{{ $chapter->id }}"><p><a title="{{ $chapter->name }}" href="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $chapter->id]) }}">{{ $chapter->name }}</a></p></li>
                             @endforeach
                         </ul>
                         <div class="clr"></div>
@@ -83,11 +79,13 @@
     <!--/ left -->	 <!-- right -->
     @include('common.right')
     <div class="clr"></div>
+    <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         var book_id = {{ $novel->id }};
-        @if(isset($user))
-        var user_id = {{ $user->id }};
+        var $_pchapter = $("#_pchapter");
         $(function() {
+            @if(isset($user))
+            var user_id = {{ $user->id }};
             $('.subscribe').click(function() {
                 $.ajax({
                     type: 'GET',
@@ -105,12 +103,45 @@
                     }
                 })
             });
+            @endif
+
+            //上次看到
+            var chapterHistory = $.jStorage.get(book_id, null);
+            var $firstLi = $_pchapter.find("li:eq(0)"),
+                $lastLi = $_pchapter.find('li').last(),
+                $readNew = $("#readNew"),
+                $readStart = $("#readStart"),
+                $readLast = $("#readLast");
+
+            //最新章节
+            var new_href = $lastLi.find('a').attr('href'),
+                new_title = $lastLi.find('a').attr('title'),
+                next_href = $firstLi.find('a').attr('href'),
+                next_title = $firstLi.find('a').attr('title');
+            $readNew.attr('href', new_href).attr('title', new_title).html(new_title);
+            $readStart.attr('href', next_href).attr('title', next_title).html('开始阅读');
+            if(chapterHistory){
+                var last_title = chapterHistory['title'],
+                        last_href = chapterHistory['href'],
+                        last_id = chapterHistory['id'];
+                $readLast.attr('href', last_href).attr('title', last_title).html(last_title);
+                var $next = $("#_pchapter").find("li[data-id="+last_id+"]").next();
+                next_href = $next.find('a').attr('href');
+                next_title = $next.find('a').attr('title');
+                if(next_href && next_title) {
+                    $readStart.attr('href', next_href).attr('title', next_title).html('继续阅读');
+                } else {
+
+
+                }
+            }
         });
-        @endif
+
         //旋转章节列表
         function revert() {
-            $("#_pchapter").find("ul").toggleClass('dsort');
-            $("#_pchapter").find("ul li").toggleClass('dsort');
+            $_pchapter.find("ul").toggleClass('dsort');
+            $_pchapter.find("ul li").toggleClass('dsort');
         }
+
     </script>
 @stop

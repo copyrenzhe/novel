@@ -35,4 +35,18 @@
         </div>
     </div>
 </div>
+<script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
+<script>
+    var book_id = {{ $chapter->novel_id }};
+    var chapter_id = {{ $chapter->id }};
+    var chapter_name = '{{ $chapter->name }}';
+    $(function () {
+        var chapterHistory = {
+            'id' : chapter_id,
+            'href' : window.location.href,
+            'title' : chapter_name
+        };
+        $.jStorage.set(book_id, chapterHistory);
+    })
+</script>
 @stop
