@@ -42,7 +42,6 @@ class BookController extends CommonController
     public function index($bookId, $openId='')
     {
         $subList = $this->subList($openId);
-        $recentChapter = Chapter::where('novel_id', $bookId)->orderBy('id', 'desc')->first();
         $genres = $this->genres;
         return view('book.index', compact('recentChapter', 'genres', 'openId', 'subList'));
     }
