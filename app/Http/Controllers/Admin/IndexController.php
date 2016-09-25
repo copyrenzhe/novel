@@ -29,7 +29,8 @@ class IndexController extends Controller
             'other' => Novel::where('type', 'other')->count()
         ];
         $count['user'] = User::count();
-        $count['chapter'] = Chapter::count();
+//        $count['chapter'] = Chapter::count();
+        $count['chapter'] = 0;  //数量太多，暂不显示
         return view('admin.index', compact('count'));
     }
 }
