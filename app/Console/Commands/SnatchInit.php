@@ -12,6 +12,7 @@ class SnatchInit extends Command
      * @var string
      */
     protected $signature = 'snatch:initNovel
+                            {link : 链接}
                             {--queue : 是否进入队列}';
 
     /**
@@ -38,9 +39,9 @@ class SnatchInit extends Command
     public function handle()
     {
         if($this->option('queue')) {
-            dispatch(new \App\Jobs\SnatchInit());
+            dispatch(new \App\Jobs\SnatchInit($this->argument('link')));
         } else {
-            $snatch = new \App\Jobs\SnatchInit();
+            $snatch = new \App\Jobs\SnatchInit($this->argument('link'));
             $snatch->handle();
         }
     }

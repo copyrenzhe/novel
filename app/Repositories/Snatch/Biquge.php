@@ -295,7 +295,7 @@ Class Biquge implements SnatchInterface
             $value_array[] = [
                 'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
                 'name' => $name,
-                'content' => $temp[$name],
+                'content' => @$temp[$name],
                 'novel_id' => $novel->id,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -349,7 +349,7 @@ Class Biquge implements SnatchInterface
                 $value_array[] = [
                     'biquge_url' => $novel->biquge_url . $splice_list[1][$k],
                     'name' => $name,
-                    'content' => $temp[$name],
+                    'content' => @$temp[$name],
                     'novel_id' => $novel->id,
                     'created_at' => $now,
                     'updated_at' => $now
@@ -401,7 +401,7 @@ Class Biquge implements SnatchInterface
             $value_array = [
                 'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
                 'name' => $name,
-                'content' => $temp[$name],
+                'content' => @$temp[$name],
                 'novel_id' => $novel->id,
                 'created_at' => $now,
                 'updated_at' => $now
