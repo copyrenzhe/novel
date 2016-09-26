@@ -46,6 +46,7 @@
             <div class="box-body">
                 <p>采集新小说（目前只支持笔趣阁）</p>
                 <form action="{{ url('/admin/system/snatch') }}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="input-group margin">
                         <input type="text" class="form-control" name="link" placeholder="输入小说地址">
                         <span class="input-group-btn">
@@ -53,10 +54,11 @@
                         </span>
                     </div>
                 </form>
-                <p>更新小说章节</p>
+                <p>更新小说</p>
                 <form action="{{ url('/admin/system/update') }}" method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="input-group margin">
-                        <input type="text" class="form-control" name="novel_id" placeholder="输入小说id">
+                        <input type="text" class="form-control" name="novel_id" placeholder="输入小说id，以逗号分开">
                         <span class="input-group-btn">
                           <button type="submit" class="btn btn-info btn-flat">更新</button>
                         </span>
