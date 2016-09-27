@@ -18,7 +18,7 @@ class OverNovelSeeder extends Seeder
         $overNovels = Novel::over()->where('id', '>', 10076)->get();
         foreach($overNovels as $novel){
             Log::info("开始采集小说[$novel->id]:[$novel->name]");
-            Biquge::snatch($novel);
+            Biquge::updateNew($novel);
             Log::info("完结小说[$novel->id]:[$novel->name]更新完毕");
         }
         $overEnd = microtime_float();

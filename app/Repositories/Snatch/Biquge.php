@@ -72,7 +72,7 @@ Class Biquge implements SnatchInterface
     }
 
     /**
-     * @desc 使用curl_multi 多线程更新章节
+     * @desc 使用curl_multi 多线程更新章节，可用于采集
      * @param Novel $novel
      * @return string|void
      */
@@ -126,19 +126,21 @@ Class Biquge implements SnatchInterface
             $contents = $this->multi_send_test($splice_list, '');
             $temp = [];
             foreach ($contents as $k => $html) {
-                preg_match('/var index_page = "(.*?)";/s', $html, $index_match);
                 preg_match('/var readid = "(.*?)"/s', $html, $read_match);
-                if($index_match[1] && $read_match[1]){
-                    $link = self::DOMAIN. $index_match[1] . $read_match[1];
+                if($read_match[1]){
+                    $biquge_id = $read_match[1];
                     $content = $this->getChapterContent($html);
-                    $temp[$link] = $content;
+                    $temp[$biquge_id] = $content;
                 }
             }
 
             foreach ($contents as $k => $content) {
                 Log::info("修复小说[{$novel->id}]，章节：{$url_list[$k]}");
+                $linkArr = explode('/', $url_list[$k]);
+                $idArr = explode('.', end($linkArr));
+                $biquge_id = $idArr[0];
                 $value_array = [
-                    'content' => @$temp[$url_list[$k]]
+                    'content' => @$temp[$biquge_id]
                 ];
                 Chapter::updateOrCreate([ 'biquge_url' => $url_list[$k] ], $value_array);
             }
@@ -274,8 +276,6 @@ Class Biquge implements SnatchInterface
             Log::error("小说[$novel->id]:[$novel->name]未更新");
             return ['code' => 1];
         }
-        //更新小说状态
-        preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
 
         //目前数据库中的最新一章
         $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
@@ -294,17 +294,24 @@ Class Biquge implements SnatchInterface
         $contents = $this->multi_send_test($filter_list[1], $novel->biquge_url, count($filter_list[1]));
         $temp = [];
         foreach ($contents as $k => $html) {
-            $name = $this->getChapterName($html);
-            $content = $this->getChapterContent($html);
-            $temp[$name] = $content;
+            preg_match('/var readid = "(.*?)"/s', $html, $read_match);
+            if($read_match[1]){
+                $biquge_id = $read_match[1];
+                $content = $this->getChapterContent($html);
+                $temp[$biquge_id] = $content;
+            }
         }
+
         $value_array = [];
         $now = Carbon::now();
         foreach($filter_list[2] as $k => $name) {
+            $biquge_idArr = explode('.', $filter_list[1][$k]);
+            $biquge_id = $biquge_idArr[0];
+            $link = $novel->biquge_url . $filter_list[1][$k];
             $value_array[] = [
-                'biquge_url' => $novel->biquge_url . $filter_list[1][$k],
+                'biquge_url' => $link,
                 'name' => $name,
-                'content' => @$temp[$name],
+                'content' => @$temp[$biquge_id],
                 'novel_id' => $novel->id,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -312,6 +319,9 @@ Class Biquge implements SnatchInterface
         }
         unset($contents);
         Chapter::insert($value_array);
+
+        //更新小说状态
+        preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
         if(@$overMatch[1]=='连载中'){
             $novel->is_over = 0;
         }
