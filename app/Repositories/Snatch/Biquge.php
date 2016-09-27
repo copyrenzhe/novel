@@ -127,7 +127,7 @@ Class Biquge implements SnatchInterface
             $temp = [];
             foreach ($contents as $k => $html) {
                 preg_match('/var readid = "(.*?)"/s', $html, $read_match);
-                if($read_match[1]){
+                if(@$read_match[1]){
                     $biquge_id = $read_match[1];
                     $content = $this->getChapterContent($html);
                     $temp[$biquge_id] = $content;
@@ -295,7 +295,7 @@ Class Biquge implements SnatchInterface
         $temp = [];
         foreach ($contents as $k => $html) {
             preg_match('/var readid = "(.*?)"/s', $html, $read_match);
-            if($read_match[1]){
+            if(@$read_match[1]){
                 $biquge_id = $read_match[1];
                 $content = $this->getChapterContent($html);
                 $temp[$biquge_id] = $content;
@@ -359,7 +359,7 @@ Class Biquge implements SnatchInterface
             $temp = [];
             foreach ($contents as $k => $html) {
                 preg_match('/var readid = "(.*?)"/s', $html, $read_match);
-                if($read_match[1]){
+                if(@$read_match[1]){
                     $biquge_id = $read_match[1];
                     $content = $this->getChapterContent($html);
                     $temp[$biquge_id] = $content;
