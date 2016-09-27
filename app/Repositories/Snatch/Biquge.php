@@ -358,17 +358,22 @@ Class Biquge implements SnatchInterface
             $contents = $this->multi_send_test($splice_list[1], $novel->biquge_url);
             $temp = [];
             foreach ($contents as $k => $html) {
-                $name = trim($this->getChapterName($html));
-                $content = $this->getChapterContent($html);
-                $temp[$name] = $content;
+                preg_match('/var readid = "(.*?)"/s', $html, $read_match);
+                if($read_match[1]){
+                    $biquge_id = $read_match[1];
+                    $content = $this->getChapterContent($html);
+                    $temp[$biquge_id] = $content;
+                }
             }
             $value_array = [];
             $now = Carbon::now();
             foreach($splice_list[2] as $k => $name) {
+                $idArr = explode('.', $splice_list[1][$k]);
+                $biquge_id = $idArr[0];
                 $value_array[] = [
                     'biquge_url' => $novel->biquge_url . $splice_list[1][$k],
                     'name' => $name,
-                    'content' => @$temp[$name],
+                    'content' => @$temp[$biquge_id],
                     'novel_id' => $novel->id,
                     'created_at' => $now,
                     'updated_at' => $now
