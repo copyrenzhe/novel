@@ -38,6 +38,5 @@ class SnatchInit extends Job implements ShouldQueue
         $dtEnd = microtime_float();
         Log::info('expire time '.($dtEnd-$dtStart).' seconds');
         Log::info('----- FINISHED THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');
-        $this->job->delete();
     }
 }

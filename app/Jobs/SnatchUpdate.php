@@ -54,7 +54,6 @@ class SnatchUpdate extends Job implements ShouldQueue
             Log::info('----- FINISHED THE PROCESS FOR UPDATE NOVELS -----');
             $dtEnd = microtime_float();
             Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
-            $this->job->delete();
         }
     }
 }

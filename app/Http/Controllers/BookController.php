@@ -51,7 +51,7 @@ class BookController extends CommonController
         $subList = $this->subList($openId);
         $chapter = Chapter::where('novel_id', '=', $bookId)->find($chapterId);
         if(!$chapter->content){
-            Event::fire(new RepairChapterEvent($chapter));
+//            Event::fire(new RepairChapterEvent($chapter));
         }
         $prev = Chapter::where('novel_id', $bookId)->where('id', '<', $chapterId)->orderBy('id', 'desc')->first();
         $next = Chapter::where('novel_id', $bookId)->where('id', '>', $chapterId)->first();
