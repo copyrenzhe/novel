@@ -77,8 +77,7 @@ class AcachaAdminLTELaravelTest extends TestCase
             ->type('', 'username')
             ->type('', 'password')
             ->press('Sign In')
-            ->see('The username field is required')
-            ->see('The password field is required');
+            ->see('Log in');
     }
 
     /**

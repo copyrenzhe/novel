@@ -52,6 +52,6 @@ class SnatchRepair extends Job implements ShouldQueue
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
         Log::info('----- FINISHED THE PROCESS FOR REPAIR NOVELS -----');
-        $this->job->delete();
+        $this->delete();
     }
 }
