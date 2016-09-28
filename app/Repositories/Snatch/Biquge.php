@@ -122,7 +122,6 @@ Class Biquge implements SnatchInterface
         $num = ceil(count($url_list)/$this->page_size);
         for ($i=0; $i<$num; $i++) {
             $splice_list = array_slice($url_list, $i * $this->page_size, $this->page_size);
-
             $contents = $this->multi_send_test($splice_list, '');
             $temp = [];
             foreach ($contents as $k => $html) {
@@ -135,14 +134,14 @@ Class Biquge implements SnatchInterface
             }
 
             foreach ($contents as $k => $content) {
-                Log::info("修复小说[{$novel->id}]，章节：{$url_list[$k]}");
-                $linkArr = explode('/', $url_list[$k]);
+                Log::info("修复小说[{$novel->id}]，章节：{$url_list[$i * $this->page_size + $k]}");
+                $linkArr = explode('/', $url_list[$i * $this->page_size + $k]);
                 $idArr = explode('.', end($linkArr));
                 $biquge_id = $idArr[0];
                 $value_array = [
                     'content' => @$temp[$biquge_id]
                 ];
-                Chapter::updateOrCreate([ 'biquge_url' => $url_list[$k] ], $value_array);
+                Chapter::updateOrCreate([ 'biquge_url' => $url_list[$i * $this->page_size + $k] ], $value_array);
             }
         }
     }

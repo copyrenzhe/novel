@@ -44,7 +44,7 @@ class RepairData extends Command
         if($this->option('queue')) {
             dispatch(new SnatchRepair($this->argument('novel_id'), $this->option('force') ? true : false));
         } else {
-            $snatch = new SnatchRepair($this->argument('novel_id', $this->option('force') ? true : false));
+            $snatch = new SnatchRepair($this->argument('novel_id'), $this->option('force') ? true : false);
             $snatch->handle();
         }
     }
