@@ -10,23 +10,19 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 
-class SnatchRepair extends Job implements ShouldQueue
+class SnatchChapters extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
-
     private $novel_id;
-    private $force;
 
     /**
      * Create a new job instance.
      *
-     * @param $novel_id
-     * @param bool $force
+     * @return void
      */
-    public function __construct($novel_id, $force=false)
+    public function __construct($novel_id)
     {
         $this->novel_id = $novel_id;
-        $this->force = $force;
     }
 
     /**
@@ -36,7 +32,6 @@ class SnatchRepair extends Job implements ShouldQueue
      */
     public function handle()
     {
-        Log::info('----- STARTING THE PROCESS FOR REPAIR NOVEL -----');
         $dtStart = microtime_float();
         if($novel_id = $this->novel_id){
             if(is_array($novel_id))
@@ -44,13 +39,20 @@ class SnatchRepair extends Job implements ShouldQueue
             else
                 $novels = Novel::where('id', $novel_id)->get();
         } else {
-            $novels = Novel::all();
+            $novels = Novel::continued()->get();
         }
-        foreach ($novels as $novel) {
-            Biquge::repair($novel, $this->force);
+        Log::info('----- STARTING THE PROCESS FOR SNATCH NOVELS -----');
+        if($novels) {
+            foreach ($novels as $novel) {
+                $return = Biquge::snatch($novel);
+                if($return['code'])
+                    Log::info("小说[{$novel->id}]：{$novel->name}采集成功");
+                else
+                    Log::info("小说[{$novel->id}]：{$novel->name}采集失败");
+            }
+            Log::info('----- FINISHED THE PROCESS FOR SNATCH NOVELS -----');
+            $dtEnd = microtime_float();
+            Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
         }
-        $dtEnd = microtime_float();
-        Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
-        Log::info('----- FINISHED THE PROCESS FOR REPAIR NOVELS -----');
     }
 }

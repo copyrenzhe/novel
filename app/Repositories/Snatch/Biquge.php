@@ -353,7 +353,6 @@ Class Biquge implements SnatchInterface
             $splice_list = [];
             $splice_list[1] = array_slice($chapter_list[1], $i*$this->page_size, $this->page_size);
             $splice_list[2] = array_slice($chapter_list[2], $i*$this->page_size, $this->page_size);
-
             $contents = $this->multi_send_test($splice_list[1], $novel->biquge_url);
             $temp = [];
             foreach ($contents as $k => $html) {
@@ -382,6 +381,7 @@ Class Biquge implements SnatchInterface
             Chapter::insert($value_array);
         }
 
+        return ['code' => 1];
     }
 
     /**
