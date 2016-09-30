@@ -21,7 +21,11 @@
         <div class="detail box">
             <div class="content">
                 <div class="detail-thumb">
+                    @if(file_exists($novel->cover))
                     <img src="{{ $novel->cover }}" border="0" title="{{ $novel->name }}" alt="{{ $novel->name }}" />
+                    @else
+                        <img src="alsdfl" border="0" title="{{ $novel->name }}" alt="{{ $novel->name }}" >
+                    @endif
                 </div>
                 <div class="detail-story">
                     <h1><a href="{{ route('book', ['bookId' => $novel->id]) }}" title="{{ $novel->name }}">{{ $novel->name }}</a></h1>
