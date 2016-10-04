@@ -13,8 +13,8 @@
         var shareData = {
             title: document.title,
             link: window.location.href,
-            desc: "{!! $novel->description !!}",
-            imgUrl: "{{ $novel->cover }}"
+            desc: document.title,
+            imgUrl: "{{ env('APP_URL') . $novel->cover }}"
         };
         wx.onMenuShareTimeline(shareData);
         wx.onMenuShareAppMessage(shareData);
@@ -34,7 +34,7 @@
         <div class="detail box">
             <div class="content">
                 <div class="detail-thumb">
-                    @if(file_exists(env('APP_URL') . $novel->cover))
+                    @if($novel->cover))
                         <img src="{{ $novel->cover }}" border="0" title="{{ $novel->name }}" alt="{{ $novel->name }}" />
                     @else
                         <img src="{{ url('/cover/cover_default.jpg') }}" border="0" title="{{ $novel->name }}" alt="{{ $novel->name }}" >

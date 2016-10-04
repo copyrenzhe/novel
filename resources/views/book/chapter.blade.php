@@ -7,7 +7,7 @@
         var shareData = {
             title: document.title,
             link: window.location.href,
-            desc: "{!! $chapter->novel->description !!}",
+            desc: document.title,,
             imgUrl: "{{ env('APP_URL') . $chapter->novel->cover }}"
         };
         wx.onMenuShareTimeline(shareData);
