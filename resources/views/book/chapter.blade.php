@@ -3,6 +3,19 @@
 书虫网-{{ $chapter->novel->name }}-{{ $chapter->name }}无弹窗-{{ $chapter->novel->name }}最新章节
 @stop
 @section('content')
+    <script>
+        var shareData = {
+            title: document.title,
+            link: window.location.href,
+            desc: "{!! $chapter->novel->description !!}",
+            imgUrl: "{{ env('APP_URL') . $chapter->novel->cover }}"
+        };
+        wx.onMenuShareTimeline(shareData);
+        wx.onMenuShareAppMessage(shareData);
+        wx.onMenuShareQQ(shareData);
+        wx.onMenuShareWeibo(shareData);
+        wx.onMenuShareQZone(shareData);
+    </script>
 <div id="view-page">
     <!-- Thong tin truyen -->
     <h1 class="title"><a href="{{ route('book', ['bookId' => $chapter->novel_id]) }}" title="{{ $chapter->novel->name }}">{{ $chapter->novel->name }}</a> / {{ $chapter->name }}</h1>
