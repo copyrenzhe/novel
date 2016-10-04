@@ -24,7 +24,7 @@
                         'onMenuShareWeibo',
                         'onMenuShareTimeline',
                         'onMenuShareAppMessage'
-                        ], true) !!});
+                        ], env('APP_DEBUG')) !!});
     </script>
 </head>
 <body>
