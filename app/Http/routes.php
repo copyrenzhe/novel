@@ -37,7 +37,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admi
     Route::resource('users', 'UserController');
 });
 
-Route::group(['middleware'=>['web']], function(){
+Route::group(['middleware'=>['web', 'wechat']], function(){
 
     Route::get('/', 'IndexController@index');
 
@@ -54,7 +54,7 @@ Route::group(['middleware'=>['web']], function(){
     Route::get('search', ['as' => 'search', 'uses' => 'IndexController@search']);
 
     Route::get('{category}', ['as' => 'category', 'uses'=>'IndexController@category'])
-        ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan)');
+        ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan|other)');
 
     Route::get('feedback', 'IndexController@feedback');
     Route::post('feedback', 'IndexController@postFeedback');

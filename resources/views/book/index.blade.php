@@ -9,6 +9,7 @@
 -书虫网
 @stop
 @section('content')
+    @if(isset($js))
     <script>
         var shareData = {
             title: document.title,
@@ -22,6 +23,7 @@
         wx.onMenuShareWeibo(shareData);
         wx.onMenuShareQZone(shareData);
     </script>
+    @endif
     <style>
         .dsort{
             transform: rotate(180deg);
@@ -98,11 +100,11 @@
     <div class="clr"></div>
     <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-        var book_id = {{ $novel->id }};
+        var book_id = "{{ $novel->id }}";
         var $_pchapter = $("#_pchapter");
         $(function() {
             @if(isset($user))
-            var user_id = {{ $user->id }};
+            var user_id = "{{ $user->id }}";
             $('.subscribe').click(function() {
                 $.ajax({
                     type: 'GET',

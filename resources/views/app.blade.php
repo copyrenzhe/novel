@@ -17,15 +17,17 @@
     <link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
     <script type="text/javascript" src="/dist/js/santruyen.js"></script>
     <script type="text/javascript" src="/dist/js/tabs.js"></script>
-    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        wx.config({!!  $js->config([
-                        'onMenuShareQQ',
-                        'onMenuShareWeibo',
-                        'onMenuShareTimeline',
-                        'onMenuShareAppMessage'
-                        ], env('APP_DEBUG')) !!});
-    </script>
+    @if(isset($js))
+        <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            wx.config({!!  $js->config([
+                            'onMenuShareQQ',
+                            'onMenuShareWeibo',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage'
+                            ], env('APP_DEBUG')) !!});
+        </script>
+    @endif
 </head>
 <body>
     <div class="wrapper">
