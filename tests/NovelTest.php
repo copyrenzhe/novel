@@ -26,12 +26,6 @@ class NovelTest extends TestCase
             ->see('书虫网');
     }
 
-    public function test404Page()
-    {
-        $response = $this->call('GET', '/abcdefg');
-        $this->assertEquals(404, $response->status());
-    }
-
     //test category
     public function testXuanhuan()
     {

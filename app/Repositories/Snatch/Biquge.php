@@ -26,7 +26,7 @@ Class Biquge implements SnatchInterface
     const REFERER = 'http://www.biquge.la';
     const DOMAIN = 'http://www.biquge.la';
 
-    private $page_size = 500;
+    private $page_size = 200;
 
     /**
      * 初始化小说列表，获取当前笔趣阁所有小说
