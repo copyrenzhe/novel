@@ -18,8 +18,8 @@ class WechatMiddleware extends OAuthAuthenticate
     {
         if(is_weixin()) {
             //如果是服务号
+            $wechat = app('EasyWeChat\\Foundation\\Application', [config('wechat')]);
             if(env('WECHAT_TYPE', 'SUB')=='SRV') {
-                $wechat = app('EasyWeChat\\Foundation\\Application', [config('wechat')]);
 
                 if (!session('wechat.oauth_user')) {
                     if ($request->has('state') && $request->has('code')) {
@@ -37,6 +37,11 @@ class WechatMiddleware extends OAuthAuthenticate
                     return $wechat->oauth->scopes($scopes)->redirect($request->fullUrl());
                 }
             }
+            $js = $wechat->js;
+            view()->composer(['app'], function($view) use($js) {
+                $view->with('js', $js);
+            });
+
         }
         return $next($request);
     }

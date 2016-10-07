@@ -31,13 +31,8 @@ class CommonController extends Controller
             ];
         });
         $this->genres = $genres;
-        $wechat = app('wechat');
-        $js = $wechat->js;
         view()->composer(['common.right', 'common.navbar'], function($view) use($HotNovels, $genres) {
             $view->with('HotNovels', $HotNovels)->with('genres', $genres);
-        });
-        view()->composer(['app'], function($view) use($js) {
-            $view->with('js', $js);
         });
     }
 }

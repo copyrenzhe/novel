@@ -3,11 +3,12 @@
 书虫网-{{ $chapter->novel->name }}-{{ $chapter->name }}无弹窗-{{ $chapter->novel->name }}最新章节
 @stop
 @section('content')
+    @if(isset($js))
     <script>
         var shareData = {
             title: document.title,
             link: window.location.href,
-            desc: document.title,,
+            desc: document.title,
             imgUrl: "{{ env('APP_URL') . $chapter->novel->cover }}"
         };
         wx.onMenuShareTimeline(shareData);
@@ -16,6 +17,7 @@
         wx.onMenuShareWeibo(shareData);
         wx.onMenuShareQZone(shareData);
     </script>
+    @endif
 <div id="view-page">
     <!-- Thong tin truyen -->
     <h1 class="title"><a href="{{ route('book', ['bookId' => $chapter->novel_id]) }}" title="{{ $chapter->novel->name }}">{{ $chapter->novel->name }}</a> / {{ $chapter->name }}</h1>
@@ -50,8 +52,8 @@
 </div>
 <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
 <script>
-    var book_id = {{ $chapter->novel_id }};
-    var chapter_id = {{ $chapter->id }};
+    var book_id = "{{ $chapter->novel_id }}";
+    var chapter_id = "{{ $chapter->id }}";
     var chapter_name = '{{ $chapter->name }}';
     $(function () {
         var chapterHistory = {
