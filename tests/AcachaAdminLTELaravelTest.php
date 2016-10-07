@@ -131,18 +131,6 @@ class AcachaAdminLTELaravelTest extends TestCase
     }
 
     /**
-     * Test 404 Error page.
-     *
-     * @return void
-     */
-    public function test404Page()
-    {
-        $this->get('asdasdjlapmnnk')
-            ->seeStatusCode(404)
-            ->see('404');
-    }
-
-    /**
      * Test user registration.
      *
      * @return void
