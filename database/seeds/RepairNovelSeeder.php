@@ -14,7 +14,7 @@ class RepairNovelSeeder extends Seeder
     {
         $dtStart = microtime_float();
         Log::useDailyFiles(storage_path().'/logs/repair', 5);
-        for ($id =6000; $id<8000; $id++){
+        for ($id =8000; $id<10000; $id++){
             dispatch(new SnatchRepair($id, true));
         }
         $continueEnd = microtime_float();
