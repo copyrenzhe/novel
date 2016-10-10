@@ -69,6 +69,11 @@ Route::group(['prefix'=>'books/{bookId}', 'middleware' => ['web','wechat']], fun
         ->where(['bookId'=> '[0-9]+', 'chapterId' => '[0-9]+', 'openId' => '[a-zA-Z]+']);
 });
 
+//sitemap
+Route::get('sitemap', 'SitemapsController@index');
+Route::get('sitemaps/novels', ['as' => 'sitemaps.novels', 'uses'=>'SitemapsController@novels']);
+Route::get('sitemaps/category', ['as' => 'sitemaps.category', 'uses'=>'SitemapsController@category']);
+
 //wechat route
 Route::any('wechat', 'WechatController@serve');
 

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c26551e3d1b34fa04ea6ddd3188a80c0",
-    "content-hash": "f93d75ac8b0fa68234f07a4c5a6ff2fc",
+    "hash": "aaa98a93b3ad8c52eda84bf75f2db588",
+    "content-hash": "8352e176e58e7a83b097af2d1acab135",
     "packages": [
         {
             "name": "acacha/admin-lte-template-laravel",
@@ -3265,6 +3265,52 @@
                 "environment"
             ],
             "time": "2016-06-14 14:14:52"
+        },
+        {
+            "name": "watson/sitemap",
+            "version": "2.0.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dwightwatson/sitemap.git",
+                "reference": "aef2ba42379cb061b73d139c28360053ec5f79b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packagist.phpcomposer.com/files/dwightwatson/sitemap/aef2ba42379cb061b73d139c28360053ec5f79b8.zip",
+                "reference": "aef2ba42379cb061b73d139c28360053ec5f79b8",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "~5.0",
+                "illuminate/support": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Watson\\": "src/Watson"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dwight Watson",
+                    "email": "dwightwatson@studious.com.au"
+                }
+            ],
+            "description": "Generate Google Sitemaps in Laravel 4/5",
+            "keywords": [
+                "laravel",
+                "sitemaps"
+            ],
+            "time": "2016-09-07 13:46:35"
         },
         {
             "name": "wittiws/phpquery",

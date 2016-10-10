@@ -15,7 +15,8 @@
         "pda/pheanstalk": "~3.0",
         "yajra/laravel-datatables-oracle": "~6.0",
         "barryvdh/laravel-debugbar": "^2.2",
-        "predis/predis": "~1.0"
+        "predis/predis": "~1.0",
+        "watson/sitemap": "2.0.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
