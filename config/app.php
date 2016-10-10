@@ -164,6 +164,7 @@ return [
         Acacha\AdminLTETemplateLaravel\Providers\AdminLTETemplateServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Watson\Sitemap\SitemapServiceProvider::class,
 
     ],
 
@@ -218,6 +219,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'AdminLTE' => Acacha\AdminLTETemplateLaravel\Facades\AdminLTE::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Sitemap' => \Watson\Sitemap\Facades\Sitemap::class,
     ],
 
 ];
