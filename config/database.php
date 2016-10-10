@@ -55,10 +55,10 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'read' => [
-                'host' => env('DB_HOST_READ', env('DB_HOST', 'localhost')),
+                'host' => env('DB_HOST_READ', env('DB_HOST_WRITE', env('DB_HOST', 'localhost'))),
             ],
             'write' => [
-                'host' => env('DB_HOST_WRITE', env('DB_HOST', 'localhost')),
+                'host' => env('DB_HOST_WRITE', env('DB_HOST_READ', env('DB_HOST', 'localhost'))),
             ],
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
