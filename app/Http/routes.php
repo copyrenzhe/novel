@@ -56,7 +56,7 @@ Route::group(['middleware'=>['web', 'wechat']], function(){
     Route::get('{category}', ['as' => 'category', 'uses'=>'IndexController@category'])
         ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan|other)');
 
-    Route::get('feedback', 'IndexController@feedback');
+    Route::get('feedback', ['as' => 'feedback', 'uses' => 'IndexController@feedback']);
     Route::post('feedback', 'IndexController@postFeedback');
 
     Route::get('ajax/subscribe', ['as' => 'subscribe','uses' =>'BookController@subscribe']);
@@ -70,7 +70,7 @@ Route::group(['prefix'=>'books/{bookId}', 'middleware' => ['web','wechat']], fun
 });
 
 //sitemap
-Route::get('sitemap', 'SitemapsController@index');
+Route::get('sitemap', ['as' => 'sitemap', 'uses'=> 'SitemapsController@index']);
 Route::get('sitemaps/novels', ['as' => 'sitemaps.novels', 'uses'=>'SitemapsController@novels']);
 Route::get('sitemaps/category', ['as' => 'sitemaps.category', 'uses'=>'SitemapsController@category']);
 
