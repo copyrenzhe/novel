@@ -87,7 +87,6 @@
                             @endforeach
                         </ul>
                         <div class="clr"></div>
-                        <script type="text/javascript">var cid	= '{{ $novel->id }}';ten = '{{ $novel->name }}';</script>
                     </div>
                 </div>
             </div>
