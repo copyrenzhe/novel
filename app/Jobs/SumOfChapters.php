@@ -42,6 +42,7 @@ class SumOfChapters extends Job implements ShouldQueue
         foreach ($novels as $novel) {
             $novel->chapter_num = Chapter::where('novel_id', $novel->id)->count();
             $novel->save();
+            $this->touch();
         }
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');

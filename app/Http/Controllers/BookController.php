@@ -31,30 +31,25 @@ class BookController extends CommonController
         $user && view()->composer(['book.index', 'book.chapter'], function($view) use($user) {
             $view->with('user', $user);
         });
-        if($bookId = $request->route('bookId')){
-            $novel = Novel::find($bookId);
-            view()->composer(['book.index', 'book.chapter'], function($view) use($novel) {
-                $view->with('novel', $novel);
-            });
-        }
     }
 
     public function index($bookId, $openId='')
     {
         $subList = $this->subList($openId);
         $genres = $this->genres;
-        return view('book.index', compact('recentChapter', 'genres', 'openId', 'subList'));
+        $novel = Novel::findOrFail($bookId);
+        return view('book.index', compact('novel', 'genres', 'subList'));
     }
 
     public function chapter($bookId, $chapterId, $openId='')
     {
         $subList = $this->subList($openId);
-        $chapter = Chapter::where('novel_id', '=', $bookId)->find($chapterId);
+        $chapter = Chapter::with('novel')->where('novel_id', '=', $bookId)->findOrFail($chapterId);
         if(!$chapter->content){
 //            Event::fire(new RepairChapterEvent($chapter));
         }
         $prev = Chapter::where('novel_id', $bookId)->where('id', '<', $chapterId)->orderBy('id', 'desc')->first();
-        $next = Chapter::where('novel_id', $bookId)->where('id', '>', $chapterId)->first();
+        $next = Chapter::where('novel_id', $bookId)->where('id', '>', $chapterId)->orderBy('id', 'asc')->first();
         Event::fire(new NovelView($chapter));
         return view('book.chapter', compact('chapter', 'prev', 'next', 'subList'));
     }
