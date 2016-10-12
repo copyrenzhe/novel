@@ -1,12 +1,21 @@
 @extends('app')
 @section('title')
-{{ $novel->name }}无弹窗-
+{{ $novel->name }}-{{ $novel->name }}免费无弹窗-
 @if($novel->is_over)
     {{ $novel->name }}全集-{{ $novel->name }}全文完整版
 @else
     {{ $novel->name }}最新章节-{{ $novel->name }}最新章节列表
 @endif
 -书虫网
+@stop
+@section('keyword')
+    {{ $novel->name }},
+    @if($novel->is_over)
+    {{ $novel->name }}全文完整版,
+    @else
+    {{ $novel->name }}最新章节,
+    @endif
+    {{ $novel->author->name }}
 @stop
 @section('content')
     @if(isset($js))
@@ -36,7 +45,7 @@
         <div class="detail box">
             <div class="content">
                 <div class="detail-thumb">
-                    @if($novel->cover))
+                    @if($novel->cover)
                         <img src="{{ $novel->cover }}" border="0" title="{{ $novel->name }}" alt="{{ $novel->name }}" />
                     @else
                         <img src="{{ url('/cover/cover_default.jpg') }}" border="0" title="{{ $novel->name }}" alt="{{ $novel->name }}" >

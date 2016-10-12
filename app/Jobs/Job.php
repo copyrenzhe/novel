@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
 
 abstract class Job
 {
@@ -17,5 +18,12 @@ abstract class Job
     |
     */
 
-    use Queueable;
+    use Queueable, InteractsWithQueue;
+
+    public function touch()
+    {
+        if(method_exists($this->job, 'getPheanstalk')) {
+            $this->job->getPheanstalk()->touch($this->job->getPheanstalkJob());
+        }
+    }
 }
