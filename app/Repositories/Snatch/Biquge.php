@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\Author;
 use App\Models\Chapter;
 use App\Models\Novel;
+use Illuminate\Database\QueryException;
 use Log;
 
 /**
@@ -147,7 +148,15 @@ Class Biquge implements SnatchInterface
                     'content' => @$temp[$biquge_id]
                 ];
             }
-            updateBatch('chapter', $value_array);
+            try{
+                updateBatch('chapter', $value_array);
+            }catch (QueryException $e){
+                Log::error("修复小说[{$novel->id}], 批量插入失败");
+                foreach ($value_array as $value){
+                    Log::info("修复小说[{$novel->id}]，章节：{$value['biquge_url']}");
+                    Chapter::updateOrCreate(['biquge_url' => $value['biquge_url']], ['content' => $value['content']]);
+                }
+            }
             Log::info("修复小说[{$novel->id}], 第[{$i}]次循环结束");
         }
 
