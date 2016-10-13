@@ -119,9 +119,13 @@ Class Biquge implements SnatchInterface
             return false;
         }
 
-        $num = ceil(count($url_list)/$this->page_size);
+        $countList = count($url_list);
+        $num = ceil($countList/$this->page_size);
+        Log::info("修复小说[{$novel->id}], 共[{$countList}]条章节需要修复,设定[{$num}]次循环");
         for ($i=0; $i<$num; $i++) {
-            $splice_list = array_slice($url_list, $i * $this->page_size, $this->page_size);
+            $start = $i * $this->page_size;
+            Log::info("修复小说[{$novel->id}], 第[{$i}]次循环开始，从第[{$start}]条取[{$this->page_size}]条");
+            $splice_list = array_slice($url_list, $start, $this->page_size);
             $contents = $this->multi_send_test($splice_list, '');
             $temp = [];
             foreach ($contents as $k => $html) {
@@ -143,7 +147,10 @@ Class Biquge implements SnatchInterface
                 ];
                 Chapter::updateOrCreate([ 'biquge_url' => $url_list[$i * $this->page_size + $k] ], $value_array);
             }
+            Log::info("修复小说[{$novel->id}], 第[{$i}]次循环结束");
         }
+
+        return true;
     }
 
     /**
@@ -329,6 +336,7 @@ Class Biquge implements SnatchInterface
         }
         $novel->chapter_num = count($chapter_list[1]);
         $novel->save();
+        return true;
     }
 
 
