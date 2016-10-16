@@ -33,18 +33,18 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //每个小时更新热门小说
-        $schedule->command('snatch:updateHot --queue')
-                ->dailyAt('06:00')
-                ->withoutOverlapping();
+//        $schedule->command('snatch:updateHot --queue')
+//                ->dailyAt('06:00')
+//                ->withoutOverlapping();
 //
         //每天更新所有小说章节
-        $schedule->command('snatch:update --queue')
-                ->dailyAt('03:00')
-                ->withoutOverlapping();
+//        $schedule->command('snatch:update --queue')
+//                ->dailyAt('03:00')
+//                ->withoutOverlapping();
 //
         //每天更新所有小说章节数
-        $schedule->command('sum:chapter --queue')
-                ->dailyAt('12:00');
+//        $schedule->command('sum:chapter --queue')
+//                ->dailyAt('12:00');
 //
 //        //每天发送邮件
 //        $schedule->command('mail:daily')
