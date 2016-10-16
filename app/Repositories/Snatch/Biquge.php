@@ -293,7 +293,7 @@ Class Biquge implements SnatchInterface
             Log::error("小说[$novel->id]:[$novel->name]未更新");
             return ['code' => 1];
         }
-        Log::info("小说[$novel->id]正在更新，共有".($chapter_list[1]-$count)."章需要更新");
+        Log::info("小说[$novel->id]正在更新，共有".(count($chapter_list[1])-$count)."章需要更新");
         //目前数据库中的最新一章
         $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
         if($last_novel) {
