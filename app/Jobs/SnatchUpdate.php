@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Jobs\Job;
 use App\Models\Novel;
 use App\Repositories\Snatch\Biquge;
+use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,7 +40,7 @@ class SnatchUpdate extends Job implements ShouldQueue
             else
                 $novels = Novel::where('id', $novel_id)->get();
         } else {
-            $novels = Novel::continued()->get();
+            $novels = Novel::continued()->where('updated_at', '<', Carbon::today())->get();
         }
         Log::info('----- STARTING THE PROCESS FOR UPDATE NOVELS -----');
         if($novels) {
