@@ -339,24 +339,31 @@ Class Biquge implements SnatchInterface
             Chapter::insert($value_array);
         } catch (QueryException $e) {
             Log::error("小说[$novel->id]批量插入失败，正在逐条插入");
-            foreach ($value_array as $v) {
-                $chapter = Chapter::updateOrCreate(['biquge_url' => $v['biquge_url']], $v);
-                Log::info("小说[$novel->id]: 更新章节:[$chapter->id],来源：[$v->biquge_url]");
+            try{
+                foreach ($value_array as $v) {
+                    $chapter = Chapter::updateOrCreate(['biquge_url' => $v['biquge_url']], $v);
+                    Log::info("小说[$novel->id]: 更新章节:[$chapter->id],来源：[$v->biquge_url]");
+                    Log::info("小说[$novel->id]章节更新完毕");
+                    Log::info("正在更新小说[$novel->id]状态");
+                    //更新小说状态
+                    preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
+                    if(@$overMatch[1]=='连载中'){
+                        $novel->is_over = 0;
+                    }
+                    if(@$overMatch[1]=='完结'){
+                        $novel->is_over = 1;
+                    }
+                    $novel->chapter_num = count($chapter_list[1]);
+                    $novel->save();
+                    Log::info("小说[$novel->id]状态更新完毕");
+                }
+            } catch (QueryException $e) {
+                Log::error("小说[$novel->id]逐条插入也失败，正在重新获取该小说");
+                Log::info("清空小说[$novel->id]所有章节，并重新获取");
+                Chapter::where('novel_id', $novel->id)->delete();
+                Biquge::snatch($novel);
             }
         }
-        Log::info("小说[$novel->id]章节更新完毕");
-        Log::info("正在更新小说[$novel->id]状态");
-        //更新小说状态
-        preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
-        if(@$overMatch[1]=='连载中'){
-            $novel->is_over = 0;
-        }
-        if(@$overMatch[1]=='完结'){
-            $novel->is_over = 1;
-        }
-        $novel->chapter_num = count($chapter_list[1]);
-        $novel->save();
-        Log::info("小说[$novel->id]状态更新完毕");
         return ['code' => 1];
     }
 
@@ -375,7 +382,8 @@ Class Biquge implements SnatchInterface
             return ['code' => 0];
         }
 
-        $num = ceil(count($chapter_list[1])/$this->page_size);
+        $total_num = count($chapter_list[1]);
+        $num = ceil($total_num/$this->page_size);
 
         for ($i=0; $i<$num; $i++)
         {
@@ -409,7 +417,8 @@ Class Biquge implements SnatchInterface
             unset($contents);
             Chapter::insert($value_array);
         }
-
+        $novel->chapter_num = $total_num;
+        $novel->save();
         return ['code' => 1];
     }
 
