@@ -343,20 +343,10 @@ Class Biquge implements SnatchInterface
                 foreach ($value_array as $v) {
                     $chapter = Chapter::updateOrCreate(['biquge_url' => $v['biquge_url']], $v);
                     Log::info("小说[$novel->id]: 更新章节:[$chapter->id],来源：[$v->biquge_url]");
-                    Log::info("小说[$novel->id]章节更新完毕");
-                    Log::info("正在更新小说[$novel->id]状态");
-                    //更新小说状态
-                    preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
-                    if(@$overMatch[1]=='连载中'){
-                        $novel->is_over = 0;
-                    }
-                    if(@$overMatch[1]=='完结'){
-                        $novel->is_over = 1;
-                    }
-                    $novel->chapter_num = count($chapter_list[1]);
-                    $novel->save();
-                    Log::info("小说[$novel->id]状态更新完毕");
                 }
+                Log::info("小说[$novel->id]章节更新完毕");
+                $novel->chapter_num = count($chapter_list[1]);
+
             } catch (QueryException $e) {
                 Log::error("小说[$novel->id]逐条插入也失败，正在重新获取该小说");
                 Log::info("清空小说[$novel->id]所有章节，并重新获取");
@@ -364,6 +354,17 @@ Class Biquge implements SnatchInterface
                 Biquge::snatch($novel);
             }
         }
+        Log::info("正在更新小说[$novel->id]状态");
+        //更新小说状态
+        preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
+        if(@$overMatch[1]=='连载中'){
+            $novel->is_over = 0;
+        }
+        if(@$overMatch[1]=='完结'){
+            $novel->is_over = 1;
+        }
+        $novel->save();
+        Log::info("小说[$novel->id]状态更新完毕");
         return ['code' => 1];
     }
 
