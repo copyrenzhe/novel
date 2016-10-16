@@ -293,7 +293,7 @@ Class Biquge implements SnatchInterface
             Log::error("小说[$novel->id]:[$novel->name]未更新");
             return ['code' => 1];
         }
-
+        Log::info("小说[$novel->id]正在更新，共有".($chapter_list[1]-$count)."章需要更新");
         //目前数据库中的最新一章
         $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
         if($last_novel) {
@@ -335,8 +335,17 @@ Class Biquge implements SnatchInterface
             ];
         }
         unset($contents);
-        Chapter::insert($value_array);
-
+        try{
+            Chapter::insert($value_array);
+        } catch (QueryException $e) {
+            Log::error("小说[$novel->id]批量插入失败，正在逐条插入");
+            foreach ($value_array as $v) {
+                $chapter = Chapter::insert($v);
+                Log::info("小说[$novel->id]: 更新章节:[$chapter->id],来源：[$v->biquge_url]");
+            }
+        }
+        Log::info("小说[$novel->id]章节更新完毕");
+        Log::info("正在更新小说[$novel->id]状态");
         //更新小说状态
         preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
         if(@$overMatch[1]=='连载中'){
@@ -347,6 +356,7 @@ Class Biquge implements SnatchInterface
         }
         $novel->chapter_num = count($chapter_list[1]);
         $novel->save();
+        Log::info("小说[$novel->id]状态更新完毕");
         return true;
     }
 
