@@ -41,12 +41,22 @@ class SnatchDaily extends Command
      */
     public function handle()
     {
-        $novels = Novel::continued()->where('updated_at', '<', Carbon::today())->get();
-        foreach($novels as $novel) {
-            if($this->option('queue')) {
-                dispatch(new SnatchUpdate($this->argument($novel->id)));
+        $queue = $this->option('queue');
+        if(!$this->argument('novel_id')){
+            $novels = Novel::continued()->where('updated_at', '<', Carbon::today())->get();
+            foreach($novels as $novel) {
+                if($queue) {
+                    dispatch(new SnatchUpdate($novel->id));
+                } else {
+                    $snatch = new SnatchUpdate($novel->id);
+                    $snatch->handle();
+                }
+            }
+        } else {
+            if($queue) {
+                dispatch(new SnatchUpdate($this->argument('novel_id')));
             } else {
-                $snatch = new SnatchUpdate($this->argument($novel->id));
+                $snatch = new SnatchUpdate($this->argument('novel_id'));
                 $snatch->handle();
             }
         }
