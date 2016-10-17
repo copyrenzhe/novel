@@ -31,6 +31,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admi
     Route::post('system/init', 'SystemController@init');
     Route::post('system/snatch', 'SystemController@snatch');
     Route::post('system/repair', 'SystemController@repair');
+    Route::post('system/sumSingle', 'SystemController@sumSingle');
 
 
     Route::get('users/datatables', 'UserController@datatables');

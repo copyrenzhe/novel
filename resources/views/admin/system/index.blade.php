@@ -84,6 +84,16 @@
                         </span>
                     </div>
                 </form>
+                <p>统计小说章节数</p>
+                <form action="{{ url('/admin/system/sumSingle') }}" method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="input-group margin">
+                        <input type="text" class="form-control" name="novel_id" placeholder="输入小说id，以逗号分开">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn btn-info btn-flat">更新</button>
+                        </span>
+                    </div>
+                </form>
         </div>
     </div>
 @endsection

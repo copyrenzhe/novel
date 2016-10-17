@@ -34,11 +34,7 @@ class SumOfChapters extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR SUM OF CHAPTER -----');
         $dtStart = microtime_float();
-        if($novel_id = $this->novel_id){
-            $novels = Novel::whereIn('id', $novel_id)->get();
-        } else {
-            $novels = Novel::all();
-        }
+        $novels = ($novel_id = $this->novel_id) ? Novel::whereIn('id', $this->novel_id)->get() : Novel::all();
         foreach ($novels as $novel) {
             $novel->chapter_num = Chapter::where('novel_id', $novel->id)->count();
             $novel->save();
