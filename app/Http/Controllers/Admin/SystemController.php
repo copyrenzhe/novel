@@ -6,6 +6,7 @@ use App\Jobs\SnatchChapters;
 use App\Jobs\SnatchInit;
 use App\Jobs\SnatchRepair;
 use App\Jobs\SnatchUpdate;
+use App\Jobs\SumOfChapters;
 use Artisan;
 use Illuminate\Http\Request;
 
@@ -66,6 +67,15 @@ class SystemController extends Controller
         $ids = $request->input('novel_id');
         $idArr = explode(',', $ids);
         $this->dispatch(new SnatchRepair($idArr, true));
+        Session::flash('system_message', '修复'.$ids.'小说任务已加入后台队列');
+        return redirect('/admin/system');
+    }
+
+    public function sumSingle(Request $request)
+    {
+        $ids = $request->input('novel_id');
+        $idArr = explode(',', $ids);
+        $this->dispatch(new SumOfChapters($idArr, true));
         Session::flash('system_message', '修复'.$ids.'小说任务已加入后台队列');
         return redirect('/admin/system');
     }
