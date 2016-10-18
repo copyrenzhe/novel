@@ -31,6 +31,7 @@
                             <th>作者</th>
                             <th>类型</th>
                             <th>热度</th>
+                            <th>排序</th>
                             <th>章节数</th>
                             <th>是否完结</th>
                             <th>创建时间</th>
@@ -45,6 +46,7 @@
                             <th>作者</th>
                             <th>类型</th>
                             <th>热度</th>
+                            <th>排序</th>
                             <th>章节数</th>
                             <th>是否完结</th>
                             <th>创建时间</th>
@@ -99,6 +101,7 @@
                     {data: 'a_name', name: 'a_name'},
                     {data: 'type', name: 'type'},
                     {data: 'hot', name: 'hot'},
+                    {data: 'sort', name: 'sort'},
                     {data: 'chapter_num', name: 'chapter_num'},
                     {data: 'is_over', name: 'is_over'},
                     {data: 'created_at', name: 'created_at'},
