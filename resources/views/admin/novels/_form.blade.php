@@ -52,10 +52,10 @@
     <label for="is_over" class="col-md-3 control-label">是否完结</label>
     <div class="col-md-6">
         <div class="checkbox-inline">
-            <input type="radio" name="is_over" value="0" {{ $is_show ? '' : 'checked' }}>否</input>
+            <input type="radio" name="is_over" value="0" {{ $is_over ? '' : 'checked' }}>否</input>
         </div>
         <div class="checkbox-inline">
-            <input type="radio" name="is_over" value="1" {{ $is_show ? 'checked' : '' }}>是</input>
+            <input type="radio" name="is_over" value="1" {{ $is_over ? 'checked' : '' }}>是</input>
         </div>
     </div>
 </div>

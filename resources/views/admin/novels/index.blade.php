@@ -32,6 +32,7 @@
                             <th>类型</th>
                             <th>热度</th>
                             <th>章节数</th>
+                            <th>是否完结</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -45,6 +46,7 @@
                             <th>类型</th>
                             <th>热度</th>
                             <th>章节数</th>
+                            <th>是否完结</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -98,6 +100,7 @@
                     {data: 'type', name: 'type'},
                     {data: 'hot', name: 'hot'},
                     {data: 'chapter_num', name: 'chapter_num'},
+                    {data: 'is_over', name: 'is_over'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'updated_at', name: 'updated_at'},
                     {data: 'operations', name: 'operations'}

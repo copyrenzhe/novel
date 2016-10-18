@@ -27,7 +27,7 @@ class NovelUpdateRequest extends Request
             'name' => 'required|max:255',
             'author_id' => 'required|int',
             'type' => 'required',
-            'biquge_url' => 'required|unique:novel,biquge_url|max:255',
+            'biquge_url' => 'required|unique:novel,biquge_url,'.$this->get('id').'|max:255',
             'chapter_num' => 'int'
         ];
     }
