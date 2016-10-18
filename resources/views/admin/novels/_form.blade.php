@@ -13,7 +13,7 @@
 <div class="form-group">
     <label for="type" class="col-md-3 control-label">类型</label>
     <div class="col-md-6">
-        <select name="type" id="type">
+        <select name="type" id="type" class="form-control">
             <option value="xuanhuan" {{ $type=='xuanhuan' ? 'seleced' : '' }}>玄幻</option>
             <option value="xiuzhen" {{ $type=='xiuzhen' ? 'seleced' : '' }}>修真</option>
             <option value="dushi" {{ $type=='dushi' ? 'seleced' : '' }}>都市</option>
