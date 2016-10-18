@@ -16,18 +16,13 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
+                @include('admin.partials.errors')
+                @include('admin.partials.success')
                 <div class="box-header">
                     <h3 class="box-title">小说列表</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if( Session::has('novel_message') )
-                    <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h4><i class="icon fa fa-check"></i> Alert!</h4>
-                        {{ Session::get('novel_message') }}
-                    </div>
-                    @endif
                     <table id="novels" class="table table-bordered table-striped">
                         <thead>
                         <tr>
@@ -69,9 +64,33 @@
     <script>
         $(function () {
             $('#novels').DataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('admin/novels/datatables') }}",
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                processing: true,
+                serverSide: true,
+                ajax: "{{ url('admin/novels/datatables') }}",
                 "columns": [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
