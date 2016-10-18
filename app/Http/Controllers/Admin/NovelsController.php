@@ -34,7 +34,7 @@ class NovelsController extends Controller
         return view('admin.novels.index', compact('novels'));
     }
 
-    public function datatables()
+    public function datatables(Request $request)
     {
         $novel = Novel::leftJoin('author', 'novel.author_id', '=', 'author.id')
             ->select(['novel.id', 'novel.name', 'author.name as a_name', 'novel.type', 'novel.hot', 'novel.chapter_num', 'novel.is_over', 'novel.created_at', 'novel.updated_at']);
@@ -65,6 +65,12 @@ class NovelsController extends Controller
                                 @else
                                 其他
                                 @endif')
+            ->filter(function($query) use($request){
+                if($filterValue = $request->get('search')['value']) {
+                    $query->where('novel.id', 'LIKE', '%'.$filterValue.'%')
+                        ->orWhere('novel.name', 'LIKE', '%'.$filterValue.'%');
+                }
+            })
             ->make(true);
     }
     public function snatchUpdate($novel_id)
