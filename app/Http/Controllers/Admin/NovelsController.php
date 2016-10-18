@@ -37,7 +37,7 @@ class NovelsController extends Controller
     public function datatables(Request $request)
     {
         $novel = Novel::leftJoin('author', 'novel.author_id', '=', 'author.id')
-            ->select(['novel.id', 'novel.name', 'author.name as a_name', 'novel.type', 'novel.hot', 'novel.chapter_num', 'novel.is_over', 'novel.created_at', 'novel.updated_at']);
+            ->select(['novel.id', 'novel.name', 'author.name as a_name', 'novel.type', 'novel.hot', 'novel.sort', 'novel.chapter_num', 'novel.is_over', 'novel.created_at', 'novel.updated_at']);
         return Datatables::of($novel)
             ->addColumn('operations',
                 '
