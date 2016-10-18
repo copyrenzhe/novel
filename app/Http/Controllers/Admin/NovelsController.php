@@ -37,14 +37,34 @@ class NovelsController extends Controller
     public function datatables()
     {
         $novel = Novel::leftJoin('author', 'novel.author_id', '=', 'author.id')
-            ->select(['novel.id', 'novel.name', 'author.name as a_name', 'novel.type', 'novel.hot', 'novel.chapter_num', 'novel.created_at', 'novel.updated_at']);
+            ->select(['novel.id', 'novel.name', 'author.name as a_name', 'novel.type', 'novel.hot', 'novel.chapter_num', 'novel.is_over', 'novel.created_at', 'novel.updated_at']);
         return Datatables::of($novel)
             ->addColumn('operations',
                 '
                 <a style="margin:3px;" href="/admin/novels/{{ $id }}/snatchUpdate" class="X-Small btn-xs text-success "><i class="fa fa-line-chart"></i> 更新</a>
                 <a style="margin:3px;" href="/admin/novels/{{ $id }}/snatchRepair" class="X-Small btn-xs text-success "><i class="fa fa-history"></i> 修复</a>
                 <a style="margin:3px;" href="/admin/novels/{{ $id }}/edit" class="X-Small btn-xs text-success "><i class="fa fa-edit"></i> 编辑</a>
-                <a style="margin:3px;" href="#" attr="5" class="delBtn X-Small btn-xs text-danger"><i class="fa fa-times-circle"></i> 删除</a>')
+                <a style="margin:3px;" href="#" attr="{{ $id }}" class="delBtn X-Small btn-xs text-danger"><i class="fa fa-times-circle"></i> 删除</a>')
+            ->editColumn('is_over', '@if($is_over)
+                                        是
+                                    @else
+                                        否
+                                    @endif')
+            ->editColumn('type', '@if($type=="xuanhuan")
+                                        玄幻
+                                @elseif($type=="xiuzhen")
+                                        修真
+                                @elseif($type=="dushi")
+                                        都市
+                                @elseif($type=="lishi")
+                                        历史
+                                @elseif($type=="wangyou")
+                                网游
+                                @elseif($type=="kehuan")
+                                科幻
+                                @else
+                                其他
+                                @endif')
             ->make(true);
     }
     public function snatchUpdate($novel_id)
