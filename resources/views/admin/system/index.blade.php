@@ -14,17 +14,12 @@
 @section('main-content')
     <div class="row">
         <div class="box">
+            @include('admin.partials.errors')
+            @include('admin.partials.success')
             <div class="box-header">
                 <h3 class="box-title">工具列表</h3>
             </div>
             <div class="box-body">
-                @if( Session::has('system_message') )
-                    <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h4><i class="icon fa fa-check"></i> Alert!</h4>
-                        {{ Session::get('system_message') }}
-                    </div>
-                @endif
                 <a href="{{ url('/admin/system/updateAllNovels') }}" class="btn btn-app">
                     <i class="fa fa-book"></i>
                     更新小说

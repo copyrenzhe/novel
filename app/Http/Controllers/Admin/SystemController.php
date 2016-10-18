@@ -25,15 +25,13 @@ class SystemController extends Controller
     public function updateAll()
     {
         Artisan::queue('snatch:update --queue');
-        Session::flash('system_message', '更新小说任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('更新小说任务已加入后台队列');
     }
 
     public function sumChapter()
     {
         Artisan::queue('sum:chapter --queue');
-        Session::flash('system_message', '更新各小说章节数量任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('更新各小说章节数量任务已加入后台队列');
     }
 
     public function update(Request $request)
@@ -41,16 +39,14 @@ class SystemController extends Controller
         $ids = $request->input('novel_id');
         $idArr = explode(',', $ids);
         $this->dispatch(new SnatchUpdate($idArr));
-        Session::flash('system_message', '更新'.$ids.'小说任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('更新'.$ids.'小说任务已加入后台队列');
     }
 
     public function init(Request $request)
     {
         $link = $request->input('link');
         $this->dispatch(new SnatchInit($link));
-        Session::flash('system_message', '初始化小说任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('初始化小说'.$link.'任务已加入后台队列');
     }
 
     public function snatch(Request $request)
@@ -58,8 +54,7 @@ class SystemController extends Controller
         $ids = $request->input('novel_id');
         $idArr = explode(',', $ids);
         $this->dispatch(new SnatchChapters($idArr));
-        Session::flash('system_message', '采集'.$ids.'小说任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('采集'.$ids.'小说任务已加入后台队列');
     }
 
     public function repair(Request $request)
@@ -67,8 +62,7 @@ class SystemController extends Controller
         $ids = $request->input('novel_id');
         $idArr = explode(',', $ids);
         $this->dispatch(new SnatchRepair($idArr, true));
-        Session::flash('system_message', '修复'.$ids.'小说任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('修复'.$ids.'小说任务已加入后台队列');
     }
 
     public function sumSingle(Request $request)
@@ -76,7 +70,6 @@ class SystemController extends Controller
         $ids = $request->input('novel_id');
         $idArr = explode(',', $ids);
         $this->dispatch(new SumOfChapters($idArr, true));
-        Session::flash('system_message', '修复'.$ids.'小说任务已加入后台队列');
-        return redirect('/admin/system');
+        return redirect('/admin/system')->withSuccess('修复'.$ids.'小说任务已加入后台队列');
     }
 }
