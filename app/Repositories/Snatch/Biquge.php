@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\Author;
 use App\Models\Chapter;
 use App\Models\Novel;
+use ErrorException;
 use Illuminate\Database\QueryException;
 use Log;
 
@@ -347,7 +348,7 @@ Class Biquge implements SnatchInterface
                 Log::info("小说[$novel->id]章节更新完毕");
                 $novel->chapter_num = count($chapter_list[1]);
 
-            } catch (QueryException $e) {
+            } catch (ErrorException $e) {
                 Log::error("小说[$novel->id]逐条插入也失败，正在重新获取该小说");
                 Log::info("清空小说[$novel->id]所有章节，并重新获取");
                 Chapter::where('novel_id', $novel->id)->delete();
