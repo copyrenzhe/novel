@@ -32,11 +32,13 @@
                 alert('取消了分享');
             }
         };
-        wx.onMenuShareTimeline(shareData);
-        wx.onMenuShareAppMessage(shareData);
-        wx.onMenuShareQQ(shareData);
-        wx.onMenuShareWeibo(shareData);
-        wx.onMenuShareQZone(shareData);
+        wx.ready(function(){
+            wx.onMenuShareTimeline(shareData);
+            wx.onMenuShareAppMessage(shareData);
+            wx.onMenuShareQQ(shareData);
+            wx.onMenuShareWeibo(shareData);
+            wx.onMenuShareQZone(shareData);
+        })
     </script>
     @endif
     <style>
@@ -163,9 +165,6 @@
                 next_title = $next.find('a').attr('title');
                 if(next_href && next_title) {
                     $readStart.attr('href', next_href).attr('title', next_title).html('继续阅读');
-                } else {
-
-
                 }
             }
         });
