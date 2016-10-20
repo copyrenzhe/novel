@@ -34,7 +34,9 @@
         @include('common.header')
         @include('common.navbar')
         <!-- main -->
-
+        <div class="forshare" style="overflow:hidden;width:1px;height:1px;position:absolute;left:-100px;top:-100px;display:none;">
+            <img src="/dist/images/logo.png" alt="">
+        </div>
         @if( Session::has('flash_message') )
         <div class="alert">
             <h3>{{ Session::get('flash_message') }}</h3>

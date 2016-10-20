@@ -24,7 +24,13 @@
             title: document.title,
             link: window.location.href,
             desc: document.title,
-            imgUrl: "{{ env('APP_URL') . $novel->cover }}"
+            imgUrl: "{{ env('APP_URL') . $novel->cover }}",
+            success: function() {
+                alert('分享成功，图片为'+this.imgUrl);
+            },
+            cancel: function(){
+                alert('取消了分享');
+            }
         };
         wx.onMenuShareTimeline(shareData);
         wx.onMenuShareAppMessage(shareData);
