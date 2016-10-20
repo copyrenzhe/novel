@@ -338,6 +338,7 @@ Class Biquge implements SnatchInterface
         unset($contents);
         try{
             Chapter::insert($value_array);
+            $novel->chapter_num = count($chapter_list[1]);
         } catch (QueryException $e) {
             Log::error("小说[$novel->id]批量插入失败，正在逐条插入");
             try{
