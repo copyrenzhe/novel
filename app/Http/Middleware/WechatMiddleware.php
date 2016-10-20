@@ -38,9 +38,7 @@ class WechatMiddleware extends OAuthAuthenticate
                 }
             }
             $js = $wechat->js;
-            view()->composer(['app'], function($view) use($js) {
-                $view->with('js', $js);
-            });
+            view()->share('js', $js);
 
         }
         return $next($request);
