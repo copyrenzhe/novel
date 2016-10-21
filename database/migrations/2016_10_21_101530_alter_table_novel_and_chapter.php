@@ -13,9 +13,9 @@ class AlterTableNovelAndChapter extends Migration
     public function up()
     {
         Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-        Schema::table('novel', function (Blueprint $table) {
-            $table->string('source')->after('is_over')->default('');
-        });
+//        Schema::table('novel', function (Blueprint $table) {
+//            $table->string('source')->after('is_over')->default('');
+//        });
 
         Schema::table('novel', function(Blueprint $table) {
             $table->renameColumn('biquge_url', 'source_link');
