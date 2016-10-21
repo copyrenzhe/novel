@@ -12,12 +12,12 @@ class AlterTableNovelAndChapter extends Migration
      */
     public function up()
     {
-        Schema::table('novel', function ($table) {
+        Schema::table('novel', function (Blueprint $table) {
             $table->string('source')->after('is_over')->default('');
             $table->renameColumn('biquge_url', 'source_link');
         });
 
-        Schema::table('chapter', function($table) {
+        Schema::table('chapter', function(Blueprint $table) {
             $table->renameColumn('biquge_url', 'source_link');
         });
     }
