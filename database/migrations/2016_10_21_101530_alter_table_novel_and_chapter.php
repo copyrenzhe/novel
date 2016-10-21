@@ -17,6 +17,10 @@ class AlterTableNovelAndChapter extends Migration
             $table->renameColumn('biquge_url', 'source_link');
         });
 
+        Schema::table('novel', function(Blueprint $table) {
+            $table->renameColumn('biquge_url', 'source_link');
+        });
+
         Schema::table('chapter', function(Blueprint $table) {
             $table->renameColumn('biquge_url', 'source_link');
         });
