@@ -79,12 +79,11 @@ if(!function_exists('async_get_url')) {
     {
         $n = (count($urls) > $page_size) ? $page_size : count($urls);
 
-        $options = array(
+        $options = [
             CURLOPT_RETURNTRANSFER => 1, // 返回内容不直接显示
             CURLOPT_TIMEOUT => 10,
-            CURLOPT_TIMEOUT => 60,
-            CURLOPT_FOLLOWLOCATION => 1
-        );
+            CURLOPT_TIMEOUT => 60
+        ];
 
         // 初始化批处理
         $mh = curl_multi_init();
