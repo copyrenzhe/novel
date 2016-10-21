@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Novel extends Model
 {
     protected $table = 'novel';
-    protected $fillable = ['name', 'description', 'author_id', 'type', 'cover', 'hot', 'sort', 'is_over', 'biquge_url', 'chapter_num'];
+    protected $fillable = ['name', 'description', 'author_id', 'type', 'cover', 'hot', 'sort', 'is_over', 'source', 'source_link', 'chapter_num'];
 
     //
     public function tags()
