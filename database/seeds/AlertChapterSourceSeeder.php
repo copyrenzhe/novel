@@ -1,9 +1,10 @@
 <?php
 
-use App\Jobs\SnatchRepair;
+use App\Jobs\AlertSource;
+use App\Models\Novel;
 use Illuminate\Database\Seeder;
 
-class RepairNovelSeeder extends Seeder
+class AlertChapterSourceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,12 +14,12 @@ class RepairNovelSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        Log::useDailyFiles(storage_path().'/logs/repair', 5);
-        for ($id =1; $id<10800; $id++){
-            dispatch(new SnatchRepair($id, true));
+        $novels = Novel::all();
+        foreach ($novels as $novel) {
+            dispatch(new AlertSource($novel));
         }
         $continueEnd = microtime_float();
-        echo "添加队列完毕\n";
+        echo "修改小说源结束\n";
         echo "耗时：".($continueEnd-$dtStart)."秒\n";
     }
 }
