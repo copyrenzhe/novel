@@ -18,17 +18,18 @@ class ChapterRepair extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
-    private $chapter_id;
+    private $chapter;
     private $force;
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $chapter
+     * @param bool $force
      */
-    public function __construct($chapter_id, $force=false)
+    public function __construct($chapter, $force=false)
     {
-        $this->chapter_id = $chapter_id;
+        $this->chapter = $chapter;
         $this->force = $force;
     }
 
@@ -41,8 +42,7 @@ class ChapterRepair extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR REPAIR CHAPTER -----');
         $dtStart = microtime_float();
-        $chapter = Chapter::find($this->chapter_id);
-        Biquge::repairChapter($chapter, $this->force);
+        Biquge::repairChapter($this->chapter, $this->force);
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
         Log::info('----- FINISHED THE PROCESS FOR REPAIR CHAPTER -----');

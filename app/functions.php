@@ -75,14 +75,15 @@ if(!function_exists('microtime_float')) {
 }
 
 if(!function_exists('async_get_url')) {
-    function async_get_url($urls, $append_url, $page_size=500)
+    function async_get_url($urls, $append_url='', $page_size=500)
     {
         $n = (count($urls) > $page_size) ? $page_size : count($urls);
 
         $options = [
             CURLOPT_RETURNTRANSFER => 1, // 返回内容不直接显示
             CURLOPT_TIMEOUT => 10,
-            CURLOPT_TIMEOUT => 60
+            CURLOPT_TIMEOUT => 60,
+            CURLOPT_FOLLOWLOCATION => 1,
         ];
 
         // 初始化批处理

@@ -35,11 +35,11 @@ class AlertSource extends Job implements ShouldQueue
         $dtStart = microtime_float();
         foreach($this->novel->chapter as $chapter) {
             $linkArr = explode('/', $chapter->source_link);
-            $chapter->source_link = end($linkArr);
+            $chapter->source_link = 'http://www.qu.la'. $this->novel->source_link . end($linkArr);
             $chapter->save();
         }
         $dtEnd = microtime_float();
-        Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
+        Log::info("----- 小说{$this->novel->id}源已处理,耗时".($dtEnd-$dtStart)."秒");
         Log::info('----- FINISHED THE PROCESS FOR ALERT SOURCE -----');
     }
 }
