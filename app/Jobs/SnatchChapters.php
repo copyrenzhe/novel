@@ -45,7 +45,6 @@ class SnatchChapters extends Job implements ShouldQueue
         if($novels) {
             foreach ($novels as $novel) {
                 $return = Biquge::snatch($novel);
-                $this->touch();
                 if($return['code'])
                     Log::info("小说[{$novel->id}]：{$novel->name}采集成功");
                 else

@@ -23,7 +23,8 @@ class NovelsController extends Controller
         'hot'=> 0,
         'sort' => 0,
         'is_over' => 0,
-        'biquge_url' => '',
+        'source' => '',
+        'source_link' => '',
         'chapter_num' => 0
     ];
 

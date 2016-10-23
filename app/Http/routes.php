@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('test', function(){
+    dd(async_get_url(['http://www.biquge.la/book/9215/3758417.html']));
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');

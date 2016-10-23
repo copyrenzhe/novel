@@ -48,7 +48,6 @@ class SnatchRepair extends Job implements ShouldQueue
         }
         foreach ($novels as $novel) {
             Biquge::repair($novel, $this->force);
-            $this->touch();
         }
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');

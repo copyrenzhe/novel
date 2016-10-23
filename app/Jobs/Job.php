@@ -18,12 +18,6 @@ abstract class Job
     |
     */
 
-    use Queueable, InteractsWithQueue;
+    use Queueable;
 
-    public function touch()
-    {
-        if(method_exists($this->job, 'getPheanstalk')) {
-            $this->job->getPheanstalk()->touch($this->job->getPheanstalkJob());
-        }
-    }
 }

@@ -29,6 +29,6 @@ class RepairChapterListener
     {
         //
         $chapter = $event->chapter;
-        dispatch(new ChapterRepair($chapter->id));
+        dispatch(new ChapterRepair($chapter));
     }
 }
