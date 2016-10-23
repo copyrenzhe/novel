@@ -343,7 +343,7 @@ Class Biquge implements SnatchInterface
             Log::error("小说[$novel->id]批量插入失败，正在逐条插入");
             try{
                 foreach ($value_array as $v) {
-                    $chapter = Chapter::updateOrCreate(['source_link' => $v['source_link'], 'novel_id' => $novel->id], $v);
+                    $chapter = Chapter::updateOrCreate(['source_link' => $v['source_link']], $v);
                     Log::info("小说[$novel->id]: 更新章节:[$chapter->id],来源：[$novel->source_link . $v->source_link]");
                 }
                 Log::info("小说[$novel->id]章节更新完毕");
