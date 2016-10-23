@@ -14,7 +14,7 @@ class AlertChapterSourceSeeder extends Seeder
     public function run()
     {
         $dtStart = microtime_float();
-        $novels = Novel::where('id', '<', 717)->get();
+        $novels = Novel::where('id', '<', 643)->get();
         foreach ($novels as $novel) {
             dispatch(new AlertSource($novel));
         }
