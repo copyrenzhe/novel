@@ -66,9 +66,9 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="biquge_url" class="col-md-3 control-label">来源链接</label>
+    <label for="source_link" class="col-md-3 control-label">来源链接</label>
     <div class="col-md-6">
-        <input type="text" class="form-control" name="biquge_url" id="biquge_url" value="{{ $biquge_url }}" autofocus>
+        <input type="text" class="form-control" name="source_link" id="source_link" value="{{ $source_link }}" autofocus>
     </div>
 </div>
 <div class="form-group">
