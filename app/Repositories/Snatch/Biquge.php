@@ -409,7 +409,7 @@ Class Biquge implements SnatchInterface
                 $idArr = explode('.', $splice_list[1][$k]);
                 $biquge_id = $idArr[0];
                 $value_array[] = [
-                    'source_link' => $splice_list[1][$k],
+                    'source_link' => self::DOMAIN . $novel->source_link . $splice_list[1][$k],
                     'name' => $name,
                     'content' => @$temp[$biquge_id],
                     'novel_id' => $novel->id,
