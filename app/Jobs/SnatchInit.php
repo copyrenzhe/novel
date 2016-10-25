@@ -34,7 +34,12 @@ class SnatchInit extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');
         $dtStart = microtime_float();
-        Biquge::init($this->link);
+        $novel = Biquge::init($this->link);
+        if($novel) {
+            Log::info("小说[$novel->id]:[$novel->name] 已初始化完毕");
+            Biquge::snatch($novel);
+            Log::info("小说[$novel->id]:[$novel->name] 已采集完毕");
+        }
         $dtEnd = microtime_float();
         Log::info('expire time '.($dtEnd-$dtStart).' seconds');
         Log::info('----- FINISHED THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');

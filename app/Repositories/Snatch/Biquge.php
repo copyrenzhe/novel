@@ -271,7 +271,7 @@ Class Biquge implements SnatchInterface
             }
             return $novel;
         }
-        return true;
+        return false;
     }
 
     /**

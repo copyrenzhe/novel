@@ -39,7 +39,7 @@
                 <h3 class="box-title">采集相关</h3>
             </div>
             <div class="box-body">
-                <p>初始化新小说（目前只支持笔趣阁）</p>
+                <p>初始化新小说（目前只支持笔趣阁）（包含采集小说章节）</p>
                 <form action="{{ url('/admin/system/init') }}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="input-group margin">
@@ -49,7 +49,7 @@
                         </span>
                     </div>
                 </form>
-                <p>采集小说（初始化之后采集）</p>
+                <p>采集小说</p>
                 <form action="{{ url('/admin/system/snatch') }}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="input-group margin">
@@ -89,6 +89,7 @@
                         </span>
                     </div>
                 </form>
+            </div>
         </div>
     </div>
 @endsection
