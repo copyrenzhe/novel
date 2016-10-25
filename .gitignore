@@ -4,6 +4,7 @@
 Homestead.yaml
 Homestead.json
 .env
+envoy.config.php
 /.idea
 _ide_helper.php
 /public/cover
