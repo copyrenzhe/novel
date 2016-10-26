@@ -39,6 +39,9 @@
 
 @task('show_cmd_list', ['on' => 'local'])
     echo '================';
+    echo '---- [macro command] ----';
+    echo 'deploy';
+    echo 'help';
     echo '---- [common list] ----';
     echo 'git';
     echo 'composer';
