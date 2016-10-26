@@ -20,7 +20,7 @@
     }
     $envoy_servers = array_merge(['local'=>'localhost'], $server_connections);
 
-    $app_dir = $deploy_basepath . $app_name;
+    $app_dir = $deploy_basepath .'/'. $app_name;
 @endsetup
 
 @servers($envoy_servers)
@@ -42,6 +42,15 @@
     echo '---- [common list] ----';
     echo 'git';
     echo 'composer';
+    echo '---- [cache list] ----';
+    echo 'clear_cache';
+    echo 'compile_cache';
+    echo '---- [queue list] ----';
+    echo 'restart_queue';
+    echo '---- [snatch list] ----';
+    echo 'update_hot';
+    echo 'update';
+    echo 'sum_chapter'
     echo '================';
 @endtask
 
@@ -72,4 +81,19 @@
 @task('restart_queue', ['on' => $envoy_alias])
     cd {{ $app_dir }}
     php artisan queue:restart
+@endtask
+
+@task('update_hot', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    php artisan snatch:updateHot 50 --queue
+@endtask
+
+@task('update', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    php artisan snatch:update --queue
+@endtask
+
+@task('sum_chapter', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    php artisan sum:chapter --queue
 @endtask
