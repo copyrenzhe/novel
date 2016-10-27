@@ -45,7 +45,7 @@ class SnatchUpdate extends Job implements ShouldQueue
                     if($return['code'])
                         Log::info("小说[{$novel->id}]：{$novel->name}更新成功");
                     else
-                        Log::info("小说[{$novel->id}]：{$novel->name}更新失败");
+                        Log::error("小说[{$novel->id}]：{$novel->name}更新失败");
                 }
                 Log::info('----- FINISHED THE PROCESS FOR UPDATE NOVELS -----');
                 $dtEnd = microtime_float();

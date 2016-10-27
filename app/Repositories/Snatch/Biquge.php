@@ -291,7 +291,7 @@ Class Biquge extends Snatch implements SnatchInterface
         $count= $novel->chapter_num;
         if(count($chapter_list[1]) <= $count) {
             //小说未更新
-            Log::error("小说[$novel->id]:[$novel->name]未更新");
+            Log::info("小说[$novel->id]:[$novel->name]未更新");
             return ['code' => 1];
         }
         Log::info("小说[$novel->id]正在更新，共有".(count($chapter_list[1])-$count)."章需要更新");
