@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\Job;
+use App\Models\Chapter;
 use App\Models\Novel;
 use App\Repositories\Snatch\Biquge;
 use Illuminate\Queue\SerializesModels;
@@ -44,6 +45,9 @@ class SnatchChapters extends Job implements ShouldQueue
         Log::info('----- STARTING THE PROCESS FOR SNATCH NOVELS -----');
         if($novels) {
             foreach ($novels as $novel) {
+                Log::info('----采集前先清空章节----');
+                Chapter::where('novel_id', $novel_id)->delete();
+                Log::info('----清空完成，开始采集----');
                 $return = Biquge::snatch($novel);
                 if($return['code'])
                     Log::info("小说[{$novel->id}]：{$novel->name}采集成功");

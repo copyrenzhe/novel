@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\RepairChapterEvent' => [
             'App\Listeners\RepairChapterListener',
+        ],
+        'App\Events\RepairNovelEvent' => [
+            'App\Listeners\RepairNovelListener',
         ]
     ];
 

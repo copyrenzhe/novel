@@ -191,3 +191,17 @@ if(!function_exists('updateBatch')) {
         }
     }
 }
+
+if(!function_exists('category_maps')){
+    function category_maps(){
+        return [
+            'xuanhuan'  =>  '玄幻小说',
+            'xiuzhen'   =>  '修真小说',
+            'dushi'     =>  '都市小说',
+            'lishi'     =>  '历史小说',
+            'wangyou'   =>  '网游小说',
+            'kehuan'    =>  '科幻小说',
+            'other'     =>  '其他'
+        ];
+    }
+}

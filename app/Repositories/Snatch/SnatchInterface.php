@@ -15,6 +15,9 @@ Interface SnatchInterface
 {
     public function getNovelList();
 
+    public function getSingleNovel($link);
+
     public function getNovelChapter(Novel $novel);
 
+    public function getSource();
 }

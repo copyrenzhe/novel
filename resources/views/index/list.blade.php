@@ -1,4 +1,6 @@
 @extends('app')
+@section('title'){{ $name }}-书虫网@stop
+@section('keywords'){{ $name }},书虫网{{ $name }}@stop
 @section('content')
     <div id="left">
         <h1 class="title">{{ $name }}</h1>
