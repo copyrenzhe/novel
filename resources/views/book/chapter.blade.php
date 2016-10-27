@@ -1,16 +1,7 @@
 @extends('app')
-@section('title')
-{{ $chapter->name }}-{{ $chapter->novel->name }}-书虫网
-@stop
-@section('keyword')
-    {{ $chapter->novel->name }},
-    @if($chapter->novel->is_over)
-        {{ $chapter->novel->name }}全文完整版,
-    @else
-        {{ $chapter->novel->name }}最新章节,
-    @endif
-    {{ $chapter->novel->name }}无弹窗,
-@stop
+@section('title'){{ $chapter->name }}-{{ $chapter->novel->name }}-书虫网@stop
+@section('keywords'){{ $chapter->name }},@if($chapter->novel->is_over){{ $chapter->novel->name }}全文完整版,@else{{ $chapter->novel->name }}最新章节,@endif{{ $chapter->novel->name }}无弹窗,书虫网@stop
+@section('description')小说{{ $chapter->novel->name }}正文 {{ $chapter->name }}在线阅读。作者{{ $chapter->novel->author->name }}的小说,{{ $chapter->novel->name }}全文免费阅读到书虫网(www.shu000.com)@stop
 @section('content')
     @if(isset($js))
     <script>

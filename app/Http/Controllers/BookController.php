@@ -38,15 +38,19 @@ class BookController extends CommonController
         $subList = $this->subList($openId);
         $genres = $this->genres;
         $novel = Novel::findOrFail($bookId);
-        return view('book.index', compact('novel', 'genres', 'subList'));
+        $lastChapter = Chapter::where('novel_id', $novel->id)->orderBy('id', 'desc')->first();
+        if($novel && !$lastChapter){
+            Event::fire(new RepairNovelEvent($novel));
+        }
+        return view('book.index', compact('novel', 'genres', 'subList', 'lastChapter'));
     }
 
     public function chapter($bookId, $chapterId, $openId='')
     {
         $subList = $this->subList($openId);
         $chapter = Chapter::with('novel')->where('novel_id', '=', $bookId)->findOrFail($chapterId);
-        if(!$chapter->content){
-//            Event::fire(new RepairChapterEvent($chapter));
+        if($chapter && !$chapter->content){
+            Event::fire(new RepairChapterEvent($chapter));
         }
         $prev = Chapter::where('novel_id', $bookId)->where('id', '<', $chapterId)->orderBy('id', 'desc')->first();
         $next = Chapter::where('novel_id', $bookId)->where('id', '>', $chapterId)->orderBy('id', 'asc')->first();

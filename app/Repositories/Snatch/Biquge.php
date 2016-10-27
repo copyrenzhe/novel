@@ -21,7 +21,7 @@ use Log;
  * Class Biquge
  * @package App\Repositories\Snatch
  */
-Class Biquge implements SnatchInterface
+Class Biquge extends Snatch implements SnatchInterface
 {
     const COOKIE = './biquge.cookie';
     const USERAGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36';
@@ -126,7 +126,7 @@ Class Biquge implements SnatchInterface
             $start = $i * $this->page_size;
             Log::info("修复小说[{$novel->id}], 第[{$i}]次循环开始，从第[{$start}]条取[{$this->page_size}]条");
             $splice_list = array_slice($url_list, $start, $this->page_size);
-            $contents = $this->multi_send_test(self::DOMAIN. $novel->source_link . $splice_list, '');
+            $contents = $this->multi_send_test(self::DOMAIN. $novel->source_link . $splice_list, $this->page_size);
             $temp = [];
             foreach ($contents as $k => $html) {
                 preg_match('/var readid = "(.*?)"/s', $html, $read_match);
@@ -393,7 +393,7 @@ Class Biquge implements SnatchInterface
             $splice_list = [];
             $splice_list[1] = array_slice($chapter_list[1], $i*$this->page_size, $this->page_size);
             $splice_list[2] = array_slice($chapter_list[2], $i*$this->page_size, $this->page_size);
-            $contents = $this->multi_send_test($splice_list[1], self::DOMAIN . $novel->source_link);
+            $contents = $this->multi_send_test($splice_list[1], self::DOMAIN . $novel->source_link, $this->page_size);
             $temp = [];
             foreach ($contents as $k => $html) {
                 preg_match('/var readid = "(.*?)"/s', $html, $read_match);
@@ -587,42 +587,8 @@ Class Biquge implements SnatchInterface
         return @$content[1];
     }
 
-
-    /**
-     * 单线程模拟请求
-     * @param $url
-     * @param string $type
-     * @param bool $params
-     * @param string $encoding
-     * @return mixed|string
-     */
-    private function send($url, $type = 'GET', $params = false, $encoding = 'gbk')
+    public function getSource()
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT,60);
-        $html = curl_exec($ch);
-        if($html === false) {
-            echo "curl error: " . curl_errno($ch);
-        }
-        curl_close($ch);
-        return mb_convert_encoding($html, 'UTF-8', $encoding);
-    }
-
-
-    /**
-     * 多线程模拟请求
-     * @param $url_array
-     * @return array
-     */
-    private function multi_send($url_array)
-    {
-        return remote($url_array, 'GET', false, 'gbk', self::REFERER, self::COOKIE);
-    }
-
-    private function multi_send_test($url_array, $append_url, $page_count=0)
-    {
-        return async_get_url($url_array, $append_url, $page_count ? $page_count : $this->page_size);
+        return $this->source;
     }
 }
