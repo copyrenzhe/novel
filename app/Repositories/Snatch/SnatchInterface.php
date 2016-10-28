@@ -13,11 +13,17 @@ use App\Models\Novel;
 
 Interface SnatchInterface
 {
+    //获取小说列表
     public function getNovelList();
 
+    //采集单本小说基本信息
     public function getSingleNovel($link);
 
-    public function getNovelChapter(Novel $novel);
+    //更新小说
+    public function getChapterNew(Novel $novel);
+
+    //采集小说章节
+    public function snatchChapter(Novel $novel);
 
     public function getSource();
 }

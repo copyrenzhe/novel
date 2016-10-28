@@ -11,9 +11,15 @@ namespace App\Repositories\Snatch;
 
 use App\Models\Author;
 use App\Models\Novel;
+use Log;
 
 class Kanshuzhong extends Snatch implements SnatchInterface
 {
+    const COOKIE = './kanshuzhong.cookie';
+    const USERAGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36';
+    const REFERER = 'http://www.kanshuzhong.com';
+    const DOMAIN = 'http://www.kanshuzhong.com';
+
     private $source = 'kanshuzhong';
 
     public static function init($link)
@@ -24,7 +30,10 @@ class Kanshuzhong extends Snatch implements SnatchInterface
 
     public function getNovelList()
     {
-        
+        $xuanhuan_link = self::DOMAIN . '/1.html';
+        $list_html = $this->send($xuanhuan_link);
+        $novel_matches = $this->getLiNovel($list_html);
+        return $novel_matches[1];
     }
 
     public function getSingleNovel($link)
@@ -39,6 +48,7 @@ class Kanshuzhong extends Snatch implements SnatchInterface
                 $novel = Novel::firstOrCreate(['name'=>$novel_name[1], 'author_id'=>$author->id]);
                 $novel->source = $this->source;
                 $novel->source_link = strstr($link, '/book');
+                $novel->chapter_num = 0;
                 if(@$overMatch[1]=='连载中'){
                     $novel->is_over = 0;
                 } else {
@@ -65,7 +75,41 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return false;
     }
 
-    public function getNovelChapter(Novel $novel)
+    public function getChapterNew(Novel $novel)
+    {
+        $novel_html = $this->send(self::DOMAIN . $novel->source_link);
+        $chapter_list = $this->getChapterList($novel_html);
+        if(!$chapter_list[1]) {
+            Log::error("小说[$novel->id]:[$novel->name]，获取章节列表失败，请注意查看");
+            return ['code' => 0];
+        }
+        $count = $novel->chapter_num;
+        if(count($chapter_list[1]) <= $count) {
+            //小说未更新
+            Log::info("小说[$novel->id]:[$novel->name]未更新");
+            return ['code' => 1];
+        }
+        Log::info("小说[$novel->id]正在更新，共有".(count($chapter_list[1])-$count)."章需要更新");
+        $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
+        if($last_novel) {
+            $last_url = $last_novel->source_link;
+            $urlArr = explode('/', $last_url);
+            $curr_key = array_search(end($urlArr), $chapter_list[1]);
+        } else {
+            $curr_key = -1;
+        }
+
+        $filter_list = [];
+        $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
+        $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
+
+        $contents = $this->multi_send_test($filter_list[1], self::DOMAIN . $novel->source_link, count($filter_list[1]));
+        $temp = [];
+
+        return true;
+    }
+
+    public function getChapterList($html)
     {
         return ;
     }
@@ -73,6 +117,13 @@ class Kanshuzhong extends Snatch implements SnatchInterface
     public function getSource()
     {
         return $this->source;
+    }
+
+    private function getLiNovel($html)
+    {
+        $preg = '/<dd><a href="(.*?)">(.*?)<\/a><\/dd>/s';
+        preg_match_all($preg, $html, $matches);
+        return $matches;
     }
 
     private function returnType($name)
