@@ -168,6 +168,9 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
 
+        /*
+         * Snatch
+         */
     ],
 
     /*

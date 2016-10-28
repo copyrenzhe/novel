@@ -14,15 +14,18 @@ class SnatchInit extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     private $link;
+    private $source;
 
     /**
      * Create a new job instance.
      *
      * @param $link
+     * @param string $source
      */
-    public function __construct($link)
+    public function __construct($link, $source='biquge')
     {
         $this->link = $link;
+        $this->source = $source;
     }
 
     /**

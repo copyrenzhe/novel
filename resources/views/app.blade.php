@@ -12,6 +12,7 @@
     <script src="/dist/js/ipos.comic.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/dist/css/style.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
+    @yield('link')
     <script type="text/javascript" src="/dist/js/santruyen.js"></script>
     <script type="text/javascript" src="/dist/js/tabs.js"></script>
     @if(isset($js))

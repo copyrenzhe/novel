@@ -12,7 +12,13 @@
 */
 
 Route::get('test', function(){
-    dd(async_get_url(['http://www.biquge.la/book/9215/3758417.html']));
+    $kanshuzhong = new \App\Repositories\Snatch\Kanshuzhong;
+    $kanshuzhong->getNovelList();
+});
+
+Route::get('test2', function(){
+    $instance = \App\Repositories\Snatch\Snatch::instance('biquge');
+    $instance::init('http://www.qu.la/book/24267/');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){

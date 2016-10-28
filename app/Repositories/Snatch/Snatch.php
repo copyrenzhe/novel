@@ -9,8 +9,20 @@
 
 namespace App\Repositories\Snatch;
 
+use ReflectionClass;
+
 class Snatch
 {
+    public static function instance($source='biquge')
+    {
+        $biquge = new Biquge();
+        $kanshuzhong = new Kanshuzhong();
+        $className = 'App\Repositories\Snatch\\'.ucfirst($source);
+        $class = new ReflectionClass($className);
+        $instance = $class->newInstanceArgs();
+        return $instance;
+    }
+
     /**
      * 单线程模拟请求
      * @param $url
