@@ -27,13 +27,13 @@ class IndexController extends CommonController
         $TopNovels = Cache::remember('TopNovels', 60, function() {
             return Novel::top()->take(8)->get();
         });
-        $LastNovels = Novel::last()->take(15)->get();
+        $LastNovels = Novel::with('author')->latest()->take(15)->get();
         return view('index.index', compact('TopNovels', 'LastNovels'));
     }
 
     public function category($category)
     {
-        $novels = Novel::where('type', '=', $category)->paginate(30);
+        $novels = Novel::with('author')->where('type', '=', $category)->paginate(30);
         $genres = $this->genres;
         $name = $genres[$category];
         return view('index.list', compact('category', 'novels', 'genres', 'name'));
@@ -41,7 +41,7 @@ class IndexController extends CommonController
 
     public function newRelease()
     {
-        $novels = Novel::orderBy('updated_at', 'desc')->paginate(30);
+        $novels = Novel::with('author')->latest()->paginate(30);
         $name = '最新发布';
         return view('index.list', compact('novels', 'name'));
     }

@@ -21,12 +21,12 @@
                 @foreach($HotNovels as $item)
                     <li>
                         <div class="fll">
-                            <a href="{{ route('book', ['bookId' => $item->id]) }}" class="crop" title="">
+                            <a href="{{ route('book', ['bookId' => $item->id]) }}" class="crop" title="{{ $item->name }}">
                                 <img class="thumb-s" title="{{ $item->name }}" alt="{{ $item->name }}" src="{{ $item->cover }}" />
                             </a>
                         </div>
                         <div class="l-right-info">
-                            <a class="r-title" href="{{ route('book', ['bookId' => $item->id]) }}" title="">{{ $item->name }}</a>
+                            <a class="r-title" href="{{ route('book', ['bookId' => $item->id]) }}" title="{{ $item->name }}">{{ $item->name }}</a>
                             <a href="{{ route('author', ['authorId' => $item->author_id]) }}" title="{{ $item->author->name }}" class="e-user">{{ $item->author->name }}</a>
                             <span class="e-view">热度: {{ $item->hot }}</span>
                         </div>

@@ -8,13 +8,9 @@
     <meta name="description" content="@yield('description', '书虫网为广大网络书虫们免费提供了当前最火热的网络小说，拥有最佳的阅读体验，是广大网络小说爱好者们必不可少小说阅读网。')" />
     @yield('meta')
     <link rel="shortcut icon" href="/favicon.ico">
-    <script src="/dist/js/ipos.core.js" type="text/javascript"></script>
-    <script src="/dist/js/ipos.comic.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/dist/css/style.css" />
     <link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
     @yield('link')
-    <script type="text/javascript" src="/dist/js/santruyen.js"></script>
-    <script type="text/javascript" src="/dist/js/tabs.js"></script>
     @if(isset($js))
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script type="text/javascript" charset="utf-8">
@@ -47,5 +43,8 @@
         <!-- /main -->
         @include('common.footer')
     </div>
+    <script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/dist/js/santruyen.js"></script>
+    @yield('js')
 </body>
 </html>

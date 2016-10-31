@@ -2,7 +2,7 @@
 @section('title')
 {{ $novel->name }}-{{ $novel->name }}免费无弹窗-@if($novel->is_over){{ $novel->name }}全集-{{ $novel->name }}全文完整版 @else{{ $novel->name }}最新章节-{{ $novel->name }}最新章节列表@endif -书虫网 @stop
 @section('keywords'){{ $novel->name }},@if($novel->is_over){{ $novel->name }}全文完整版,@else{{ $novel->name }}最新章节,@endif{{ $novel->author->name }}@stop
-@section('description'){{ $novel->name }}@if($novel->is_over)已完成@else连载中@endif最新章节{{ $lastChapter->name }},作者{{ $novel->author->name }}的小说,{{ $novel->name }}全文免费阅读到书虫网(www.shu000.com)@stop
+@section('description'){{ $novel->name }}@if($novel->is_over)已完成@else连载中@endif最新章节{{ $novel->chapter->last()->name }},作者{{ $novel->author->name }}的小说,{{ $novel->name }}全文免费阅读到书虫网(www.shu000.com)@stop
 @section('meta')
 <meta property="og:type" content="novel"/>
     <meta property="og:title" content="{{ $novel->name }}"/>
@@ -16,8 +16,8 @@
     <meta property="og:novel:status" content="{{ $novel->is_over ? '已完成' : '连载中' }}"/>
     <meta property="og:novel:author_link" content="{{ route('author', ['authorId' => $novel->author_id]) }}"/>
     <meta property="og:novel:update_time" content="{{ $novel->updated_at }}"/>
-    <meta property="og:novel:latest_chapter_name" content="{{ $lastChapter->name }}"/>
-    <meta property="og:novel:latest_chapter_url" content="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $lastChapter->id]) }}"/>
+    <meta property="og:novel:latest_chapter_name" content="{{ $novel->chapter->last()->name }}"/>
+    <meta property="og:novel:latest_chapter_url" content="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $novel->chapter->last()->id]) }}"/>
 @stop
 @section('content')
     @if(isset($js))
@@ -110,8 +110,9 @@
     <!--/ left -->	 <!-- right -->
     @include('common.right')
     <div class="clr"></div>
-    <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
+    @section('js')
+        <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
         var book_id = "{{ $novel->id }}";
         var $_pchapter = $("#_pchapter");
         $(function() {
@@ -150,7 +151,6 @@
                 next_href = $firstLi.find('a').attr('href'),
                 next_title = $firstLi.find('a').attr('title');
             $readNew.attr('href', new_href).attr('title', new_title).html(new_title);
-            $("meta")
             $readStart.attr('href', next_href).attr('title', next_title).html('开始阅读');
             if(chapterHistory){
                 var last_title = chapterHistory['title'],
@@ -173,4 +173,5 @@
         }
 
     </script>
+    @stop
 @stop

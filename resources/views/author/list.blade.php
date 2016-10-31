@@ -7,7 +7,7 @@
             <ul class="content">
                 @foreach($authors as $author)
                     <li>
-                        <a class="c-title" href="{{ route('author', ['authorId' => $author->id]) }}" title="Destroyed">{{ $author->name }}</a>
+                        <a class="c-title" href="{{ route('author', ['authorId' => $author->id]) }}" title="{{ $author->name }}">{{ $author->name }}</a>
                     </li>
                 @endforeach
             </ul>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NovelView;
 use App\Events\RepairChapterEvent;
+use App\Events\RepairNovelEvent;
 use App\Models\Chapter;
 use App\Models\Novel;
 use App\Models\User;
@@ -38,11 +39,10 @@ class BookController extends CommonController
         $subList = $this->subList($openId);
         $genres = $this->genres;
         $novel = Novel::findOrFail($bookId);
-        $lastChapter = Chapter::where('novel_id', $novel->id)->orderBy('id', 'desc')->first();
-        if($novel && !$lastChapter){
+        if($novel && !$novel->chapter){
             Event::fire(new RepairNovelEvent($novel));
         }
-        return view('book.index', compact('novel', 'genres', 'subList', 'lastChapter'));
+        return view('book.index', compact('novel', 'genres', 'subList'));
     }
 
     public function chapter($bookId, $chapterId, $openId='')
