@@ -296,7 +296,7 @@ Class Biquge extends Snatch implements SnatchInterface
         }
         Log::info("小说[$novel->id]正在更新，共有".(count($chapter_list[1])-$count)."章需要更新");
         //目前数据库中的最新一章
-        $last_novel = $novel->chapter()->orderBy('id', 'desc')->first();
+        $last_novel = $novel->chapter->last();
         if($last_novel) {
             $last_url = $last_novel->source_link;
             $urlArr = explode('/', $last_url);
@@ -444,7 +444,7 @@ Class Biquge extends Snatch implements SnatchInterface
         }
 
         //目前数据库中的最新一章
-        $last_url = $novel->chapter()->orderBy('id', 'desc')->first()->source_link;
+        $last_url = $novel->chapter->last()->source_link;
         $urlArr = explode('/', $last_url);
         $curr_key = array_search(end($urlArr), $chapter_list[1]);
 
