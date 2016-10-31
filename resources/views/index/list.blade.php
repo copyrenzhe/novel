@@ -10,7 +10,7 @@
                 @foreach($novels as $novel)
                 <li>
                     <a href="{{ route('author', ['authorId' => $novel->author_id]) }} }}" title="{{ $novel->author->name }}" class="cate-li-right">{{ $novel->author->name }}</a>
-                    <a class="c-title" href="{{ route('book', ['bookId' => $novel->id]) }}" title="Destroyed">{{ $novel->name }}</a>
+                    <a class="c-title" href="{{ route('book', ['bookId' => $novel->id]) }}" title="{{ $novel->name }}">{{ $novel->name }}</a>
                 </li>
                 @endforeach
             </ul>

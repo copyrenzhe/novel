@@ -1,4 +1,3 @@
-
 @charset "utf-8";
 body {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -462,7 +461,8 @@ h5 {
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
     background: url("../images/arrow-down.png") no-repeat scroll 4px -20px #FFFFFF;
-    border-color: #D2D2D2 #D2D2D2 -moz-use-text-color;
+    border-color: #D2D2D2 #D2D2D2;
+    outline-color: -moz-use-text-color;
     border-image: none;
     border-radius: 3px 3px 0 0;
     border-style: solid solid none;
@@ -927,7 +927,7 @@ h5 {
     width: 626px;
 }
 .search-chap .list-chap-wrap {
-    height: 500px;
+    height: 550px;
     overflow: auto;
     width: 100%;
 }

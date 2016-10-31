@@ -22,7 +22,7 @@ class Novel extends Model
 
     public function chapter()
     {
-    	return $this->hasMany('App\Models\Chapter');
+    	return $this->hasMany('App\Models\Chapter')->orderBy('id');
     }
 
     //该小说订阅用户
@@ -53,7 +53,7 @@ class Novel extends Model
     }
 
     //最新
-    public function scopeLast($query)
+    public function scopeLatest($query)
     {
         return $query->orderBy('created_at', 'desc');
     }

@@ -37,7 +37,6 @@
     </div>
 
     <!--/ thong tin truyen -->
-    <script type="text/javascript">$(document).ready(function(){showImages(2);})</script>
     <br class="clr">
     <div class="chap-select">
         <div class="flr chap-select-dropdown">
@@ -51,6 +50,8 @@
         </div>
     </div>
 </div>
+@stop
+@section('js')
 <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
 <script>
     var book_id = "{{ $chapter->novel_id }}";

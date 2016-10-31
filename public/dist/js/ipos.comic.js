@@ -28,8 +28,8 @@ $(document).ready(function(){
     },function(){
         $(this).find("div:first").css({visibility:"hidden"})
     });
-    $("#tabshow a").click(function(){
-        $('#tabshow a.activer').removeClass('activer');
+    $("#tabshow").find("a").click(function(){
+        $('#tabshow').find('a.activer').removeClass('activer');
         $(this).addClass('activer');
         var	tabid	=	$(this).attr('rel');
         $('div.showtab').hide();
@@ -46,14 +46,11 @@ $(document).ready(function(){
             this.value = this.defaultValue;
         }
     });
-
-    $("#searchInput,#searchInput_mobile").autocomplete("search.php",{width:313,max:20,highlight:!1,scroll:!1});
-    //$("#searchInput_mobile").autocomplete("search.php",{width:313,max:20,highlight:!1,scroll:!1});
 });
 
 
 function showImages(maxnum) {
-    var pagetype	=	$.inArray($.cookie("pagetype"),new Array(null,"1"))!=-1;
+    var pagetype	=	$.inArray($.cookie("pagetype"),[null,"1"])!=-1;
     if(pagetype) {
         $("select[name='pagetype'] option[value='1']").attr('selected', 'selected');
         $('div.chapter_slider p.show').removeClass('show');
