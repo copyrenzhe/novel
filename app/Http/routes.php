@@ -21,12 +21,6 @@ Route::get('test2', function(){
     $instance::init('http://www.qu.la/book/24267/');
 });
 
-Route::get('test3', function(){
-    $novel = \App\Models\Novel::find(1);
-//    $chapter = $novel->chapter;
-    dd($novel->chapter->last());
-});
-
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');
