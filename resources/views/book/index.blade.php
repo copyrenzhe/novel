@@ -10,7 +10,7 @@
     <meta property="og:image" content="{{ env('APP_URL') . $novel->cover }}"/>
     <meta property="og:novel:category" content="{{ category_maps()[$novel->type] }}"/>
     <meta property="og:novel:author" content="{{ $novel->author->name }}"/>
-    <meta property="og:novel:book_name" content="{{ $novel->author->name }}"/>
+    <meta property="og:novel:book_name" content="{{ $novel->name }}"/>
     <meta property="og:novel:read_url" content="{{ route('book', ['bookId' => $novel->id]) }}"/>
     <meta property="og:url" content="{{ route('book', ['bookId' => $novel->id]) }}"/>
     <meta property="og:novel:status" content="{{ $novel->is_over ? '已完成' : '连载中' }}"/>
@@ -18,6 +18,7 @@
     <meta property="og:novel:update_time" content="{{ $novel->updated_at }}"/>
     <meta property="og:novel:latest_chapter_name" content="{{ $novel->chapter->last()->name }}"/>
     <meta property="og:novel:latest_chapter_url" content="{{ route('chapter', ['bookId' => $novel->id, 'chapterId' => $novel->chapter->last()->id]) }}"/>
+    <meta property="og:novel:author_other_books" content="{{ $otherBooks }}"/>
 @stop
 @section('content')
     @if(isset($js))

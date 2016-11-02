@@ -39,10 +39,11 @@ class BookController extends CommonController
         $subList = $this->subList($openId);
         $genres = $this->genres;
         $novel = Novel::findOrFail($bookId);
+        $otherBooks = Novel::where('author_id', $novel->author_id)->where('id', '!=', $novel->id)->pluck('name')->implode(',');
         if($novel && !$novel->chapter){
             Event::fire(new RepairNovelEvent($novel));
         }
-        return view('book.index', compact('novel', 'genres', 'subList'));
+        return view('book.index', compact('novel', 'genres', 'subList', 'otherBooks'));
     }
 
     public function chapter($bookId, $chapterId, $openId='')
