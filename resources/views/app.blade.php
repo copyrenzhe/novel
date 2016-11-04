@@ -8,8 +8,7 @@
     <meta name="description" content="@yield('description', '书虫网为广大网络书虫们免费提供了当前最火热的网络小说，拥有最佳的阅读体验，是广大网络小说爱好者们必不可少小说阅读网。')" />
     @yield('meta')
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="/dist/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="/dist/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="{{ elixir('dist/css/all.css') }}" />
     @yield('link')
     @if(isset($js))
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
@@ -29,7 +28,7 @@
         @include('common.navbar')
         <!-- main -->
         <div class="forshare" style="overflow:hidden;width:1px;height:1px;position:absolute;left:-100px;top:-100px;display:none;">
-            <img src="/dist/images/logo.png" alt="">
+            <img src="/build/dist/images/logo.png" alt="">
         </div>
         @if( Session::has('flash_message') )
         <div class="alert">
@@ -44,7 +43,7 @@
         @include('common.footer')
     </div>
     <script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/dist/js/santruyen.js"></script>
+    <script type="text/javascript" src="{{ elixir('dist/js/all.js') }}"></script>
     @yield('js')
 </body>
 </html>

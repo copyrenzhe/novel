@@ -12,11 +12,26 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.less('app.less');
-    mix.less('admin-lte/AdminLTE.less');
-    mix.less('bootstrap/bootstrap.less');
-    mix.styles([
-        'style.css',
-        'main.css'
-    ], 'public/dist/css');
+    // mix.less('app.less');
+    // mix.less('admin-lte/AdminLTE.less');
+    // mix.less('bootstrap/bootstrap.less');
+
+    mix
+        .styles([
+            'style.css',
+            'main.css'
+        ], 'public/dist/css')
+
+        .scripts([
+            'santruyen.js'
+        ], 'public/dist/js')
+
+        .version([
+            'dist/css/all.css',
+            'dist/js/all.js'
+        ])
+
+        .copy([
+            'resources/assets/images'
+        ], 'public/build/dist/images')
 });
