@@ -31,9 +31,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admi
 
     Route::get('novels/datatables', 'NovelsController@datatables');
     Route::get('novels/{novel_id?}/snatchUpdate', ['as' => 'snatchUpdate', 'uses' => 'NovelsController@snatchUpdate'])
-            ->where(['bookId'=> '[0-9]+']);
+            ->where(['novel_id'=> '[0-9]+']);
     Route::get('novels/{novel_id?}/snatchRepair', ['as' => 'snatchRepair', 'uses' => 'NovelsController@snatchRepair'])
-            ->where(['bookId'=> '[0-9]+']);
+            ->where(['novel_id'=> '[0-9]+']);
+    Route::get('novels/{novel_id?}/truncate', ['as' => 'truncate', 'uses' => 'NovelsController@truncate'])
+            ->where(['novel_id'=>'[0-9]+']);
     Route::resource('novels', 'NovelsController');
 
     Route::get('system', 'SystemController@index');
