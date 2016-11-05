@@ -44,6 +44,7 @@ class NovelsController extends Controller
                 '
                 <a style="margin:3px;" href="/admin/novels/{{ $id }}/snatchUpdate" class="X-Small btn-xs text-success "><i class="fa fa-line-chart"></i> 更新</a>
                 <a style="margin:3px;" href="/admin/novels/{{ $id }}/snatchRepair" class="X-Small btn-xs text-success "><i class="fa fa-history"></i> 修复</a>
+                <a style="margin:3px;" href="/admin/novels/{{ $id }}/truncate" class="X-Small btn-xs text-success "><i class="fa fa-history"></i> 清空</a>
                 <a style="margin:3px;" href="/admin/novels/{{ $id }}/edit" class="X-Small btn-xs text-success "><i class="fa fa-edit"></i> 编辑</a>
                 <a style="margin:3px;" href="#" attr="{{ $id }}" class="delBtn X-Small btn-xs text-danger"><i class="fa fa-times-circle"></i> 删除</a>')
             ->editColumn('is_over', '@if($is_over)
@@ -157,5 +158,17 @@ class NovelsController extends Controller
             return redirect()->back()->withErrors('删除失败');
         }
         return redirect()->back()->withSuccess('删除成功');
+    }
+
+    public function truncate($novel_id)
+    {
+        $chapter = Chapter::where('novel_id', $novel_id)->delete();
+        $novel = Novel::find((int)$novel_id);
+        $novel->chapter_num = 0;
+        if($chapter && $novel->save()) {
+            return redirect()->back()->withSuccess('清空成功');
+        } else {
+            return redirect()->back()->withErrors('清空失败');
+        }
     }
 }
