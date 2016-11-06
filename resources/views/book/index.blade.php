@@ -113,7 +113,7 @@
     <div class="clr"></div>
 @stop
 @section('js')
-    <script src="{{ public_path('dist/js/jstorage.min.js') }}" type="text/javascript"></script>
+    <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     var book_id = "{{ $novel->id }}";
     var $_pchapter = $("#_pchapter");
