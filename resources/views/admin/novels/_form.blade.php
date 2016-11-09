@@ -20,6 +20,7 @@
             <option value="lishi" {{ $type=='lishi' ? 'seleced' : '' }}>历史</option>
             <option value="wangyou" {{ $type=='wangyou' ? 'seleced' : '' }}>网游</option>
             <option value="kehuan" {{ $type=='kehuan' ? 'seleced' : '' }}>科幻</option>
+            <option value="mingzhu" {{ $type=='mingzhu' ? 'seleced' : '' }}>名著</option>
             <option value="other" {{ $type=='other' ? 'seleced' : '' }}>其他</option>
         </select>
     </div>
