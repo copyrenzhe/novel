@@ -7,7 +7,7 @@
 <meta property="og:type" content="novel"/>
     <meta property="og:title" content="{{ $novel->name }}"/>
     <meta property="og:description" content="{{ preg_replace('/\s+/', '', strip_tags($novel->description)) }}"/>
-    <meta property="og:image" content="{{ env('APP_URL') . $novel->cover }}"/>
+    <meta property="og:image" content="{{ config('app.url') . $novel->cover }}"/>
     <meta property="og:novel:category" content="{{ category_maps()[$novel->type] }}"/>
     <meta property="og:novel:author" content="{{ $novel->author->name }}"/>
     <meta property="og:novel:book_name" content="{{ $novel->name }}"/>
@@ -27,7 +27,7 @@
             title: document.title,
             link: window.location.href,
             desc: document.title,
-            imgUrl: "{{ env('APP_URL') . $novel->cover }}"
+            imgUrl: "{{ config('app.url') . $novel->cover }}"
         };
         wx.ready(function(){
             wx.onMenuShareTimeline(shareData);

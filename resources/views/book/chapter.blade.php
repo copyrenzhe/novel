@@ -10,7 +10,7 @@
             title: document.title,
             link: window.location.href,
             desc: document.title,
-            imgUrl: "{{ env('APP_URL') . $chapter->novel->cover }}"
+            imgUrl: "{{ config('app.url') . $chapter->novel->cover }}"
         };
         wx.onMenuShareTimeline(shareData);
         wx.onMenuShareAppMessage(shareData);

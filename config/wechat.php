@@ -44,6 +44,8 @@ return [
          'callback' => env('WECHAT_OAUTH_CALLBACK', '/examples/oauth_callback.php'),
      ],
 
+    'type' => env('WECHAT_TYPE', 'SUB'),
+
     /**
      * 微信支付
      */

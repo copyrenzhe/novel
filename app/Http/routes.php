@@ -21,6 +21,12 @@ Route::get('test2', function(){
     $instance::init('http://www.qu.la/book/24267/');
 });
 
+Route::get('test3', function(){
+    $mzhu = new \App\Repositories\Snatch\Mzhu;
+    $novel = $mzhu->getSingleNovel('http://www.mzhu8.com/book/1444/index.html');
+    dd($novel);
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');

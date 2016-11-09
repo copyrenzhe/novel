@@ -13,6 +13,8 @@ use ReflectionClass;
 
 class Snatch
 {
+    protected $page_size = 200;
+
     public static function instance($source='biquge')
     {
         $biquge = new Biquge();
