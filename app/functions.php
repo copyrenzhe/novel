@@ -201,6 +201,7 @@ if(!function_exists('category_maps')){
             'lishi'     =>  '历史小说',
             'wangyou'   =>  '网游小说',
             'kehuan'    =>  '科幻小说',
+            'mingzhu'   =>  '文学名著',
             'other'     =>  '其他'
         ];
     }

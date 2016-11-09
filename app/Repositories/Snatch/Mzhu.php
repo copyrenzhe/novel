@@ -24,14 +24,48 @@ class Mzhu extends Snatch implements SnatchInterface
 
     private $source = 'mzhu8';
 
+    /**
+     * 初始化小说
+     * @param $link
+     * @return Novel|bool
+     */
+    public static function init($link)
+    {
+        $mzhu = new Mzhu();
+        return $mzhu->getSingleNovel($link);
+    }
+
+    /**
+     * 采集小说章节，不需考虑更新问题
+     * @param Novel $novel
+     * @return string|void
+     */
+    public static function snatch(Novel $novel)
+    {
+        $mzhu = new Mzhu();
+        return $mzhu->snatchChapter($novel);
+    }
+
     public function getNovelList()
     {
         $list_url = [
             'http://www.mzhu8.com/mulu/6/1.html',   //国外名著
+            'http://www.mzhu8.com/mulu/8/1.html',   //短篇名著
+            'http://www.mzhu8.com/mulu/9/1.html',   //武侠名著
+            'http://www.mzhu8.com/mulu/11/1.html',  //先秦文学
+            'http://www.mzhu8.com/mulu/12/1.html',  //楚辞汉赋
+            'http://www.mzhu8.com/mulu/13/1.html',  //魏晋文学
+            'http://www.mzhu8.com/mulu/14/1.html',  //唐诗宋词
+            'http://www.mzhu8.com/mulu/15/1.html',  //元朝文学
+            'http://www.mzhu8.com/mulu/16/1.html',  //明清小说
+            'http://www.mzhu8.com/mulu/17/1.html',  //现代文学
         ];
+        $list_link = [];
         foreach ($list_url as $link){
-            $this->getNovelListAction($link);
+            $links  = $this->getNovelListAction($link);
+            $list_link = array_merge($list_link, $links);
         }
+        return $list_link;
     }
 
     private function getNovelListAction($link)
@@ -48,7 +82,7 @@ class Mzhu extends Snatch implements SnatchInterface
             $page_link = implode('/', $linkArr);
             $page_html = $this->send($page_link);
             preg_match_all('/<div class="l_pic"><a href="(.*?)">.*?<\/a><\/div>/s', $page_html, $matches);
-            $novelLinks = array_merge($novelLinks, $matches);
+            $novelLinks = array_merge($novelLinks, $matches[1]);
         }
         return $novelLinks;
     }
@@ -69,7 +103,7 @@ class Mzhu extends Snatch implements SnatchInterface
                 $novel->source = $this->source;
                 $novel->source_link = strstr($link, '/book');
                 $novel->is_over = 1;
-                $novel->type = 'other';
+                $novel->type = 'mingzhu';
                 $novel->description = $description;
                 if(getFileSize($img_link)==44110) {
                     $novel->cover = '/cover/cover_default.jpg';
@@ -107,10 +141,7 @@ class Mzhu extends Snatch implements SnatchInterface
             Log::error('getChapterList failed');
             return ['code' => 0];
         }
-        $chapter_link_arr = $chapter_list[1];
-        foreach ($chapter_link_arr as $link){
-
-        }
+//        $chapter_link_arr = $chapter_list[1];
         $total_num = count($chapter_list[1]);
         $loop_num = ceil($total_num/$this->page_size);
 
@@ -118,33 +149,30 @@ class Mzhu extends Snatch implements SnatchInterface
         {
             $splice_list = [];
             $splice_list[1] = array_slice($chapter_list[1], $i*$this->page_size, $this->page_size);
-            $splice_list[2] = array_slice($chapter_list[2], $i*$this->page_size, $this->page_size);
-            $contents = $this->multi_send_test($splice_list[1], self::DOMAIN . $novel->source_link, $this->page_size);
+            $contents = $this->multi_send_test($splice_list[1], self::DOMAIN, $this->page_size);
             $temp = [];
+            $now = Carbon::now();
             foreach ($contents as $k => $html) {
-                preg_match('/var readid = "(.*?)"/s', $html, $read_match);
-                if(@$read_match[1]){
-                    $biquge_id = $read_match[1];
-                    $content = $this->getChapterContent($html);
-                    $temp[$biquge_id] = $content;
+                preg_match('/<script>showContent\(\"(.*?)\", \"(.*?)\"\);<\/script>/s', $html, $read_match);
+                if(@$read_match[2]){
+                    $chapter_id = $read_match[2];
+                    $content = $this->getChapterContent($source_book, $chapter_id);
+                    $name = $this->getChapterName($html);
+                    $source_arr[count($source_arr)-1] = $chapter_id.'.html';
+
+                    $temp[$chapter_id] = [
+                        'source_link' => self::DOMAIN . implode('/', $source_arr),
+                        'name' => $name,
+                        'content' => $content,
+                        'novel_id' => $novel->id,
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ];
                 }
             }
-            $value_array = [];
-            $now = Carbon::now();
-            foreach($splice_list[2] as $k => $name) {
-                $idArr = explode('.', $splice_list[1][$k]);
-                $biquge_id = $idArr[0];
-                $value_array[] = [
-                    'source_link' => self::DOMAIN . $novel->source_link . $splice_list[1][$k],
-                    'name' => $name,
-                    'content' => @$temp[$biquge_id],
-                    'novel_id' => $novel->id,
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ];
-            }
-            unset($contents);
-            Chapter::insert($value_array);
+            ksort($temp);
+            $temp = array_values($temp);
+            Chapter::insert($temp);
         }
         $novel->chapter_num = $total_num;
         $novel->save();
@@ -157,9 +185,21 @@ class Mzhu extends Snatch implements SnatchInterface
         return $matches;
     }
 
+    public function getChapterName($html)
+    {
+        preg_match('/<h1 class="chapter_title" >(.*?)<\/h1>/s', $html, $matches);
+        return $matches[1];
+    }
+
     public function getChapterContent($bookid, $chapterid)
     {
-        $request_url = 'modules/article/show.php';
+        $request_url = self::DOMAIN . '/modules/article/show.php';
+        $params = [
+            'aid' => $bookid,
+            'cid' => $chapterid,
+            'r' => mt_rand(0, 10000000000)/10000000000
+        ];
+        return $this->send($request_url, 'POST', $params, '');
     }
 
     public function getSource()

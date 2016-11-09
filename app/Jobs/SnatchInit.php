@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\Job;
-use App\Repositories\Snatch\Biquge;
+use App\Repositories\Snatch\Snatch;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,10 +37,11 @@ class SnatchInit extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');
         $dtStart = microtime_float();
-        $novel = Biquge::init($this->link);
+        $instance = Snatch::instance($this->source);
+        $novel = $instance::init($this->link);
         if($novel) {
             Log::info("小说[$novel->id]:[$novel->name] 已初始化完毕");
-            Biquge::snatch($novel);
+            $instance::snatch($novel);
             Log::info("小说[$novel->id]:[$novel->name] 已采集完毕");
         }
         $dtEnd = microtime_float();

@@ -18,7 +18,7 @@ class CreateTableNovel extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('author_id');
-            $table->enum('type', ['xuanhuan', 'xiuzhen', 'dushi', 'lishi', 'wangyou', 'kehuan', 'other'])->default('xuanhuan');
+            $table->enum('type', ['xuanhuan', 'xiuzhen', 'dushi', 'lishi', 'wangyou', 'kehuan', 'mingzhu', 'other'])->default('xuanhuan');
             $table->string('cover');
             $table->bigInteger('hot')->default(0);
             $table->integer('sort')->default(0);
