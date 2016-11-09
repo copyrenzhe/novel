@@ -44,6 +44,13 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="input-group margin">
                         <input type="text" class="form-control" name="link" placeholder="输入小说地址">
+                        <span class="input-group-btn" style="width: 250px;">
+                            <select name="source" id="" class="form-control">
+                                <option value="biquge" selected>笔趣阁----www.qu.la</option>
+                                <option value="kanshuzhong">看书中----www.kanshuzhong.com</option>
+                                <option value="mzhu">名著阅读网----www.mzhu8.com</option>
+                            </select>
+                        </span>
                         <span class="input-group-btn">
                           <button type="submit" class="btn btn-info btn-flat">初始化</button>
                         </span>

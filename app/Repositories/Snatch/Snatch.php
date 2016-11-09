@@ -19,6 +19,7 @@ class Snatch
     {
         $biquge = new Biquge();
         $kanshuzhong = new Kanshuzhong();
+        $mzhu = new Mzhu();
         $className = 'App\Repositories\Snatch\\'.ucfirst($source);
         $class = new ReflectionClass($className);
         $instance = $class->newInstanceArgs();
@@ -39,12 +40,16 @@ class Snatch
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT,60);
+        if($type == 'POST'){
+            curl_setopt($ch, CURLOPT_POST, 1);
+            $params && curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        }
         $html = curl_exec($ch);
         if($html === false) {
             echo "curl error: " . curl_errno($ch);
         }
         curl_close($ch);
-        return mb_convert_encoding($html, 'UTF-8', $encoding);
+        return $encoding ? mb_convert_encoding($html, 'UTF-8', $encoding) : $html;
     }
 
 

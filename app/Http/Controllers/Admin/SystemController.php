@@ -45,7 +45,8 @@ class SystemController extends Controller
     public function init(Request $request)
     {
         $link = $request->input('link');
-        $this->dispatch(new SnatchInit($link));
+        $source = $request->input('source');
+        $this->dispatch(new SnatchInit($link, $source));
         return redirect('/admin/system')->withSuccess('初始化小说'.$link.'任务已加入后台队列');
     }
 

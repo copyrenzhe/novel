@@ -17,14 +17,20 @@ Route::get('test', function(){
 });
 
 Route::get('test2', function(){
-    $instance = \App\Repositories\Snatch\Snatch::instance('biquge');
-    $instance::init('http://www.qu.la/book/24267/');
+    $job = new \App\Jobs\SnatchInit('http://www.mzhu8.com/book/4/index.html', 'mzhu');
+    $job->handle();
 });
 
 Route::get('test3', function(){
     $mzhu = new \App\Repositories\Snatch\Mzhu;
     $novel = $mzhu->getSingleNovel('http://www.mzhu8.com/book/1444/index.html');
-    dd($novel);
+    $mzhu->snatchChapter($novel);
+});
+
+Route::get('test4', function(){
+    $mzhu = new \App\Repositories\Snatch\Mzhu();
+    $content = $mzhu->getNovelList();
+    dd($content);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
@@ -75,7 +81,7 @@ Route::group(['middleware'=>['web', 'wechat']], function(){
     Route::get('search', ['as' => 'search', 'uses' => 'IndexController@search']);
 
     Route::get('{category}', ['as' => 'category', 'uses'=>'IndexController@category'])
-        ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan|other)');
+        ->where('category', '(xuanhuan|xiuzhen|dushi|lishi|wangyou|kehuan|mingzhu|other)');
 
     Route::get('feedback', ['as' => 'feedback', 'uses' => 'IndexController@feedback']);
     Route::post('feedback', 'IndexController@postFeedback');

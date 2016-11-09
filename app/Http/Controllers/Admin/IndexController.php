@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Chapter;
 use App\Models\Novel;
 use App\Http\Requests;
 use App\Models\User;
@@ -26,6 +25,7 @@ class IndexController extends Controller
             'lishi' => Novel::where('type', 'lishi')->count(),
             'wangyou' => Novel::where('type', 'wangyou')->count(),
             'kehuan' => Novel::where('type', 'wangyou')->count(),
+            'mingzhu' => Novel::where('type', 'mingzhu')->count(),
             'other' => Novel::where('type', 'other')->count()
         ];
         $count['user'] = User::count();

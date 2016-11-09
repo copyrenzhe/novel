@@ -109,6 +109,12 @@
                     label: "科幻小说"
                 },
                 {
+                    value: {{ $count['novel']['mingzhu'] }},
+                    color: "#b98f4a",
+                    highlight: "#b98f4a",
+                    label: "古典名著"
+                },
+                {
                     value: {{ $count['novel']['other'] }},
                     color: "#3b8bba",
                     highlight: "#3b8bba",
