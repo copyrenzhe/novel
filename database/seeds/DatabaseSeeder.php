@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ContinueNovelSeeder::class);
 
         $this->call(RepairNovelSeeder::class);
+
+        $this->call(MingzhuNovelsInitSeeder::class);
     }
 }
