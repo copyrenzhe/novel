@@ -153,16 +153,16 @@ if(!function_exists('is_weixin')) {
     }
 }
 
-    /*
-     * ----------------------------------
-     * update batch
-     * ----------------------------------
-     *
-     * multiple update in one query
-     *
-     * tablename( required | string )
-     * multipleData ( required | array of array )
-     */
+/*
+ * ----------------------------------
+ * update batch
+ * ----------------------------------
+ *
+ * multiple update in one query
+ *
+ * tablename( required | string )
+ * multipleData ( required | array of array )
+ */
 if(!function_exists('updateBatch')) {
     function updateBatch($tableName = "", $multipleData = array()){
         if( $tableName && !empty($multipleData) ) {
@@ -203,5 +203,29 @@ if(!function_exists('category_maps')){
             'kehuan'    =>  '科幻小说',
             'other'     =>  '其他'
         ];
+    }
+}
+
+/**
+ * 获取文件大小，可获取远程文件
+ */
+if(!function_exists('getFileSize')){
+    function getFileSize($url){
+        $url = parse_url($url);
+        if($fp = @fsockopen($url['host'],empty($url['port'])?80:$url['port'],$error)){
+            fputs($fp,"GET ".(empty($url['path'])?'/':$url['path'])." HTTP/1.1\r\n");
+            fputs($fp,"Host:$url[host]\r\n\r\n");
+            while(!feof($fp)){
+                $tmp = fgets($fp);
+                if(trim($tmp) == ''){
+                    break;
+                }else if(preg_match('/Content-Length:(.*)/si',$tmp,$arr)){
+                    return trim($arr[1]);
+                }
+            }
+            return null;
+        }else{
+            return null;
+        }
     }
 }

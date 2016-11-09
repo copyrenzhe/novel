@@ -114,6 +114,11 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return ;
     }
 
+    public function snatchChapter(Novel $novel)
+    {
+        return ;
+    }
+
     public function getSource()
     {
         return $this->source;

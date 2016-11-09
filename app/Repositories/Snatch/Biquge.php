@@ -27,8 +27,7 @@ Class Biquge extends Snatch implements SnatchInterface
     const USERAGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36';
     const REFERER = 'http://www.qu.la';
     const DOMAIN = 'http://www.qu.la';
-
-    private $page_size = 200;
+    
     private $source = 'biquge';
 
     /**

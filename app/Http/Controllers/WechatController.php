@@ -40,8 +40,8 @@ class WechatController extends Controller
                         $new = new News([
                             'title'         =>  $novel->name,
                             'description'   =>  strip_tags($novel->description),
-                            'url'           =>  env('APP_URL', ''). '/books/'.$novel->id,
-                            'image'         =>  env('APP_URL', ''). $novel->cover
+                            'url'           =>  config('app.url'). '/books/'.$novel->id,
+                            'image'         =>  config('app.url'). $novel->cover
                         ]);
                         array_push($news, $new);
                         return $news;
@@ -56,7 +56,7 @@ class WechatController extends Controller
                 case 'location':
                     break;
                 case 'link':
-                    return 'http://'.env('APP_URL', '');
+                    return 'http://'.config('app.url');
                     break;
                 default:
                     break;

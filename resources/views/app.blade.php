@@ -18,7 +18,7 @@
                         'onMenuShareWeibo',
                         'onMenuShareTimeline',
                         'onMenuShareAppMessage'
-                        ], env('APP_DEBUG')) !!});
+                        ], config('app.debug')) !!});
     </script>
     @endif
 </head>

@@ -19,7 +19,7 @@ class WechatMiddleware extends OAuthAuthenticate
         if(is_weixin()) {
             //如果是服务号
             $wechat = app('EasyWeChat\\Foundation\\Application', [config('wechat')]);
-            if(env('WECHAT_TYPE', 'SUB')=='SRV') {
+            if(config('wechat.type')=='SRV') {
 
                 if (!session('wechat.oauth_user')) {
                     if ($request->has('state') && $request->has('code')) {
