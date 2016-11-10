@@ -17,8 +17,7 @@ Route::get('test', function(){
 });
 
 Route::get('test2', function(){
-    $job = new \App\Jobs\SnatchInit('http://www.mzhu8.com/book/4/index.html', 'mzhu');
-    $job->handle();
+    @fopen('http://www.mzhu8.com/files/article/image/0/900/900s.jpg', 'r') ? dd ('success') : dd('false');
 });
 
 Route::get('test3', function(){
