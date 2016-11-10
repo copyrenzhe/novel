@@ -17,7 +17,7 @@ Route::get('test', function(){
 });
 
 Route::get('test2', function(){
-    @fopen('http://www.mzhu8.com/files/article/image/0/900/900s.jpg', 'r') ? dd ('success') : dd('false');
+    @fopen('http://www.mzhu8.com/files/article/image/0/418/418s.jpg', 'r') ? dd ('success') : dd('false');
 });
 
 Route::get('test3', function(){

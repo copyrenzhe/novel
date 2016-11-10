@@ -19,7 +19,7 @@
         </div>
         <!--/ Truyen hot -->
         <!-- truyen moi cap nhat -->
-        <h1 class="title"><a href="/" title="Books online free" >最近更新</a></h1>
+        <h1 class="title"><a href="/" title="最近更新" >最近更新</a></h1>
         <div class="l-category box category-home">
             <ul class="content">
                 @foreach($LastNovels as $novel)
