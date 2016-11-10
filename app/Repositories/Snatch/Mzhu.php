@@ -105,7 +105,7 @@ class Mzhu extends Snatch implements SnatchInterface
                 $novel->is_over = 1;
                 $novel->type = 'mingzhu';
                 $novel->description = $description;
-                if(getFileSize($img_link)==44110) {
+                if(getFileSize($img_link)==44110 || !@fopen($img_link, 'r')) {
                     $novel->cover = '/cover/cover_default.jpg';
                 } else {
                     $cover_ext = substr($img_link, strrpos($img_link, '.')+1);
