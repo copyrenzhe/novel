@@ -40,13 +40,18 @@ class SnatchHourly extends Command
      */
     public function handle()
     {
+        $queue = $this->option('queue');
         $number = $this->argument('number') ? intval($this->argument('number')) : 30;
-        $hot_ids = Novel::continued()->orderBy('hot', 'desc')->take($number)->pluck('id')->toArray();
-        if($this->option('queue')) {
-            dispatch(new SnatchUpdate($hot_ids));
-        } else {
-            $snatch = new SnatchUpdate($hot_ids);
-            $snatch->handle();
+        $novels = Novel::continued()->orderBy('hot', 'desc')->take($number)->get();
+        if($novels){
+            foreach ($novels as $novel) {
+                if($queue){
+                    dispatch(new SnatchUpdate($novel->id));
+                } else {
+                    $snatch = new SnatchUpdate($novel->id);
+                    $snatch->handle();
+                }
+            }
         }
     }
 }
