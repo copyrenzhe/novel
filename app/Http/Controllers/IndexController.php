@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Event;
+use App\Events\MailPostEvent;
 use Session;
 use Validator;
 use App\Models\Novel;
@@ -94,7 +96,12 @@ class IndexController extends CommonController
         $feedback = Feedback::create($request->input());
         if($feedback) {
             Session::flash('flash_message', '提交成功!');
+            $title = '书虫网收到新的意见反馈';
+            Event::fire(new MailPostEvent('feedback', $title, $feedback->toArray()));
             return redirect('/');
+        } else {
+            Session::flash('flash_message', '提交失败!');
+            return redirect()->back();
         }
     }
 }
