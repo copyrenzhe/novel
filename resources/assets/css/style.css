@@ -711,15 +711,36 @@ h5 {
     width: 100%;
 }
 .l-category ul.content li .c-title {
+    float: left;
     font-size: 12px;
     font-weight: bold;
     overflow: hidden;
+    padding: 1px 5px;
+    margin-right: 10px;
 }
 .l-category ul.content li .cate-li-right {
     float: right;
     min-width: 80px;
-    padding-left: 20px;
+    padding: 1px 5px;
     text-align: right;
+}
+.l-category ul.content li .tag {
+    float: left;
+    color: #fff;
+    font-size: 12px;
+    padding: 1px 5px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+.tag-novel-type{
+    background: #2B74D4;
+    text-shadow: 0 0 2px #2B74D4;
+}
+.tag-novel-status{
+    background: #ac5c00;
+    text-shadow: 0 0 2px #ac5c00;
 }
 .menu-child {
     margin-bottom: 10px;
@@ -1628,6 +1649,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         text-align: center;
         top: auto;
         width: 100%;
+        display: none;
     }
     #view-page .tool-right a {
         margin-top: 0;
@@ -1792,6 +1814,10 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         min-height: 240px;
         width: 100%;
     }
+    .l-category ul.content li .c-title {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
 @media only screen and (min-width: 320px) and (max-width: 469px) {
     .adbox {
@@ -1854,6 +1880,10 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
     .crop .thumb {
         min-height: 180px;
         width: 100%;
+    }
+    .l-category ul.content li .c-title {
+        width: 100%;
+        margin-bottom: 5px;
     }
 }
 .suggest-wrap {
