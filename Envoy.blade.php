@@ -100,3 +100,8 @@
     cd {{ $app_dir }}
     php artisan sum:chapter --queue
 @endtask
+
+@task('gulp', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    gulp --production
+@endtask
