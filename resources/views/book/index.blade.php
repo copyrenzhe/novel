@@ -149,7 +149,7 @@
         } else {
             read_history.push({id: book_id, url: book_url, name: book_name, updated_at: timestamp});
         }
-        $.jStorage.set('read_history', read_history);
+        $.jStorage.set('history', read_history);
         //上次看到
         var chapterHistory = $.jStorage.get(book_id, null);
         var $firstLi = $_pchapter.find("li:eq(0)"),
