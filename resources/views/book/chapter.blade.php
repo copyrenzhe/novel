@@ -52,7 +52,6 @@
 </div>
 @stop
 @section('js')
-<script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
 <script>
     var book_id = "{{ $chapter->novel_id }}";
     var chapter_id = "{{ $chapter->id }}";

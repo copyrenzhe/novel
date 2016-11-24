@@ -113,9 +113,11 @@
     <div class="clr"></div>
 @stop
 @section('js')
-    <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-    var book_id = "{{ $novel->id }}";
+    var book_id = "{{ $novel->id }}",
+        book_url = $("meta[property='og:novel:read_url']").attr('content'),
+        book_name = $("meta[property='og:novel:book_name']").attr('content');
+
     var $_pchapter = $("#_pchapter");
     $(function() {
         @if(isset($user))
@@ -139,6 +141,14 @@
         });
         @endif
 
+        //存入阅读历史
+        var history_index = findElem(read_history, 'id', book_id);
+        if( history_index > -1){
+            //已存在历史中
+            read_history[history_index]['updated_at'] = timestamp;
+        } else {
+            read_history.push({id: book_id, url: book_url, name: book_name, updated_at: timestamp});
+        }
         //上次看到
         var chapterHistory = $.jStorage.get(book_id, null);
         var $firstLi = $_pchapter.find("li:eq(0)"),

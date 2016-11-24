@@ -23,7 +23,9 @@ elixir(function(mix) {
         ], 'public/dist/css')
 
         .scripts([
-            'santruyen.js'
+            'vendor/jstorage/jstorage.min.js',
+            'santruyen.js',
+            'functions.js'
         ], 'public/dist/js')
 
         .version([
