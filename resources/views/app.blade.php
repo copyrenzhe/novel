@@ -44,6 +44,11 @@
     </div>
     <script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="{{ elixir('dist/js/all.js') }}"></script>
+    <script type="text/javascript">
+        var timestamp = Date.parse(new Date());
+        var read_history = $.jStorage.get('history', []);
+
+    </script>
     @yield('js')
 </body>
 </html>
