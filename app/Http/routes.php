@@ -12,8 +12,12 @@
 */
 
 Route::get('test', function(){
-    $kanshuzhong = new \App\Repositories\Snatch\Kanshuzhong;
-    $kanshuzhong->getNovelList();
+    $nameArr= ['完美世界', '一念永恒', '地需要'];
+    $in_name = \App\Models\Novel::whereIn('name', $nameArr)->pluck('name')->toArray();
+    $excep_name = array_where($nameArr, function($key, $value) use($in_name){
+        return !in_array($value, $in_name);
+    });
+    dd($excep_name);
 });
 
 Route::get('test2', function(){
