@@ -242,7 +242,7 @@ if(!function_exists('qidianRank')){
         $url_base = 'http://r.qidian.com/';
         $urlArr = [];
         for ($i=1; $i<=25; $i++) {
-            $urlArr[] = $url_base.$mod.'?dataType='.$dataType.'&chn='.$chn.'&page='.$i;
+            $urlArr[] = $url_base.$mod.'?dateType='.$dataType.'&chn='.$chn.'&page='.$i;
         }
         $htmlArr = async_get_url($urlArr, '', 25, '');
         $nameArr = [];

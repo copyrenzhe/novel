@@ -96,7 +96,7 @@ class IndexController extends CommonController
         $feedback = Feedback::create($request->input());
         if($feedback) {
             Session::flash('flash_message', '提交成功!');
-            $title = '书虫网收到新的意见反馈';
+            $title = '收到新的意见反馈';
             Event::fire(new MailPostEvent('feedback', $title, $feedback->toArray()));
             return redirect('/');
         } else {
