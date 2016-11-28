@@ -27,7 +27,7 @@ class MailPostListener
      */
     public function handle(MailPostEvent $event)
     {
-        $title = $event->title;
+        $title = '书虫网--'.$event->title;
         $data = $event->data;
         $type = $event->type;
         \Mail::queue('emails.'.$type, ['data' => $data], function($message) use ($title) {
