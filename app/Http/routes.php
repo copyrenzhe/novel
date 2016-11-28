@@ -11,31 +11,6 @@
 |
 */
 
-Route::get('test', function(){
-    $nameArr= ['完美世界', '一念永恒', '地需要'];
-    $in_name = \App\Models\Novel::whereIn('name', $nameArr)->pluck('name')->toArray();
-    $excep_name = array_where($nameArr, function($key, $value) use($in_name){
-        return !in_array($value, $in_name);
-    });
-    dd($excep_name);
-});
-
-Route::get('test2', function(){
-    @fopen('http://www.mzhu8.com/files/article/image/0/418/418s.jpg', 'r') ? dd ('success') : dd('false');
-});
-
-Route::get('test3', function(){
-    $mzhu = new \App\Repositories\Snatch\Mzhu;
-    $novel = $mzhu->getSingleNovel('http://www.mzhu8.com/book/1444/index.html');
-    $mzhu->snatchChapter($novel);
-});
-
-Route::get('test4', function(){
-    $mzhu = new \App\Repositories\Snatch\Mzhu();
-    $content = $mzhu->getNovelList();
-    dd($content);
-});
-
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');
