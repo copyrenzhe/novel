@@ -48,7 +48,8 @@ class SnatchChapters extends Job implements ShouldQueue
                 Log::info('----采集前先清空章节----');
                 Chapter::where('novel_id', $novel_id)->delete();
                 Log::info('----清空完成，开始采集----');
-                $return = Biquge::snatch($novel);
+                $source = ucfirst($novel->source);
+                $return = $source::snatch($novel);
                 if($return['code'])
                     Log::info("小说[{$novel->id}]：{$novel->name}采集成功");
                 else

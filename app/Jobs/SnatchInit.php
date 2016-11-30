@@ -37,7 +37,7 @@ class SnatchInit extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');
         $dtStart = microtime_float();
-        $instance = Snatch::instance($this->source);
+        $instance = ucfirst($this->source);
         $novel = $instance::init($this->link);
         if($novel) {
             Log::info("小说[$novel->id]:[$novel->name] 已初始化完毕");
