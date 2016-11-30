@@ -171,6 +171,7 @@ return [
         /*
          * Snatch
          */
+        App\Providers\SnatchServiceProvider::class,
     ],
 
     /*
@@ -225,6 +226,11 @@ return [
         'AdminLTE' => Acacha\AdminLTETemplateLaravel\Facades\AdminLTE::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Sitemap' => \Watson\Sitemap\Facades\Sitemap::class,
+
+        /**
+         * snatch
+         */
+        'Biquge' => App\Facades\BiqugeFacade::class,
     ],
 
 ];

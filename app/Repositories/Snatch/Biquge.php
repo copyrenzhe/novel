@@ -31,73 +31,12 @@ Class Biquge extends Snatch implements SnatchInterface
     private $source = 'biquge';
 
     /**
-     * 初始化小说列表，获取当前笔趣阁所有小说
-     * @param $link
-     * @return Novel|bool
-     */
-    public static function init($link)
-    {
-        $Biquge = new Biquge();
-        return $Biquge->getSingleNovel($link);
-    }
-
-    /**
      * @desc 修复未获取到内容的章节，若传入小说id，则修复该小说的章节，否则修复所有内容为空的章节
      * @param Novel $novel
      * @param bool $force
      * @return bool
      */
-    public static function repair(Novel $novel, $force=false )
-    {
-        $Biquge = new Biquge();
-        return $Biquge->repairNovel($novel, $force);
-    }
-
-    public static function repairChapter(Chapter $chapter, $force = false)
-    {
-        $Biquge = new Biquge();
-        return $Biquge->updateChapter($chapter, $force);
-    }
-
-    /**
-     * 更新小说章节，当执行updateNew内存溢出时，执行此方法代替
-     * @param Novel $novel
-     * @return array [type] [description]
-     */
-    public static function update( Novel $novel)
-    {
-        $Biquge = new Biquge();
-        return $Biquge->getNovelChapter($novel);
-    }
-
-    /**
-     * @desc 使用curl_multi 多线程更新章节，可用于采集
-     * @param Novel $novel
-     * @return string|void
-     */
-    public static function updateNew(Novel $novel)
-    {
-        $Biquge = new Biquge();
-        return $Biquge->getChapterNew($novel);
-    }
-
-    /**
-     * 采集小说章节，不需考虑更新问题
-     * @param Novel $novel
-     * @return string|void
-     */
-    public static function snatch(Novel $novel)
-    {
-        $Biquge = new Biquge();
-        return $Biquge->snatchChapter($novel);
-    }
-
-    /**
-     * @param Novel $novel
-     * @param $force
-     * @return bool
-     */
-    public function repairNovel(Novel $novel, $force)
+    public function repair(Novel $novel, $force)
     {
         Log::info("开始修复");
         if(!!$novel){
@@ -166,7 +105,7 @@ Class Biquge extends Snatch implements SnatchInterface
      * @param $force
      * @return bool
      */
-    public function updateChapter(Chapter $chapter, $force)
+    public function repairChapter(Chapter $chapter, $force)
     {
         if($chapter->source_link && (!$chapter->content || ($chapter->content && $force))){
             $html = $this->send($chapter->source_link);
@@ -236,7 +175,7 @@ Class Biquge extends Snatch implements SnatchInterface
      * @param $link 小说网址
      * @return Novel $novel 返回小说实例
      */
-    public function getSingleNovel($link)
+    public function init($link)
     {
         $novel_html = $this->send($link);
         if(preg_match('/property="og:novel:book_name" content="(.*?)"/s', $novel_html, $novel_name)){
@@ -278,7 +217,7 @@ Class Biquge extends Snatch implements SnatchInterface
      * @param Novel $novel
      * @return string|void
      */
-    public function getChapterNew(Novel $novel)
+    public function update(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link);
 
@@ -375,7 +314,7 @@ Class Biquge extends Snatch implements SnatchInterface
      * @param Novel $novel
      * @return array
      */
-    public function snatchChapter(Novel $novel)
+    public function snatch(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link);
         $chapter_list = $this->getChapterList($novel_html);
@@ -425,11 +364,11 @@ Class Biquge extends Snatch implements SnatchInterface
     }
 
     /**
-     * 获取小说章节
+     * 单线程更新小说章节，当执行update内存溢出时，执行此方法代替
      * @param Novel $novel
-     * @return array
+     * @return array [type] [description]
      */
-    public function getNovelChapter( Novel $novel ) {
+    public function update_single( Novel $novel ) {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link);
         $chapter_list = $this->getChapterList($novel_html);
         if(!$chapter_list[1]) {

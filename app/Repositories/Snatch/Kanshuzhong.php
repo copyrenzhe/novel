@@ -22,12 +22,6 @@ class Kanshuzhong extends Snatch implements SnatchInterface
 
     private $source = 'kanshuzhong';
 
-    public static function init($link)
-    {
-        $Kanshuzhong = new Kanshuzhong();
-        return $Kanshuzhong->getSingleNovel($link);
-    }
-
     public function getNovelList()
     {
         $xuanhuan_link = self::DOMAIN . '/1.html';
@@ -36,7 +30,7 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return $novel_matches[1];
     }
 
-    public function getSingleNovel($link)
+    public function init($link)
     {
         $novel_html = $this->send($link);
         if(preg_match('/property="og:novel:book_name" content="(.*?)"/s', $novel_html, $novel_name)){
@@ -75,7 +69,7 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return false;
     }
 
-    public function getChapterNew(Novel $novel)
+    public function update(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link);
         $chapter_list = $this->getChapterList($novel_html);
@@ -109,19 +103,14 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return true;
     }
 
-    public function getChapterList($html)
+    public function snatch(Novel $novel)
     {
         return ;
     }
 
-    public function snatchChapter(Novel $novel)
+    private function getChapterList($html)
     {
         return ;
-    }
-
-    public function getSource()
-    {
-        return $this->source;
     }
 
     private function getLiNovel($html)
@@ -151,5 +140,10 @@ class Kanshuzhong extends Snatch implements SnatchInterface
             default:
                 return 'other';
         }
+    }
+
+    public function getSource()
+    {
+        return $this->source;
     }
 }

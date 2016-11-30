@@ -41,7 +41,8 @@ class SnatchUpdate extends Job implements ShouldQueue
             Log::info('----- STARTING THE PROCESS FOR UPDATE NOVELS -----');
             if($novels) {
                 foreach ($novels as $novel) {
-                    $return = Biquge::updateNew($novel);
+                    $source = ucfirst($novel->source);
+                    $return = $source::update($novel);
                     if($return['code'])
                         Log::info("小说[{$novel->id}]：{$novel->name}更新成功");
                     else
