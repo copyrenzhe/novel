@@ -16,6 +16,20 @@ function findElem(arrayToSearch,attr,val){
  */
 function keysrt(key,desc) {
     return function(a,b){
-        return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+        if(desc){
+            res = a[key] < b[key];
+            if(res){
+                return 1;
+            }else{
+                return -1;
+            }
+        }else{
+            res = a[key] > b[key];
+            if(res){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
     }
 }

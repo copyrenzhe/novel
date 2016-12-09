@@ -238,13 +238,14 @@ if(!function_exists('getFileSize')){
  * @param chn {-1: 全部分类, 21: 玄幻, 1: 奇幻, 2:武侠, 22:仙侠, 4:都市, 5:历史, 9:科幻}
  */
 if(!function_exists('qidianRank')){
-    function qidianRank($mod='click', $dataType='1', $chn='-1'){
+    function qidianRank($mod='click', $dataType='1', $chn='-1', $maxPage = 10){
         $url_base = 'http://r.qidian.com/';
         $urlArr = [];
-        for ($i=1; $i<=25; $i++) {
+        //取前10页
+        for ($i=1; $i<=$maxPage; $i++) {
             $urlArr[] = $url_base.$mod.'?dateType='.$dataType.'&chn='.$chn.'&page='.$i;
         }
-        $htmlArr = async_get_url($urlArr, '', 25, '');
+        $htmlArr = async_get_url($urlArr, '', $maxPage, '');
         $nameArr = [];
         foreach($htmlArr as $html) {
             preg_match_all('/<div class=\"book-mid-info\">.*?<h4><a .*?>(.*?)<\/a><\/h4>.*?<\/div>/s', $html, $matches);
