@@ -67,6 +67,7 @@
         };
         $.jStorage.set(book_id, chapterHistory);
         $(".contents-comic").html($(".contents-comic").html().replace(/公告：笔趣阁APP上线了，支持安卓，苹果。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, ''));
+        $(".contents-comic").html($(".contents-comic").html().replace(/公告：本站推荐一款免费小说APP，告别一切广告。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, ''));
     })
 </script>
 @stop
