@@ -33,6 +33,8 @@
             <br class="clr">
             <div class="contents-comic">
                 {!!  $chapter->content !!}
+                <br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;精采小说就在书虫网(www.shu000.com)
             </div>
         </div>
     </div>
@@ -64,6 +66,7 @@
             'title' : chapter_name
         };
         $.jStorage.set(book_id, chapterHistory);
+        $(".contents-comic").html($(".contents-comic").html().replace(/公告：笔趣阁APP上线了，支持安卓，苹果。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, ''));
     })
 </script>
 @stop
