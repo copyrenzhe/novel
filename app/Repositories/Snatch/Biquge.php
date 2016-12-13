@@ -505,12 +505,12 @@ Class Biquge extends Snatch implements SnatchInterface
      */
     private function getChapterContent($html)
     {
-        $preg = '/<div id="content"><script>(.*?)<\/script>(.*?)<\/div>/s';
+        $preg = '/<div id="content"><script>.*?<\/script>(.*?)<\/div>/s';
         preg_match($preg, $html, $content);
-        if(!isset($content[2])){
+        if(!isset($content[1])){
 //            Log::error("get Chapter Content fail");
         }
-        return @$content[2];
+        return @$content[1];
     }
 
     /**
