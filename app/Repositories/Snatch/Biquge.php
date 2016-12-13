@@ -510,7 +510,8 @@ Class Biquge extends Snatch implements SnatchInterface
         if(!isset($content[1])){
 //            Log::error("get Chapter Content fail");
         }
-        return @$content[1];
+        $result = preg_replace("/<script[^>]*?>.*?<\/script>/i", "", @$content[1]);
+        return $result;
     }
 
     /**
