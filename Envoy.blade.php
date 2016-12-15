@@ -28,6 +28,7 @@
 @macro('deploy')
     git
     composer
+    gulp
     clear_cache
     restart_queue
     compile_cache
@@ -65,6 +66,12 @@
 @task('composer', ['on' => $envoy_alias])
     cd {{ $app_dir }}
     composer install
+@endtask
+
+@task('gulp', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    npm install
+    gulp
 @endtask
 
 @task('clear_cache', ['on' => $envoy_alias])
