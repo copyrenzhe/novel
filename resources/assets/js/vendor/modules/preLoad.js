@@ -76,9 +76,14 @@
     update: function(pageObj){
       this.options.page = pageObj.page;
       document.title = pageObj.title;
-      this.$view.html(pageObj.content);
-      this.preload();
       this.$root.scrollTop(this.$view.offset().top);
+      this.preload();
+      try{
+        this.$view.html(pageObj.content);
+      }catch(e){
+        
+      }
+      
     }
   });
   $.extend(PreLoad,{
