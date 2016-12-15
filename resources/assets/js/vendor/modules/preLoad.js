@@ -2,7 +2,6 @@
   window.PreLoad = factory();
 }(function(){
   var PreLoad = function(opt){
-    this.$el = $(opt.el);
     this.cache = [];
     this.options = $.extend({},arguments.callee.options,opt);
     if(!history.pushState) return false;
@@ -84,13 +83,10 @@
       }finally{
         this.preload();
       }
-      
     }
   });
   $.extend(PreLoad,{
     options:{
-      bookid: 1,
-      current: 1,
       maxCache: 20
     }
   });
