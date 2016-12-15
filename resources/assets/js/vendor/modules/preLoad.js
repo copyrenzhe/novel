@@ -14,10 +14,9 @@
       this.$root = $('html,body');
       this.$view = $(".view-page");
       this.$content = this.$view.find('>.detail-box>.content');
-      this.options.page = this.$content.data('page');
+      this.options.page = location.href;
       $(window).on("load",function(){
-        var detail = location.href.match(/books\/(\d+)\/chapters\/(\d+)/);
-        that.addPage(parseInt(detail[2])+1);
+        that.preload();
       });
       $(window).on("popstate",function(){
         var current = history.state;
@@ -25,10 +24,9 @@
         that.loadPage(page);
       });
       $(document).on("click","a",function(e){
-        var detail = this.href.match(/books\/(\d+)\/chapters\/(\d+)/);
-        if(detail){
+        if(this.href.match(/books\/(\d+)\/chapters\/(\d+)/)){
           e.preventDefault();
-          var page = parseInt(detail[2]);
+          var page = this.href;
           var pageObj = that.loadPage(page);
           history.pushState({page:page},'',this.href);
         }
@@ -43,7 +41,6 @@
       }
       if(pageObj.ajax.state() == 'resolved'){
         this.update(pageObj);
-        this.addPage(page+1);
       }
       return pageObj;
     },
@@ -58,7 +55,7 @@
       pageObj = {
         page: page
       }
-      pageObj.ajax = $.get('/books/'+this.options.bookid+'/chapters/'+page)
+      pageObj.ajax = $.get(page)
         .done(function(res){
           var $doc = $(res);
           pageObj.title = $doc.filter('title').html();
@@ -73,12 +70,15 @@
       }
       return pageObj;
     },
+    preload: function(){
+      this.addPage(this.$view.find('.next-page').attr('href'));
+    },
     update: function(pageObj){
-      console.log(pageObj)
       this.options.page = pageObj.page;
       document.title = pageObj.title;
       this.$view.html(pageObj.content);
-      //this.$root.scrollTop(this.$view.offset().top);
+      this.preload();
+      this.$root.scrollTop(this.$view.offset().top);
     }
   });
   $.extend(PreLoad,{
