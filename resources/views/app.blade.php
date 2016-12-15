@@ -1,4 +1,4 @@
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html id="@yield('pagetype','')">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
