@@ -20,6 +20,7 @@ a:hover {
     margin: 0;
     padding: 0;
 }
+
 input, textarea, select {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #D2D2D2;
@@ -86,6 +87,20 @@ h5 {
     font-size: 12px;
     font-weight: bold;
 }
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.stuck{
+    position: fixed!important;
+}
 .mt5 {
     margin-top: 5px !important;
 }
@@ -129,13 +144,14 @@ h5 {
     vertical-align: text-bottom;
     width: 16px;
 }
-.box {
+.detail-box {
     clear: both;
     display: inline-block;
     margin-bottom: 10px;
     width: 100%;
 }
-.box .content {
+.detail-box .content {
+    margin-bottom: 10px;
     border: 1px solid #D2D2D2;
     border-radius: 3px;
     box-shadow: 0 2px 0 #EEEEEE;
@@ -144,7 +160,7 @@ h5 {
     position: relative;
     line-height: 1.8;
 }
-.box .content .contents-comic p{
+.detail-box .content .contents-comic p{
     padding: 10px;
     line-height: 1.8;
 }
@@ -161,7 +177,6 @@ h5 {
 .title {
     display: block;
     font-size: 14px;
-    margin-bottom: 10px;
     text-transform: uppercase;
 }
 .title:after {
@@ -175,12 +190,29 @@ h5 {
 .title a {
     margin-right: 10px;
 }
-.box .title {
+.detail-title{
+    position: relative;
+    line-height: 26px;
+    padding: 8px 0;
+}
+.detail-title.stuck{
+    top:0;
+    background-color: #fff;
+    width: 970px;
+    z-index: 10;
+    padding: 8px 4px;
+    border: 1px solid #D2D2D2;
+    border-top: none;
+}
+.detail-title.stuck .tool-right{
+    right:4px;
+}
+.detail-box .title {
     border-bottom: 1px solid #EEEEEE;
     margin-bottom: 5px;
     padding-bottom: 5px;
 }
-.box .title:after {
+.detail-box .title:after {
     display: none;
 }
 .box-chap {
@@ -1011,31 +1043,32 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
     color: #AAAAAA;
     font-size: 11px;
 }
-#view-page {
+.view-page {
     position: relative;
 }
-#view-page .comment .textarea-comment {
+.view-page .comment .textarea-comment {
     max-width: 878px;
     min-width: 878px;
 }
-#view-page .box .content .content-comic {
+.view-page .detail-box .content .content-comic {
     font-family: verdana;
     font-weight: normal;
     line-height: 2em;
     padding: 10px;
 }
-#view-page .box .content .chapter-number {
+.view-page .detail-box .content .chapter-number {
     font-size: 22px;
     padding: 20px 10px 5px;
 }
-#view-page .tool-right {
+.view-page .tool-right {
     position: absolute;
     right: 0;
     text-align: right;
-    top: -17px;
+    top: 0px;
     width: 200px;
+    line-height: 16px;
 }
-#view-page .tool-right a {
+.view-page .tool-right a {
     margin-left: 5px;
 }
 .chap-select-dropdown .btn-blue {
@@ -1321,7 +1354,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         max-width: 398px;
         min-width: 398px;
     }
-    #view-page .comment .textarea-comment {
+    .view-page .comment .textarea-comment {
         max-width: 608px;
         min-width: 608px;
     }
@@ -1418,10 +1451,10 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         font-size: 12px;
         padding: 10px 0 0;
     }
-    #view-page .box .content .content-comic {
+    .view-page .detail-box .content .content-comic {
         padding: 0;
     }
-    #view-page .box .content .chapter-number {
+    .view-page .detail-box .content .chapter-number {
         padding: 20px 0 5px;
     }
     .chap-select .fll {
@@ -1642,7 +1675,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
     .box-chap .content {
         margin-top: 15px;
     }
-    #view-page .tool-right {
+    .view-page .tool-right {
         margin-bottom: 10px;
         position: relative;
         right: auto;
@@ -1651,7 +1684,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         width: 100%;
         display: none;
     }
-    #view-page .tool-right a {
+    .view-page .tool-right a {
         margin-top: 0;
     }
     .l-category ul.content li .cate-li-right {
@@ -1684,7 +1717,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
     .wrapper {
         width: 630px;
     }
-    #view-page .comment .textarea-comment {
+    .view-page .comment .textarea-comment {
         max-width: 528px;
         min-width: 528px;
     }
@@ -1788,7 +1821,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
     .color-display .cd-content {
         padding: 5px;
     }
-    #view-page .comment .textarea-comment {
+    .view-page .comment .textarea-comment {
         max-width: 368px;
         min-width: 368px;
     }
@@ -1853,7 +1886,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         max-width: 208px;
         min-width: 208px;
     }
-    #view-page .comment .textarea-comment {
+    .view-page .comment .textarea-comment {
         max-width: 208px;
         min-width: 208px;
     }
