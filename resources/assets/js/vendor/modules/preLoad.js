@@ -63,7 +63,7 @@
           var $doc = $(res);
           pageObj.title = $doc.filter('title').html();
           pageObj.content = $doc.find('.view-page').html();
-          if(history.state.page == pageObj.page){
+          if(history.state && history.state.page == pageObj.page){
             that.update(pageObj);
           }
         });
