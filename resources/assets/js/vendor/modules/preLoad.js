@@ -77,11 +77,12 @@
       this.options.page = pageObj.page;
       document.title = pageObj.title;
       this.$root.scrollTop(this.$view.offset().top);
-      this.preload();
       try{
         this.$view.html(pageObj.content);
       }catch(e){
-        
+        console.log('has script');
+      }finally{
+        this.preload();
       }
       
     }
