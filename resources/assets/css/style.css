@@ -144,13 +144,13 @@ h5 {
     vertical-align: text-bottom;
     width: 16px;
 }
-.detail-box {
+.detail-box,.box{
     clear: both;
     display: inline-block;
     margin-bottom: 10px;
     width: 100%;
 }
-.detail-box .content {
+.detail-box .content,.box .content{
     margin-bottom: 10px;
     border: 1px solid #D2D2D2;
     border-radius: 3px;
@@ -160,7 +160,7 @@ h5 {
     position: relative;
     line-height: 1.8;
 }
-.detail-box .content .contents-comic p{
+.detail-box .content .contents-comic p,.box .content .contents-comic p{
     padding: 10px;
     line-height: 1.8;
 }
@@ -178,6 +178,7 @@ h5 {
     display: block;
     font-size: 14px;
     text-transform: uppercase;
+    margin-bottom: 10px;
 }
 .title:after {
     background: url("../images/arrow-title.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -207,12 +208,12 @@ h5 {
 .detail-title.stuck .tool-right{
     right:4px;
 }
-.detail-box .title {
+.detail-box .title,.box .title{
     border-bottom: 1px solid #EEEEEE;
     margin-bottom: 5px;
     padding-bottom: 5px;
 }
-.detail-box .title:after {
+.detail-box .title:after,.box .title:after{
     display: none;
 }
 .box-chap {
