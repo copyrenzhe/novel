@@ -4,9 +4,21 @@ php:
   - '5.6'
   - '7.0'
   - hhvm
+cache:
+  directories:
+    - vendor
+notifications:
+  email: false
 
 install:
   - travis_retry composer install --no-interaction --no-scripts --prefer-source
+  - npm install
+
+before_script:
+  - sudo apt-get -y install nodejs
+  - sudo apt-get -y install npm
+  - npm install -g gulp
+  - npm install
 
 script:
   - vendor/bin/phpunit
