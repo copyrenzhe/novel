@@ -12,9 +12,6 @@
 */
 
 Route::get('test', function(){
-    $source = 'biquge';
-    $class = ucfirst($source);
-    dd($class::test());
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
