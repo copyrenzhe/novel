@@ -19,6 +19,7 @@ before_script:
   - sudo apt-get -y install npm
   - npm install -g gulp
   - npm install
+  - gulp
 
 script:
   - vendor/bin/phpunit
