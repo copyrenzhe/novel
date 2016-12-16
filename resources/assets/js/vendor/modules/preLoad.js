@@ -77,7 +77,7 @@
       document.title = pageObj.title;
       this.$root.scrollTop(this.$view.offset().top);
       try{
-        this.$view.html(pageObj.content);
+        this.$view.html(window.ad_filter(pageObj.content));
       }catch(e){
         console.log('has script');
       }finally{

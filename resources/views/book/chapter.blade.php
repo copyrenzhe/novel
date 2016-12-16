@@ -12,6 +12,11 @@
         chapter_id: "{{ $chapter->id }}",
         chapter_name: "{{ $chapter->name }}"
     }
+    function ad_filter(content) {
+        return content.replace(/<script[^>]*?>.*?<\/script>/, '')
+                    .replace(/公告：笔趣阁APP上线了，支持安卓，苹果。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, '')
+                    .replace(/公告：本站推荐一款免费小说APP，告别一切广告。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, '');
+    }
     $(function () {
         var chapterHistory = {
             'id' : CHAPTER_INFO.chapter_id,
@@ -20,7 +25,7 @@
         };
         $.jStorage.set(CHAPTER_INFO.book_id, chapterHistory);
         var $content = $(".contents-comic");
-        $content.html($content.html().replace(/<script[^>]*?>.*?<\/script>/, '').replace(/公告：笔趣阁APP上线了，支持安卓，苹果。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, '').replace(/公告：本站推荐一款免费小说APP，告别一切广告。请关注微信公众号进入下载安装 appxsyd \(按住三秒复制\)/, ''));
+        $content.html(ad_filter($content.html()));
 	 
 
     });
