@@ -231,6 +231,8 @@ return [
          * snatch
          */
         'Biquge' => App\Facades\BiqugeFacade::class,
+        'Kanshuzhong' =>App\Facades\KanshuzhongFacade::class,
+        'Mzhu' => App\Facades\MzhuFacade::class,
     ],
 
 ];
