@@ -981,13 +981,16 @@ h5 {
     width: 626px;
 }
 .search-chap .list-chap-wrap {
-    height: 550px;
+    /*height: 550px;*/
     overflow: auto;
     width: 100%;
 }
 th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;border-top:1px solid #CAE0BA;background:#F1F1F1;font-size:14px;text-indent:20px;}td.tb{padding:10px 0 10px 20px;border-top:1px solid #CAE0BA;border-left:1px solid #CAE0BA;}td.tb p{float:left;width:195px;height:28px;line-height:28px;font-size:14px;overflow:hidden;}
 .bookindex td.tb p{width:190px;}.authorindex td.tb p{width:70px;}td.tb a{color:#333;}td.tb strong a{color:#000;}td.tb span a{margin-left:5px;font-size:12px;color:#999;}
-
+.search-chap .list-chap-wrap .list-chap li{
+    float: left;
+    width: 33%;
+}
 .search-chap .list-chap-wrap .list-chap p {
     border-bottom: 1px dotted #EEEEEE;
     font-size: 13px;
@@ -1059,13 +1062,14 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
 }
 .view-page .detail-box .content .chapter-number {
     font-size: 22px;
-    padding: 20px 10px 5px;
+    /*padding: 20px 10px 5px;*/
+    text-align: center;
 }
 .view-page .tool-right {
     position: absolute;
     right: 0;
     text-align: right;
-    top: 0px;
+    top: 0;
     width: 200px;
     line-height: 16px;
 }
@@ -1451,6 +1455,10 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
     #footer .wrapper {
         font-size: 12px;
         padding: 10px 0 0;
+    }
+    .search-chap .list-chap-wrap .list-chap li{
+        float: none;
+        width: 100%;
     }
     .view-page .detail-box .content .content-comic {
         padding: 0;
