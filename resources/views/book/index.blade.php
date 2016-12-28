@@ -44,7 +44,7 @@
         }
     </style>
     <!--left-->
-    <div id="left">
+    <div>
         <!-- Thong tin truyen -->
         <h2 class="title">{{ $novel->name }}</h2>
         <div class="detail box">
@@ -108,8 +108,7 @@
         <!--/ chap -->
 
     </div>
-    <!--/ left -->	 <!-- right -->
-    @include('common.right')
+    <!--/ left -->
     <div class="clr"></div>
 @stop
 @section('js')
