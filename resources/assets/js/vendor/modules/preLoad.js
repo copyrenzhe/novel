@@ -53,7 +53,7 @@
       }else if(pageObj.ajax.state() == 'resolved'){
         this.current = pageObj;
         document.title = pageObj.title;
-        //this.$root.scrollTop(this.$view.offset().top);
+        this.$root.scrollTop(this.$view.offset().top);
         try{
           this.$view.html(window.ad_filter(pageObj.content));
         }catch(e){
@@ -103,7 +103,7 @@
     safeMode: function(){
       var that = this;
       clearTimeout(this._safeid);
-      console.log('用户观看欲望十分强烈，必须要强制跳转啦！');
+      console.log('用户观看欲望十分强烈，必须要启用安全模式啦！');
       this._safeid = setTimeout(function(){
         if(window.location.href != that.current.page){
           location.reload();
