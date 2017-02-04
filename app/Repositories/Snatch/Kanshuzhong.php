@@ -203,8 +203,4 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         }
     }
 
-    public function getSource()
-    {
-        return $this->source;
-    }
 }

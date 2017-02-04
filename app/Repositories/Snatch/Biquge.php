@@ -526,8 +526,4 @@ Class Biquge extends Snatch implements SnatchInterface
         return @$content[1];
     }
 
-    public function getSource()
-    {
-        return $this->source;
-    }
 }
