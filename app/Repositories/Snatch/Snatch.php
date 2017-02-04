@@ -14,6 +14,7 @@ use ReflectionClass;
 class Snatch
 {
     protected $page_size = 200;
+    protected $source;
 
     /**
      * 单线程模拟请求
@@ -52,5 +53,10 @@ class Snatch
     protected function multi_send_test($url_array, $append_url, $page_count=200)
     {
         return async_get_url($url_array, $append_url, $page_count);
+    }
+
+    public function getSource()
+    {
+        return $this->source;
     }
 }

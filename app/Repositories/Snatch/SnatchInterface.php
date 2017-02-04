@@ -25,5 +25,4 @@ Interface SnatchInterface
     //采集小说章节
     public function snatch(Novel $novel);
 
-    public function getSource();
 }

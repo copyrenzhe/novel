@@ -190,8 +190,4 @@ class Mzhu extends Snatch implements SnatchInterface
         return $this->send($request_url, 'POST', $params, '');
     }
 
-    public function getSource()
-    {
-        return $this->source;
-    }
 }
