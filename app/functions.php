@@ -146,7 +146,7 @@ if(!function_exists('async_get_url')) {
  */
 if(!function_exists('is_weixin')) {
     function is_weixin(){
-        if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+        if ( strpos(@$_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
             return true;
         }
         return false;

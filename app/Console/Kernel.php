@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         Commands\RepairData::class,
         Commands\SumOfChapters::class,
         Commands\CompareQidianNovel::class,
+        Commands\SiteMonitor::class,
     ];
 
     /**
@@ -58,6 +59,10 @@ class Kernel extends ConsoleKernel
                 ->monthlyOn(28, '21:00');
         $schedule->command('compare:qidian fin 2 --queue')
                 ->monthlyOn(28, '22:00');
+        
+        //站点可访问性监控
+        $schedule->command('monitor:site')
+                ->everyTenMinutes();
 //
         //每天更新所有小说章节数
 //        $schedule->command('sum:chapter --queue')
