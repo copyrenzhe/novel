@@ -1316,7 +1316,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
 @media only screen and (min-width: 710px) and (max-width: 979px) {
     .wrapper {
         padding: 0 5px;
-        width: 710px;
+        width: auto;
     }
     #left {
         width: 500px;
@@ -1728,7 +1728,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
 }
 @media only screen and (min-width: 630px) and (max-width: 709px) {
     .wrapper {
-        width: 630px;
+        width: auto;
     }
     .view-page .comment .textarea-comment {
         max-width: 528px;
@@ -1798,7 +1798,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
 }
 @media only screen and (min-width: 470px) and (max-width: 629px) {
     .wrapper {
-        width: 470px;
+        width: auto;
     }
     .l-grid .e-wrapper {
         margin-left: -10px;
@@ -1870,7 +1870,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         width: 100%;
     }
     .wrapper {
-        width: 310px;
+        width: auto;
     }
     .l-grid .element {
         height: auto;

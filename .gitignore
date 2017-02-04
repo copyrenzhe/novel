@@ -9,4 +9,5 @@ envoy.config.php
 _ide_helper.php
 /public/cover
 /public/build
+/public/dist
 npm-debug.log
