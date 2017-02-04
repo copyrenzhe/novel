@@ -10,7 +10,11 @@
 namespace App\Repositories\Snatch;
 
 use App\Models\Author;
+use App\Models\Chapter;
 use App\Models\Novel;
+use Carbon\Carbon;
+use ErrorException;
+use Illuminate\Database\QueryException;
 use Log;
 
 class Kanshuzhong extends Snatch implements SnatchInterface
@@ -22,12 +26,6 @@ class Kanshuzhong extends Snatch implements SnatchInterface
 
     private $source = 'kanshuzhong';
 
-    public static function init($link)
-    {
-        $Kanshuzhong = new Kanshuzhong();
-        return $Kanshuzhong->getSingleNovel($link);
-    }
-
     public function getNovelList()
     {
         $xuanhuan_link = self::DOMAIN . '/1.html';
@@ -36,7 +34,7 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return $novel_matches[1];
     }
 
-    public function getSingleNovel($link)
+    public function init($link)
     {
         $novel_html = $this->send($link);
         if(preg_match('/property="og:novel:book_name" content="(.*?)"/s', $novel_html, $novel_name)){
@@ -75,7 +73,7 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         return false;
     }
 
-    public function getChapterNew(Novel $novel)
+    public function update(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link);
         $chapter_list = $this->getChapterList($novel_html);
@@ -103,32 +101,84 @@ class Kanshuzhong extends Snatch implements SnatchInterface
         $filter_list[1] = array_slice($chapter_list[1], $curr_key+1);
         $filter_list[2] = array_slice($chapter_list[2], $curr_key+1);
 
+
         $contents = $this->multi_send_test($filter_list[1], self::DOMAIN . $novel->source_link, count($filter_list[1]));
         $temp = [];
+        foreach ($contents as $k => $html) {
+            preg_match('/<link rel="canonical" href="http:\/\/www\.kanshuzhong\.com\/book\/.*?\/(.*)?\.html" \/>/s', $html, $read_match);
+            if(@$read_match[1]){
+                $source_chapter_id = $read_match[1];
+                $content = $this->getChapterContent($html);
+                $temp[$source_chapter_id] = $content;
+            }
+        }
 
-        return true;
+        $value_array = [];
+        $now = Carbon::now();
+        foreach($filter_list[2] as $k => $name) {
+            $biquge_idArr = explode('.', $filter_list[1][$k]);
+            $source_chapter_id = $biquge_idArr[0];
+            $link = $filter_list[1][$k];
+            $value_array[] = [
+                'source_link' => self::DOMAIN . $novel->source_link . $link,
+                'name' => $name,
+                'content' => @$temp[$source_chapter_id],
+                'novel_id' => $novel->id,
+                'created_at' => $now,
+                'updated_at' => $now
+            ];
+        }
+        unset($contents);
+        try{
+            Chapter::insert($value_array);
+            $novel->chapter_num = count($chapter_list[1]);
+        } catch (QueryException $e) {
+            Log::error("小说[$novel->id]批量插入失败，正在逐条插入");
+            try{
+                foreach ($value_array as $v) {
+                    $chapter = Chapter::updateOrCreate(['source_link' => $v['source_link']], $v);
+                    Log::info("小说[$novel->id]: 更新章节:[$chapter->id],来源：[$novel->source_link . $v->source_link]");
+                }
+                Log::info("小说[$novel->id]章节更新完毕");
+                $novel->chapter_num = count($chapter_list[1]);
+
+            } catch (ErrorException $e) {
+                Log::error("小说[$novel->id]逐条插入也失败，正在重新获取该小说");
+                Log::info("清空小说[$novel->id]所有章节，并重新获取");
+                Chapter::where('novel_id', $novel->id)->delete();
+                self::snatch($novel);
+            }
+        }
+        Log::info("正在更新小说[$novel->id]状态");
+        //更新小说状态
+        preg_match('/property="og:novel:status" content="(.*?)"/s', $novel_html, $overMatch);
+        if(@$overMatch[1]=='连载中'){
+            $novel->is_over = 0;
+        } else {
+            $novel->is_over = 1;
+        }
+        $novel->save();
+        Log::info("小说[$novel->id]状态更新完毕");
+        return ['code' => 1];
     }
 
-    public function getChapterList($html)
+    public function snatch(Novel $novel)
     {
         return ;
     }
 
-    public function snatchChapter(Novel $novel)
+    private function getChapterList($html)
     {
-        return ;
-    }
-
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    private function getLiNovel($html)
-    {
-        $preg = '/<dd><a href="(.*?)">(.*?)<\/a><\/dd>/s';
+        $preg = '/<dd>.*?<a href="(.*?)">(.*?)<\/a>.*?<\/dd>/is';
         preg_match_all($preg, $html, $matches);
         return $matches;
+    }
+
+    private function getChapterContent($html)
+    {
+        $preg = '/<div class="ad"><script>read_01\(\)\;<\/script><\/div>(.*?)<div class="ad"><script>read_02\(\)\;<\/script><\/div>/s';
+        preg_match($preg, $html, $match);
+        return @$match[1];
     }
 
     private function returnType($name)
@@ -151,5 +201,10 @@ class Kanshuzhong extends Snatch implements SnatchInterface
             default:
                 return 'other';
         }
+    }
+
+    public function getSource()
+    {
+        return $this->source;
     }
 }

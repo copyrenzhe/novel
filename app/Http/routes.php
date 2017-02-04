@@ -11,27 +11,6 @@
 |
 */
 
-Route::get('test', function(){
-    $kanshuzhong = new \App\Repositories\Snatch\Kanshuzhong;
-    $kanshuzhong->getNovelList();
-});
-
-Route::get('test2', function(){
-    $job = new \App\Jobs\SnatchInit('http://www.mzhu8.com/book/4/index.html', 'mzhu');
-    $job->handle();
-});
-
-Route::get('test3', function(){
-    $mzhu = new \App\Repositories\Snatch\Mzhu;
-    $novel = $mzhu->getSingleNovel('http://www.mzhu8.com/book/1444/index.html');
-    $mzhu->snatchChapter($novel);
-});
-
-Route::get('test4', function(){
-    $mzhu = new \App\Repositories\Snatch\Mzhu();
-    $content = $mzhu->getNovelList();
-    dd($content);
-});
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');

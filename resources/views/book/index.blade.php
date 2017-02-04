@@ -44,7 +44,7 @@
         }
     </style>
     <!--left-->
-    <div id="left">
+    <div>
         <!-- Thong tin truyen -->
         <h2 class="title">{{ $novel->name }}</h2>
         <div class="detail box">
@@ -57,7 +57,6 @@
                     @endif
                 </div>
                 <div class="detail-story">
-                    <h1><a href="{{ route('book', ['bookId' => $novel->id]) }}" title="{{ $novel->name }}">{{ $novel->name }}</a></h1>
                     <div class="d-s-col">
                         <p>作者: <a href="{{ route('author', ['authorId' => $novel->author->id ]) }}" title="{{ $novel->author->name }}">{{ $novel->author->name }}</a></p>
                         <p>分类: <a href="{{ route('category', ['category' => $novel->type])  }}" title="{{ $novel->type }}">{{ $genres[$novel->type] }}</a>
@@ -108,14 +107,15 @@
         <!--/ chap -->
 
     </div>
-    <!--/ left -->	 <!-- right -->
-    @include('common.right')
+    <!--/ left -->
     <div class="clr"></div>
 @stop
 @section('js')
-    <script src="/dist/js/jstorage.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-    var book_id = "{{ $novel->id }}";
+    var book_id = "{{ $novel->id }}",
+        book_url = $("meta[property='og:novel:read_url']").attr('content'),
+        book_name = $("meta[property='og:novel:book_name']").attr('content');
+
     var $_pchapter = $("#_pchapter");
     $(function() {
         @if(isset($user))
@@ -139,6 +139,15 @@
         });
         @endif
 
+        //存入阅读历史
+        var history_index = findElem(read_history, 'id', book_id);
+        if( history_index > -1){
+            //已存在历史中
+            read_history[history_index]['updated_at'] = timestamp;
+        } else {
+            read_history.push({id: book_id, url: book_url, name: book_name, updated_at: timestamp});
+        }
+        $.jStorage.set('history', read_history);
         //上次看到
         var chapterHistory = $.jStorage.get(book_id, null);
         var $firstLi = $_pchapter.find("li:eq(0)"),

@@ -75,7 +75,7 @@ if(!function_exists('microtime_float')) {
 }
 
 if(!function_exists('async_get_url')) {
-    function async_get_url($urls, $append_url='', $page_size=500)
+    function async_get_url($urls, $append_url='', $page_size=500, $source_encode='gbk')
     {
         $n = (count($urls) > $page_size) ? $page_size : count($urls);
 
@@ -116,7 +116,7 @@ if(!function_exists('async_get_url')) {
                 $handle = $info[ 'handle' ];
                 // 读取收到的内容
                 $content = curl_multi_getcontent( $handle );
-                $recv[] = curl_errno($handle) == 0 ? mb_convert_encoding($content, 'UTF-8', 'gbk') : '';
+                $recv[] = curl_errno($handle) == 0 ? ($source_encode ? mb_convert_encoding($content, 'UTF-8', 'gbk') : $content) : '';
                 // 移除本资源
                 curl_multi_remove_handle( $mh, $handle );
                 // 关闭资源
@@ -228,5 +228,29 @@ if(!function_exists('getFileSize')){
         }else{
             return null;
         }
+    }
+}
+
+/**
+ * 获取起点排行
+ * @param mod {click:点击榜, recom:推荐, fin:完本榜}
+ * @param dataType {1:周榜, 2:月榜, 3:总榜}
+ * @param chn {-1: 全部分类, 21: 玄幻, 1: 奇幻, 2:武侠, 22:仙侠, 4:都市, 5:历史, 9:科幻}
+ */
+if(!function_exists('qidianRank')){
+    function qidianRank($mod='click', $dataType='1', $chn='-1', $maxPage = 10){
+        $url_base = 'http://r.qidian.com/';
+        $urlArr = [];
+        //取前10页
+        for ($i=1; $i<=$maxPage; $i++) {
+            $urlArr[] = $url_base.$mod.'?dateType='.$dataType.'&chn='.$chn.'&page='.$i;
+        }
+        $htmlArr = async_get_url($urlArr, '', $maxPage, '');
+        $nameArr = [];
+        foreach($htmlArr as $html) {
+            preg_match_all('/<div class=\"book-mid-info\">.*?<h4><a .*?>(.*?)<\/a><\/h4>.*?<\/div>/s', $html, $matches);
+            $nameArr = array_merge($nameArr, $matches[1]);
+        }
+        return $nameArr;
     }
 }

@@ -21,7 +21,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\RepairNovelEvent' => [
             'App\Listeners\RepairNovelListener',
-        ]
+        ],
+        'App\Events\MailPostEvent' => [
+            'App\Listeners\MailPostListener',
+        ],
     ];
 
     /**

@@ -21,7 +21,7 @@ class AuthorController extends CommonController
     public function info($authorId)
     {
         $author = Author::find($authorId);
-        $novels = Novel::where('author_id', $authorId)->paginate(30);
+        $novels = Novel::where('author_id', $authorId)->hot()->paginate(30);
         $name = $author->name;
         return view('index.list', compact('author', 'name', 'novels'));
     }

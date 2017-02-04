@@ -23,7 +23,14 @@ elixir(function(mix) {
         ], 'public/dist/css')
 
         .scripts([
-            'santruyen.js'
+            'jquery.js',
+            'underscore.js',
+            'vendor/jstorage/jstorage.min.js',
+            'santruyen.js',
+            'functions.js',
+            'vendor/libs/*.js',
+            'vendor/modules/*.js',
+            'vendor/pages/*.js'
         ], 'public/dist/js')
 
         .version([

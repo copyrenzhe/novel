@@ -28,6 +28,7 @@
 @macro('deploy')
     git
     composer
+    gulp
     clear_cache
     restart_queue
     compile_cache
@@ -67,6 +68,12 @@
     composer install
 @endtask
 
+@task('gulp', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    npm install
+    gulp
+@endtask
+
 @task('clear_cache', ['on' => $envoy_alias])
     cd {{ $app_dir }}
     php artisan config:clear
@@ -99,4 +106,9 @@
 @task('sum_chapter', ['on' => $envoy_alias])
     cd {{ $app_dir }}
     php artisan sum:chapter --queue
+@endtask
+
+@task('gulp', ['on' => $envoy_alias])
+    cd {{ $app_dir }}
+    gulp --production
 @endtask
