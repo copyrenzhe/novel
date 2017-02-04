@@ -11,6 +11,9 @@
 |
 */
 
+Route::get('test', function(){
+    
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function(){
     Route::get('login', 'AuthController@getLogin');
