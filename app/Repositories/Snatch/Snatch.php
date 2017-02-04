@@ -15,17 +15,6 @@ class Snatch
 {
     protected $page_size = 200;
 
-    public static function instance($source='biquge')
-    {
-        $biquge = new Biquge();
-        $kanshuzhong = new Kanshuzhong();
-        $mzhu = new Mzhu();
-        $className = 'App\Repositories\Snatch\\'.ucfirst($source);
-        $class = new ReflectionClass($className);
-        $instance = $class->newInstanceArgs();
-        return $instance;
-    }
-
     /**
      * 单线程模拟请求
      * @param $url

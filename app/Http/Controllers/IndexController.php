@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Event;
+use App\Events\MailPostEvent;
 use Session;
 use Validator;
 use App\Models\Novel;
@@ -65,7 +67,7 @@ class IndexController extends CommonController
         $keywords = $request->get('keyword');
         $authors = Author::where('name', 'like', '%'.$keywords.'%')->pluck('id')->toArray();
         $novels = Novel::where('name', 'like', '%'.$keywords.'%')
-                    ->orwhereIn('author_id', $authors)->paginate(30);
+                    ->orwhereIn('author_id', $authors)->hot()->paginate(30);
         $name = "关键词：".$keywords;
         return view('index.list', compact('name', 'novels'));
     }
@@ -94,7 +96,12 @@ class IndexController extends CommonController
         $feedback = Feedback::create($request->input());
         if($feedback) {
             Session::flash('flash_message', '提交成功!');
+            $title = '收到新的意见反馈';
+            Event::fire(new MailPostEvent('feedback', $title, $feedback->toArray()));
             return redirect('/');
+        } else {
+            Session::flash('flash_message', '提交失败!');
+            return redirect()->back();
         }
     }
 }

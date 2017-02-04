@@ -22,29 +22,7 @@ class Mzhu extends Snatch implements SnatchInterface
     const REFERER = 'http://www.mzhu8.com';
     const DOMAIN = 'http://www.mzhu8.com';
 
-    private $source = 'mzhu8';
-
-    /**
-     * 初始化小说
-     * @param $link
-     * @return Novel|bool
-     */
-    public static function init($link)
-    {
-        $mzhu = new Mzhu();
-        return $mzhu->getSingleNovel($link);
-    }
-
-    /**
-     * 采集小说章节，不需考虑更新问题
-     * @param Novel $novel
-     * @return string|void
-     */
-    public static function snatch(Novel $novel)
-    {
-        $mzhu = new Mzhu();
-        return $mzhu->snatchChapter($novel);
-    }
+    private $source = 'mzhu';
 
     public function getNovelList()
     {
@@ -87,7 +65,12 @@ class Mzhu extends Snatch implements SnatchInterface
         return $novelLinks;
     }
 
-    public function getSingleNovel($link)
+    /**
+     * 初始化小说
+     * @param $link
+     * @return Novel|bool
+     */
+    public function init($link)
     {
         $html = $this->send($link);
         if(preg_match('/<span class="i_author">作者：(.*?)  <\/span>/s', $html, $author_matches)){
@@ -105,7 +88,7 @@ class Mzhu extends Snatch implements SnatchInterface
                 $novel->is_over = 1;
                 $novel->type = 'mingzhu';
                 $novel->description = $description;
-                if(getFileSize($img_link)==44110) {
+                if(getFileSize($img_link)==44110 || !@fopen($img_link, 'r')) {
                     $novel->cover = '/cover/cover_default.jpg';
                 } else {
                     $cover_ext = substr($img_link, strrpos($img_link, '.')+1);
@@ -125,12 +108,17 @@ class Mzhu extends Snatch implements SnatchInterface
         // TODO: Implement getSingleNovel() method.
     }
 
-    public function getChapterNew(Novel $novel)
+    public function update(Novel $novel)
     {
-        // TODO: Implement getChapterNew() method.
+
     }
 
-    public function snatchChapter(Novel $novel)
+    /**
+     * 采集小说章节，不需考虑更新问题
+     * @param Novel $novel
+     * @return string|void
+     */
+    public function snatch(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link);
         $source_arr = explode('/', $novel->source_link);
@@ -179,19 +167,19 @@ class Mzhu extends Snatch implements SnatchInterface
         return ['code' => 1];
     }
 
-    public function getChapterList($html)
+    private function getChapterList($html)
     {
         preg_match_all('/<dd><a href="(.*?)" title=".*?">.*?<\/a><\/dd>/s', $html, $matches);
         return $matches;
     }
 
-    public function getChapterName($html)
+    private function getChapterName($html)
     {
         preg_match('/<h1 class="chapter_title" >(.*?)<\/h1>/s', $html, $matches);
         return $matches[1];
     }
 
-    public function getChapterContent($bookid, $chapterid)
+    private function getChapterContent($bookid, $chapterid)
     {
         $request_url = self::DOMAIN . '/modules/article/show.php';
         $params = [

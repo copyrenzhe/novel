@@ -1,5 +1,9 @@
 @extends('app')
 @section('content')
+    <div id="history">
+        <h2 class="title">阅读历史</h2>
+        <ul class="history-ul"></ul>
+    </div>
     <!-- left -->
     <div id="left">
         <!-- Truyen hot -->
@@ -19,7 +23,7 @@
         </div>
         <!--/ Truyen hot -->
         <!-- truyen moi cap nhat -->
-        <h1 class="title"><a href="/" title="Books online free" >最近更新</a></h1>
+        <h1 class="title"><a href="/" title="最近更新" >最近更新</a></h1>
         <div class="l-category box category-home">
             <ul class="content">
                 @foreach($LastNovels as $novel)
@@ -35,4 +39,18 @@
     <!--/ left -->
     @include('common.right')
     <div class="clr"></div>
+@stop
+@section('js')
+    <script type="text/javascript">
+        $(function(){
+            read_history.sort(keysrt('updated_at', true));
+            if(read_history.length > 0){
+                $.each(read_history, function(index, item){
+                    var item_html = '<li data-novel-id="'+item.id+'"><a href="'+item.url+'">'+item.name+'</a></li>';
+                    $("#history").find('ul').append(item_html);
+                });
+                $("#history").show();
+            }
+        });
+    </script>
 @stop

@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html id="@yield('pagetype','')">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -42,8 +42,12 @@
         <!-- /main -->
         @include('common.footer')
     </div>
-    <script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="{{ elixir('dist/js/all.js') }}"></script>
+    <script type="text/javascript">
+        var timestamp = Date.parse(new Date());
+        var read_history = $.jStorage.get('history', []);
+
+    </script>
     @yield('js')
 </body>
 </html>

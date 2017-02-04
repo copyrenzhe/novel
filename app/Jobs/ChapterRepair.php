@@ -42,7 +42,8 @@ class ChapterRepair extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR REPAIR CHAPTER -----');
         $dtStart = microtime_float();
-        Biquge::repairChapter($this->chapter, $this->force);
+        $source = ucfirst($this->chapter->novel->source);
+        $source::repairChapter($this->chapter, $this->force);
         $dtEnd = microtime_float();
         Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
         Log::info('----- FINISHED THE PROCESS FOR REPAIR CHAPTER -----');
