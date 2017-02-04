@@ -1914,7 +1914,7 @@ th.tb{border-left:1px solid #CAE0BA;}th.tb a{margin-left:20px;}td.ta{width:50px;
         min-width: 60px;
     }
     #header {
-        width: 320px;
+        width: auto;
     }
     .search-chap .list-chap-wrap {
         width: 100%;
