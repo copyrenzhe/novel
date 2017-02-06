@@ -22,7 +22,7 @@ class Mzhu extends Snatch implements SnatchInterface
     const REFERER = 'http://www.mzhu8.com';
     const DOMAIN = 'http://www.mzhu8.com';
 
-    private $source = 'mzhu';
+    protected $source = 'mzhu';
 
     public function getNovelList()
     {

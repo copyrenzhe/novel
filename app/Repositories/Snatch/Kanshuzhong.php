@@ -24,7 +24,7 @@ class Kanshuzhong extends Snatch implements SnatchInterface
     const REFERER = 'http://www.kanshuzhong.com';
     const DOMAIN = 'http://www.kanshuzhong.com';
 
-    private $source = 'kanshuzhong';
+    protected $source = 'kanshuzhong';
 
     public function getNovelList()
     {
