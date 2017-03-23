@@ -39,7 +39,7 @@ class SiteMonitor extends Command
      */
     public function handle()
     {
-        $url = config('url');
+        $url = config('app.url');
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 20);
