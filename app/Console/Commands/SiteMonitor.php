@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Events\Event;
+use Event;
 use App\Events\MailPostEvent;
 use Illuminate\Console\Command;
 
