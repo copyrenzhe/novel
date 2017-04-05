@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NovelView;
-use App\Events\RepairChapterEvent;
-use App\Events\RepairNovelEvent;
-use App\Models\Chapter;
-use App\Models\Novel;
+use Event;
 use App\Models\User;
+use App\Models\Novel;
+use App\Models\Chapter;
 use App\Models\UserNovel;
+use App\Events\NovelView;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Illuminate\Support\Facades\Event;
+use App\Events\RepairNovelEvent;
+use App\Events\RepairChapterEvent;
 
 class BookController extends CommonController
 {
@@ -55,7 +53,7 @@ class BookController extends CommonController
         }
         $prev = Chapter::where('novel_id', $bookId)->where('id', '<', $chapterId)->orderBy('id', 'desc')->first();
         $next = Chapter::where('novel_id', $bookId)->where('id', '>', $chapterId)->orderBy('id', 'asc')->first();
-        Event::fire(new NovelView($chapter));
+        \Event::fire(new NovelView($chapter));
         return view('book.chapter', compact('chapter', 'prev', 'next', 'subList'));
     }
 

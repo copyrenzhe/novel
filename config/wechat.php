@@ -29,7 +29,7 @@ return [
      * file：日志文件位置(绝对路径!!!)，要求可写权限
      */
     'log' => [
-        'level' => env('WECHAT_LOG_LEVEL', 'debug'),
+        'level' => env('WECHAT_LOG_LEVEL', 'error'),
         'file'  => env('WECHAT_LOG_FILE', storage_path('logs/wechat.log')),
     ],
 

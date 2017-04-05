@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Event;
-use App\Events\MailPostEvent;
+use Event;
+use Cache;
 use Session;
 use Validator;
 use App\Models\Novel;
 use App\Models\Author;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Illuminate\Support\Facades\Cache;
+use App\Events\MailPostEvent;
 
 class IndexController extends CommonController
 {
@@ -26,7 +24,7 @@ class IndexController extends CommonController
 
     public function index()
     {
-        $TopNovels = Cache::remember('TopNovels', 60, function() {
+        $TopNovels = Cache::remember('TopNovels', 60, function () {
             return Novel::top()->take(8)->get();
         });
         $LastNovels = Novel::with('author')->latest()->take(15)->get();
@@ -65,10 +63,10 @@ class IndexController extends CommonController
     public function search(Request $request)
     {
         $keywords = $request->get('keyword');
-        $authors = Author::where('name', 'like', '%'.$keywords.'%')->pluck('id')->toArray();
-        $novels = Novel::where('name', 'like', '%'.$keywords.'%')
-                    ->orwhereIn('author_id', $authors)->hot()->paginate(30);
-        $name = "关键词：".$keywords;
+        $authors = Author::where('name', 'like', '%' . $keywords . '%')->pluck('id')->toArray();
+        $novels = Novel::where('name', 'like', '%' . $keywords . '%')
+            ->orwhereIn('author_id', $authors)->hot()->paginate(30);
+        $name = "关键词：" . $keywords;
         return view('index.list', compact('name', 'novels'));
     }
 
@@ -87,17 +85,17 @@ class IndexController extends CommonController
             'content' => 'required|max:500'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return redirect('feedback')
                 ->withInput()
                 ->withErrors($validator);
         }
 
         $feedback = Feedback::create($request->input());
-        if($feedback) {
+        if ($feedback) {
             Session::flash('flash_message', '提交成功!');
             $title = '收到新的意见反馈';
-            Event::fire(new MailPostEvent('feedback', $title, $feedback->toArray()));
+            \Event::fire(new MailPostEvent('feedback', $title, $feedback->toArray()));
             return redirect('/');
         } else {
             Session::flash('flash_message', '提交失败!');
