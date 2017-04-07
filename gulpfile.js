@@ -10,10 +10,11 @@ const fs = require('fs');
 
 // 检查文件夹是否存在,若不存在则创建
 function checkDirectory(dirPath, callback) {
-    callback = callback || function (){};
+    callback = callback || function () {
+        };
     fs.exists(dirPath, (exists) => {
         exists ? callback() : fs.mkdir(dirPath, 777, err => {
-                if(err) {
+                if (err) {
                     console.log(chalk.red('创建静态化目录 %s 失败！请确认有写入权限。'), dirPath);
                 } else {
                     callback();
@@ -28,7 +29,18 @@ const staticPath = path.join(staticDir, staticFile);
 
 gulp.task('static', () => {
     checkDirectory(staticDir, () => {
-        request(config.apps[0].env.NODE_SITE).pipe(fs.createWriteStream(staticPath));
+        // request(config.apps[0].env.NODE_SITE).pipe(fs.createWriteStream(staticPath));
+        request(config.apps[0].env.NODE_SITE, function (error, response, body) {
+            if(error) {
+                console.log('更新静态文件失败');
+                return;
+            }
+            if(response && response.statusCode == 200) {
+                fs.writeFileSync(staticPath, body, 'utf8');
+            } else {
+                console.log('获取首页信息失败');
+            }
+        })
     });
 });
 
@@ -44,7 +56,7 @@ gulp.task('static', () => {
  */
 
 
-elixir(function(mix) {
+elixir(function (mix) {
     // mix.less('app.less');
     // mix.less('admin-lte/AdminLTE.less');
     // mix.less('bootstrap/bootstrap.less');
