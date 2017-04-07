@@ -63,7 +63,7 @@
             <div class="contents-comic">
                 {!!  $chapter->content !!}
                 <br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;精采小说就在书虫网(www.shu000.com)
+                &nbsp;&nbsp;&nbsp;&nbsp;精彩小说就在书虫网(www.shu000.com)
             </div>
         </div>
     </div>
