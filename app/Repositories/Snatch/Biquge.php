@@ -173,7 +173,7 @@ Class Biquge extends Snatch implements SnatchInterface
     /**
      * 根据链接初始化单个小说
      * @param $link 小说网址
-     * @return Novel $novel 返回小说实例
+     * @return mixed Novel $novel 返回小说实例
      */
     public function init($link)
     {

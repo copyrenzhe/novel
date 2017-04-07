@@ -9,6 +9,7 @@
 
 namespace App\Repositories\Snatch;
 
+use Log;
 use ReflectionClass;
 
 class Snatch
@@ -35,8 +36,15 @@ class Snatch
             $params && curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         }
         $html = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
         if($html === false) {
-            echo "curl error: " . curl_errno($ch);
+            Log::error("链接: {$url}, curl失败，error: ". curl_errno($ch) ."请注意查看");
+            return false;
+        }
+        if($httpCode!== 200) {
+            Log::error("链接: {$url}, curl code不等于200，code: ". curl_errno($ch) ."请注意查看");
+            return false;
         }
         curl_close($ch);
         return $encoding ? mb_convert_encoding($html, 'UTF-8', $encoding) : $html;
