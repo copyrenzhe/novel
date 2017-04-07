@@ -20,7 +20,7 @@ module.exports = {
             log_date_format : 'YYYY-MM-DD HH:mm:ss',
             // 以下是站点配置
             env: {
-                NODE_SITE: 'http://www.shu000.com/',
+                NODE_SITE: 'http://www.shu000.com/index.php',
                 NODE_ENV: NODE_ENV, // 当前Node服务环境
                 port: 10500 // 服务端口
             }
