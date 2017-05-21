@@ -23,7 +23,7 @@ class SnatchRepair extends Job implements ShouldQueue
      * @param $novel_id
      * @param bool $force
      */
-    public function __construct($novel_id, $force=false)
+    public function __construct($novel_id, $force = false)
     {
         $this->novel_id = $novel_id;
         $this->force = $force;
@@ -38,8 +38,8 @@ class SnatchRepair extends Job implements ShouldQueue
     {
         Log::info('----- STARTING THE PROCESS FOR REPAIR NOVEL -----');
         $dtStart = microtime_float();
-        if($novel_id = $this->novel_id){
-            if(is_array($novel_id))
+        if ($novel_id = $this->novel_id) {
+            if (is_array($novel_id))
                 $novels = Novel::whereIn('id', $novel_id)->get();
             else
                 $novels = Novel::where('id', $novel_id)->get();
@@ -51,7 +51,7 @@ class SnatchRepair extends Job implements ShouldQueue
             $source::repair($novel, $this->force);
         }
         $dtEnd = microtime_float();
-        Log::info('----- 耗时'.($dtEnd-$dtStart).'秒');
+        Log::info('----- 耗时' . ($dtEnd - $dtStart) . '秒');
         Log::info('----- FINISHED THE PROCESS FOR REPAIR NOVELS -----');
     }
 }
