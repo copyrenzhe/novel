@@ -46,14 +46,14 @@ class SiteMonitor extends Command
         $output = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($httpcode===200){
+        if ($httpcode === 200) {
             session(['siteMonitor' => 0]);
         } else {
             $error_times = session('siteMonitor') + 1;
             session(['siteMonitor' => $error_times]);
         }
         //连续一个小时访问异常
-        if(session('siteMonitor') > 5){
+        if (session('siteMonitor') > 5) {
             Event::fire(new MailPostEvent('system', '网站访问异常', array()));
             session(['siteMonitor' => 0]);
         }

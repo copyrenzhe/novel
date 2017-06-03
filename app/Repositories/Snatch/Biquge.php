@@ -334,7 +334,7 @@ Class Biquge extends Snatch implements SnatchInterface
             $contents = $this->multi_send_test($splice_list[1], self::DOMAIN . $novel->source_link, $this->page_size, 'utf-8');
             $temp = [];
             foreach ($contents as $k => $html) {
-                preg_match('/var readid = "(.*?)"/s', $html, $read_match);
+                preg_match('/addBookMark\((\d+),.*?\)/s', $html, $read_match);
                 if (@$read_match[1]) {
                     $biquge_id = $read_match[1];
                     $content = $this->getChapterContent($html);
@@ -344,10 +344,12 @@ Class Biquge extends Snatch implements SnatchInterface
             $value_array = [];
             $now = Carbon::now();
             foreach ($splice_list[2] as $k => $name) {
-                $idArr = explode('.', $splice_list[1][$k]);
-                $biquge_id = $idArr[0];
+                $biquge_idArr = explode('.', $splice_list[1][$k]);
+                $biquge_idChunk = explode('/', $biquge_idArr[0]);
+                $biquge_id = end($biquge_idChunk);
+                $link = $splice_list[1][$k];
                 $value_array[] = [
-                    'source_link' => self::DOMAIN . $novel->source_link . $splice_list[1][$k],
+                    'source_link' => self::DOMAIN . $novel->source_link . $link,
                     'name' => $name,
                     'content' => @$temp[$biquge_id],
                     'novel_id' => $novel->id,
