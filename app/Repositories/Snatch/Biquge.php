@@ -64,7 +64,13 @@ Class Biquge extends Snatch implements SnatchInterface
             $start = $i * $this->page_size;
             Log::info("修复小说[{$novel->id}], 第[{$i}]次循环开始，从第[{$start}]条取[{$this->page_size}]条");
             $splice_list = array_slice($url_list, $start, $this->page_size);
-            $contents = $this->multi_send_test(self::DOMAIN . $novel->source_link . $splice_list, $this->page_size, 'utf-8');
+            $sourceLink = $novel->source_link;
+            $repairUrl = array_map(function($v) use($sourceLink) {
+                $chapterInfo = explode('/', $v);
+                $chapterId = end($chapterInfo);
+                return self::DOMAIN . $sourceLink . $chapterId;
+            }, $splice_list);
+            $contents = $this->multi_send_test($repairUrl, $this->page_size, 'utf-8');
             $temp = [];
             foreach ($contents as $k => $html) {
                 preg_match('/addBookMark\((\d+),.*?\)/s', $html, $read_match);
