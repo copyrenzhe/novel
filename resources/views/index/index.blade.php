@@ -15,7 +15,7 @@
                     <a href="{{ route('book', ['bookId' => $novel->id]) }}" class="crop" title="{{ $novel->name }}"><img class="thumb" src="{{ $novel->cover }}" border="0" alt="{{ $novel->name }}" /></a>
                     <div class="content">
                         <a class="e-title" href="{{ route('book', ['bookId' => $novel->id]) }}" title="{{ $novel->name }}" >{{ $novel->name }}</a>
-                        <span class="e-view">热度: {{ $novel->hot }}</span>
+                        <span class="e-view">热度: {{ \Redis::zScore(config('cache.redis.view_total', $novel->id)) ?: 0 }}</span>
                     </div>
                 </div>
                 @endforeach

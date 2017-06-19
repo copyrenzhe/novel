@@ -18,7 +18,7 @@
         </ul>
         <div id="ngay" class="l-right box">
             <ul class="content">
-                @foreach($HotNovels as $item)
+                @foreach($hotNovels['total'] as $item)
                     <li>
                         <div class="fll">
                             <a href="{{ route('book', ['bookId' => $item->id]) }}" class="crop" title="{{ $item->name }}">

@@ -16,15 +16,21 @@ class CommonController extends Controller
      */
     public function __construct()
     {
-        $HotNovels = Cache::remember('HotNovels', 60, function() {
-            return Novel::with('author')->hot()->take(8)->get();
-        });
+
+        $hotNovels = [];
+        $hotNovels['total'] = \Redis::zRevRangeByScore(config('cache.redis.view_total'), -inf, +inf,
+            ['withscores' => true, 'limit' => [0, 8]]);
+        $hotNovels['month'] = \Redis::zRevRangeByScore(config('cache.redis.view_month'), -inf, +inf,
+            ['withscores' => true, 'limit' => [0, 8]]);
+        $hotNovels['week'] = \Redis::zRevRangeByScore(config('cache.redis.view_week'), -inf, +inf,
+            ['withscores' => true, 'limit' => [0, 8]]);
+
         $genres = Cache::rememberForever('genres', function() {
             return category_maps();
         });
         $this->genres = $genres;
-        view()->composer(['common.right', 'common.navbar'], function($view) use($HotNovels, $genres) {
-            $view->with('HotNovels', $HotNovels)->with('genres', $genres);
+        view()->composer(['common.right', 'common.navbar'], function($view) use($hotNovels, $genres) {
+            $view->with('hotNovels', $hotNovels)->with('genres', $genres);
         });
     }
 }

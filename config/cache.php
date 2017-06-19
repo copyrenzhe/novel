@@ -65,6 +65,13 @@ return [
 
     ],
 
+    'redis' => [
+        'novel_info' => 'redis_key_novel_info',
+        'view_total' => 'redis_key_view_total',
+        'view_month' => 'redis_key_view_month',
+        'view_week' => 'redis_key_view_week'
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Cache Key Prefix
