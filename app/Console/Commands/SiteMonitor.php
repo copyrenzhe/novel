@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Cache;
+use Carbon\Carbon;
 use Event;
 use App\Events\MailPostEvent;
 use Illuminate\Console\Command;
@@ -47,15 +49,14 @@ class SiteMonitor extends Command
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if ($httpcode === 200) {
-            session(['siteMonitor' => 0]);
+            Cache::put('siteMonitor', 0, 60);
         } else {
-            $error_times = session('siteMonitor') + 1;
-            session(['siteMonitor' => $error_times]);
+            Cache::increment('siteMonitor');
         }
         //连续一个小时访问异常
-        if (session('siteMonitor') > 5) {
+        if (Cache::get('siteMonitor') > 5) {
             Event::fire(new MailPostEvent('system', '网站访问异常', array()));
-            session(['siteMonitor' => 0]);
+            Cache::put('siteMonitor', 0, 60);
         }
     }
 }

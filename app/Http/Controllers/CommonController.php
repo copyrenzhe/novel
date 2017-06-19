@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Novel;
 use App\Http\Requests;
-use Illuminate\Support\Facades\Cache;
+use Cache;
 
 class CommonController extends Controller
 {
@@ -25,7 +25,7 @@ class CommonController extends Controller
         $hotNovels['week'] = \Redis::zRevRangeByScore(config('cache.redis.view_week'), -inf, +inf,
             ['withscores' => true, 'limit' => [0, 8]]);
 
-        $genres = Cache::rememberForever('genres', function() {
+        $genres = \Cache::rememberForever('genres', function() {
             return category_maps();
         });
         $this->genres = $genres;
