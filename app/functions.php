@@ -243,7 +243,7 @@ if (!function_exists('qidianRank')) {
         for ($i = 1; $i <= $maxPage; $i++) {
             $urlArr[] = $url_base . $mod . '?dateType=' . $dataType . '&chn=' . $chn . '&page=' . $i;
         }
-        $htmlArr = async_get_url($urlArr, '', $maxPage, '');
+        $htmlArr = async_get_url($urlArr, '', $maxPage, 'utf-8');
         $nameArr = [];
         foreach ($htmlArr as $html) {
             preg_match_all('/<div class=\"book-mid-info\">.*?<h4><a .*?>(.*?)<\/a><\/h4>.*?<\/div>/s', $html, $matches);

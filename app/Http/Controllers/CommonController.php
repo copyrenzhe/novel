@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Novel;
 use App\Http\Requests;
-use Illuminate\Support\Facades\Cache;
+use Cache;
 
 class CommonController extends Controller
 {
