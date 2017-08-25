@@ -110,7 +110,8 @@ if (!function_exists('async_get_url')) {
                 $handle = $info['handle'];
                 // 读取收到的内容
                 $content = curl_multi_getcontent($handle);
-                $recv[] = curl_errno($handle) == 0 ? (($source_encode != 'utf-8') ? mb_convert_encoding($content, 'UTF-8', 'gbk') : $content) : '';
+                $recv[] = curl_errno($handle) == 0 ? (($source_encode != 'utf-8') ? mb_convert_encoding($content,
+                    'UTF-8', 'gbk') : $content) : '';
                 // 移除本资源
                 curl_multi_remove_handle($mh, $handle);
                 // 关闭资源
@@ -217,8 +218,10 @@ if (!function_exists('getFileSize')) {
                 $tmp = fgets($fp);
                 if (trim($tmp) == '') {
                     break;
-                } else if (preg_match('/Content-Length:(.*)/si', $tmp, $arr)) {
-                    return trim($arr[1]);
+                } else {
+                    if (preg_match('/Content-Length:(.*)/si', $tmp, $arr)) {
+                        return trim($arr[1]);
+                    }
                 }
             }
             return null;
@@ -250,5 +253,30 @@ if (!function_exists('qidianRank')) {
             $nameArr = array_merge($nameArr, $matches[1]);
         }
         return $nameArr;
+    }
+}
+
+/**
+ * 百度SEO推送
+ */
+if (!function_exists('baiduPush')) {
+    function baiduPush($urls)
+    {
+        if (config('app.baidu_push_api')) {
+            $api = config('app.baidu_push_api');
+            $ch = curl_init();
+            $options = array(
+                CURLOPT_URL => $api,
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POSTFIELDS => implode("\n", $urls),
+                CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+            );
+            curl_setopt_array($ch, $options);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);;
+            return $httpCode == 200;
+        } else {
+            return true;
+        }
     }
 }

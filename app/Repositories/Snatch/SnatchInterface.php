@@ -13,6 +13,8 @@ use App\Models\Novel;
 
 Interface SnatchInterface
 {
+    public function ping();
+
     //获取小说列表
     public function getNovelList();
 
