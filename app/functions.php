@@ -273,6 +273,7 @@ if (!function_exists('baiduPush')) {
                 CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
             );
             curl_setopt_array($ch, $options);
+            curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);;
             return $httpCode == 200;
         } else {
