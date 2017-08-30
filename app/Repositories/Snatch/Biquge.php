@@ -249,8 +249,8 @@ Class Biquge extends Snatch implements SnatchInterface
         $last_novel = $novel->chapter->last();
         if ($last_novel) {
             $last_url = $last_novel->source_link;
-            $urlArr = explode('/', $last_url);
-            $curr_key = array_search(end($urlArr), $chapter_list[1]);
+            $urlArr = parse_url($last_url);
+            $curr_key = array_search($urlArr['path'], $chapter_list[1]);
         } else {
             $curr_key = -1;
         }
