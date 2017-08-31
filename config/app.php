@@ -41,6 +41,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'baidu_push_api' => env('BAIDU_PUSH_API', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

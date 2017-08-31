@@ -184,6 +184,9 @@ Class Biquge extends Snatch implements SnatchInterface
     public function init($link)
     {
         $novel_html = $this->send($link, 'GET', false, 'utf-8');
+        if (!$novel_html) {
+            return false;
+        }
         if (preg_match('/property="og:novel:book_name" content="(.*?)"/s', $novel_html, $novel_name)) {
             preg_match('/property="og:novel:author" content="(.*?)"/s', $novel_html, $novel_author);
             preg_match('/property="og:novel:category" content="(.*?)"/s', $novel_html, $category);
@@ -221,11 +224,14 @@ Class Biquge extends Snatch implements SnatchInterface
     /**
      * @desc 使用curl_multi 多线程更新章节
      * @param Novel $novel
-     * @return string|void
+     * @return string|mixed
      */
     public function update(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link, 'GET', false, 'utf-8');
+        if (!$novel_html) {
+            return false;
+        }
 
         $chapter_list = $this->getChapterList($novel_html);
         if (!$chapter_list[1]) {
@@ -243,8 +249,8 @@ Class Biquge extends Snatch implements SnatchInterface
         $last_novel = $novel->chapter->last();
         if ($last_novel) {
             $last_url = $last_novel->source_link;
-            $urlArr = explode('/', $last_url);
-            $curr_key = array_search(end($urlArr), $chapter_list[1]);
+            $urlArr = parse_url($last_url);
+            $curr_key = array_search($urlArr['path'], $chapter_list[1]);
         } else {
             $curr_key = -1;
         }
@@ -319,11 +325,14 @@ Class Biquge extends Snatch implements SnatchInterface
     /**
      * 采集小说章节实现方法
      * @param Novel $novel
-     * @return array
+     * @return array|mixed
      */
     public function snatch(Novel $novel)
     {
         $novel_html = $this->send(self::DOMAIN . $novel->source_link, 'GET', false, 'utf-8');
+        if (!$novel_html) {
+            return false;
+        }
         $chapter_list = $this->getChapterList($novel_html);
         if (!$chapter_list[1]) {
             Log::error('getChapterList failed');

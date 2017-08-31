@@ -44,6 +44,14 @@ class SnatchInit extends Job implements ShouldQueue
             $instance::snatch($novel);
             Log::info("小说[$novel->id]:[$novel->name] 已采集完毕");
         }
+
+        //百度推送
+        $urls[] = route('book', ['bookId' => $novel->id], true);
+        $ret = baiduPush($urls);
+        $retMessage = $ret ? 'success' : 'failed';
+        Log::info('baidu push '.var_export($urls, true) . $retMessage);
+        //百度推送END
+
         $dtEnd = microtime_float();
         Log::info('expire time '.($dtEnd-$dtStart).' seconds');
         Log::info('----- FINISHED THE PROCESS FOR INIT NOVEL FROM LINK:'.$this->link. '-----');

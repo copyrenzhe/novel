@@ -17,6 +17,12 @@ class Snatch
     protected $page_size = 200;
     protected $source;
 
+    public function ping()
+    {
+        $ret = $this->send(static::DOMAIN, 'GET', false, 'utf-8');
+        return $ret;
+    }
+
     /**
      * 单线程模拟请求
      * @param $url
