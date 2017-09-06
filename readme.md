@@ -33,6 +33,7 @@
     touch .env  //根据实际情况修改数据库配置
     php artisan migrate
     php artisan db:seed --class=CreateAdminSeeder
+    gulp
     ```
 
 3. 运行系统
